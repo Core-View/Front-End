@@ -4,8 +4,8 @@
     top: 0;
     left: 0;
     height: 100%;
-    width: 300px;
-    background-color: #f1f1f1;
+    width: 230px;
+    background-color: none;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     transform: translateX(-100%);
     transition: transform 0.3s ease-in-out;
@@ -17,25 +17,69 @@
 }
 
 .rank {
-    margin-top: 20px;
+    margin-top: 100px;
     width: 100%;
     display: flex;
     flex-direction: column;
-    padding: 20px;
+}
+
+@keyframes sparkle {
+    0% {
+        background-color: aqua;
+    }
+
+    25% {
+        background-color: yellow;
+    }
+
+    50% {
+        background-color: pink;
+    }
+
+    75% {
+        background-color: lightgreen;
+    }
+
+    100% {
+        background-color: aqua;
+    }
+}
+
+.rank>div {
+    margin-top: 5px;
+    width: 100%;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 900;
+    animation: sparkle 0.3s infinite;
 }
 
 .rankcode {
     list-style-type: none;
     padding: 0;
+    margin-top: 10px;
+    width: 180px;
 }
 
 .rankcode li {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    margin-left: 10px;
+    border-bottom: 2px solid black;
+    font-weight: 800;
+}
+
+.rankcode li div {
+    font-weight: 500;
+    font-size: 20px;
+    display: inline-block;
+    width: 20px;
+    text-align: right;
+    margin-right: 10px;
 }
 
 .clicker {
     position: absolute;
-    top: 140px;
+    top: 120px;
     right: -20px;
     font-size: 24px;
     cursor: pointer;
