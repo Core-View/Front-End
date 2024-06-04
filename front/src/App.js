@@ -1,20 +1,22 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 // header 여서 안나왔는데 Header 로 고쳐서 나옵니다 이제
 // Common
-import Header from "./Common/Header";
-import Sidebar from "./Common/Sidebar";
+import Header from './Common/Header';
+import Sidebar from './Common/Sidebar';
 // Home
-import Main from "./Home/home_main";
+import Main from './Home/home_main';
 // My
-import Mypage from "./My/my_main";
-import Mymodify from "./My/my_modify";
+import Mypage from './My/my_main';
+import Mymodify from './My/my_modify';
 // Sign
-import SignIn from "./Sign/Sign_in/signin_main";
-import SignUp from "./Sign/Sign_up/signup_main";
+import SignIn from './Sign/Sign_in/signin_main';
+import SignUp from './Sign/Sign_up/signup_main';
 // Post
-import Post from "./Post/post_main";
-import PostView from "./Post/post_view";
-import CodeEditor from "./Post/post_code_editor";
+import Post from './Post/post_main';
+import PostView from './Post/post_view';
+import CodeEditor from './Post/post_code_editor';
+//test
+import Alarm from './Common/Alarm';
 
 function App() {
   return (
@@ -32,6 +34,7 @@ function App() {
           <Route path="users">
             <Route path="sign-in" element={<SignIn />} />
             <Route path="sign-up" element={<SignUp />} />
+            <Route path="al" element={<Alarm />} />
           </Route>
         </Routes>
       </Router>
