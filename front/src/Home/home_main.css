@@ -1,14 +1,14 @@
 .home-container {
-    width: 1080px;
+    width: 100%;
     display: flex;
+    justify-content: center;
     text-align: center;
     margin: 0 auto;
     margin-top: 60px;
 }
 
-section {
-    width: 100%;
-    margin-right: 30px;
+.home-mid {
+    width: 600px;
 }
 
 .post {
@@ -57,6 +57,7 @@ section {
 .home_right {
     align-items: center;
     display: flex;
+    margin-left: 20px;
 }
 
 .home_right>div {
