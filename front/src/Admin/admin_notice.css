@@ -1,0 +1,8 @@
+.ad_notice_list {
+    width: 100%;
+}
+
+.ad_notice_list li {
+    border-bottom: 1px solid black;
+    margin: 5px 0px;
+}
