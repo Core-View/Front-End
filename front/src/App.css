@@ -26,7 +26,8 @@ body {
 .content {
   flex: 1;
   padding: 20px;
-  margin-left: 250px; /* 사이드바 너비를 고려 */
+  margin-left: 250px;
+  margin-right: 250px;
   overflow-y: auto;
 }
 

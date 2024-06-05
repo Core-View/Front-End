@@ -1,76 +1,71 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
 .home-container {
     display: flex;
-    flex-direction: column;
-    align-items: center;
     padding: 20px;
 }
 
 .home_mid {
     display: flex;
-    justify-content: space-around;
-    width: 100%;
-    margin-bottom: 20px;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1;
+    padding: 20px 20px;
 }
 
 .post {
-    background: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
     padding: 20px;
-    width: 45%;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .post h2 {
-    font-size: 24px;
-    margin-bottom: 10px;
-    border-bottom: 2px solid #ddd;
-    padding-bottom: 10px;
+    margin-top: 0;
 }
 
-.post ul {
+.postcode {
     list-style: none;
     padding: 0;
 }
 
-.post ul li {
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
-    cursor: pointer;
-    transition: background-color 0.3s;
+.postcode li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
 }
 
-.post ul li:hover {
-    background-color: #f0f0f0;
+.postcode li:last-child {
+    border-bottom: none;
 }
 
 .home_right {
     display: flex;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin: 20px 20px;
+    background-color: #333; /* Green */
+    color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     cursor: pointer;
-    transition: transform 0.3s;
+    transition: background-color 0.3s ease;
 }
 
 .home_right:hover {
-    transform: scale(1.1);
+    background-color: #191919; /* Darker Green */
+}
+
+.home_right svg {
+    font-size: 60px;
+    margin-bottom: 10px;
 }
 
 .home_right div {
-    margin-left: 10px;
     font-size: 18px;
-}
-
-@media (max-width: 768px) {
-    .home_mid {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .post {
-        width: 80%;
-        margin-bottom: 20px;
-    }
-
-    .home_right {
-        margin-top: 20px;
-    }
+    font-weight: bold;
 }
