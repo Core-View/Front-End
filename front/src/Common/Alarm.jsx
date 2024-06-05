@@ -9,6 +9,7 @@ const Alarm = () => {
   // 알람표시를 누르면 리스트가 나오는데 거기에는 알람내용과 일단은 피드백만 들어옴
   // 문제식별가능한 값과 문제의 제목 시간이 표시된다
   // 게시글 좋아요는 알람으로 들어오지 않고 피드백과 그 피드밷에대한 좋아요만 들어온다.
+  // 필요한 데이터 알람 카테고리 제목 내용 시간 게시물번호
   const [isStarted, setIsStarted] = useState(false);
   const [message, setMessage] = useState('');
   const [alarm, seAlarm] = useState([]);
