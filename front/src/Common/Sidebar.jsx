@@ -1,51 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./sidebar.css";
 
 const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
-
-  useEffect(() => {
-    const handleOutsideClick = (event) => {
-      if (event.target.closest(".sidebar") === null) {
-        setIsOpen(false);
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener("click", handleOutsideClick);
-    } else {
-      document.removeEventListener("click", handleOutsideClick);
-    }
-
-    return () => {
-      document.removeEventListener("click", handleOutsideClick);
-    };
-  }, [isOpen]);
+  // 하드코딩된 기여도 순위 데이터
+  const contributors = [
+    "김민주",
+    "김장윤",
+    "김해진",
+    "김형준",
+    "박지훈",
+    "서원준",
+    "이승진",
+    "정중환",
+  ];
 
   return (
-    <div className={`sidebar ${isOpen ? "open" : ""}`}>
+    <div className="sidebar">
       <div className="rank">
-        <div>기여도 순위</div>
+        <div className="rank-title">기여도 순위</div>
         <ul className="rankcode">
-          <li>1. 이브라히모비치</li>
-          <li>2. 이브라히모비치</li>
-          <li>3. 이브라히모비치</li>
-          <li>4. 이브라히모비치</li>
-          <li>5. 이브라히모비치</li>
-          <li>6. 이브라히모비치</li>
-          <li>7. 이브라히모비치</li>
-          <li>8. 이브라히모비치</li>
-          <li>9. 이브라히모비치</li>
-          <li>10. 이브라히모비치</li>
+          {contributors.map((name, index) => (
+            <li key={index}>
+              {index + 1}. {name}
+            </li>
+          ))}
         </ul>
       </div>
-      <span className="clicker" onClick={toggleSidebar}>
-        X
-      </span>
     </div>
   );
 };

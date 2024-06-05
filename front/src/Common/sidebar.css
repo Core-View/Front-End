@@ -1,43 +1,69 @@
-.sidebar {
-    display: flex;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 300px;
-    background-color: #f1f1f1;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    transform: translateX(-100%);
-    transition: transform 0.3s ease-in-out;
-    z-index: 999;
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
 }
 
-.sidebar.open {
-    transform: translateX(0);
-}
-
-.rank {
-    margin-top: 20px;
-    width: 100%;
+.app-container {
     display: flex;
     flex-direction: column;
+    height: 100vh;
+}
+
+.main-content {
+    display: flex;
+    flex: 1;
+}
+
+.sidebar {
+    background-color: #1e1e2f;
+    color: #fff;
+    width: 250px;
+    height: calc(100vh - 60px); /* 헤더 높이를 고려 */
+    position: fixed;
+    top: 60px; /* 헤더 높이를 고려 */
+    left: 0;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.sidebar .rank {
     padding: 20px;
 }
 
-.rankcode {
-    list-style-type: none;
+.sidebar .rank-title {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.sidebar .rankcode {
+    list-style: none;
     padding: 0;
+    margin: 0;
 }
 
-.rankcode li {
-    margin-bottom: 10px;
+.sidebar .rankcode li {
+    padding: 10px;
+    border-bottom: 1px solid #444;
+    transition: background-color 0.3s ease;
 }
 
-.clicker {
-    position: absolute;
-    top: 140px;
-    right: -20px;
-    font-size: 24px;
-    cursor: pointer;
-    z-index: 1000;
+.sidebar .rankcode li:hover {
+    background-color: #444;
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+    margin-left: 250px;
+    overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+.sidebar {
+    width: 200px;
+}
+
+.content {
+    margin-left: 200px;
+}
 }

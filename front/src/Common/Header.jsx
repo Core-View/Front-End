@@ -24,7 +24,7 @@ function Header() {
             <Link to="users/sign-in">signin_main</Link>
           </li>
           <li>
-            <Link to="post-view">post_view</Link>
+            <Link to="post_view">post_view</Link>
           </li>
         </ul>
       </nav>

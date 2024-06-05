@@ -18,22 +18,26 @@ import CodeEditor from "./Post/post_code_editor";
 
 function App() {
   return (
-    <div className="App">
+    <div className="app-container">
       <Router>
         <Header />
-        <Sidebar />
-        <Routes>
-          <Route path="/" element={<Main />} />
-          <Route path="my_main" element={<Mypage />} />
-          <Route path="my_modify" element={<Mymodify />} />
-          <Route path="post_main" element={<Post />} />
-          <Route path="post_code" element={<CodeEditor />} />
-          <Route path="post_view" element={<PostView />} />
-          <Route path="users">
-            <Route path="sign-in" element={<SignIn />} />
-            <Route path="sign-up" element={<SignUp />} />
-          </Route>
-        </Routes>
+        <div className="main-content">
+          <Sidebar />
+          <div className="content">
+            <Routes>
+              <Route path="/" element={<Main />} />
+              <Route path="my_main" element={<Mypage />} />
+              <Route path="my_modify" element={<Mymodify />} />
+              <Route path="post_main" element={<Post />} />
+              <Route path="post_code" element={<CodeEditor />} />
+              <Route path="post_view" element={<PostView />} />
+              <Route path="users">
+                <Route path="sign-in" element={<SignIn />} />
+                <Route path="sign-up" element={<SignUp />} />
+              </Route>
+            </Routes>
+          </div>
+        </div>
       </Router>
     </div>
   );
