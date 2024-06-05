@@ -71,7 +71,15 @@ const Alarm = () => {
           <div className="dropdown">
             {alarm.map((a, index) => (
               <div key={index} className="dropdown-item">
-                {a.message} - {a.timestamp}
+                <div className="al_category">{a.category}</div>
+                <div className="al_content">
+                  <div>{a.title}</div>
+                  <div>{a.content}</div>
+                </div>
+                <div className="al_time">
+                  <GiBackwardTime className="timer" />
+                  <span>{a.time}</span>
+                </div>
               </div>
             ))}
           </div>
