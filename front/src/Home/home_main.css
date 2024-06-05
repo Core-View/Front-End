@@ -1,68 +1,76 @@
 .home-container {
-    width: 1080px;
     display: flex;
-    text-align: center;
-    margin: 0 auto;
-    margin-top: 60px;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
 }
 
-section {
+.home_mid {
+    display: flex;
+    justify-content: space-around;
     width: 100%;
-    margin-right: 30px;
+    margin-bottom: 20px;
 }
 
 .post {
-    text-align: left;
-    margin-bottom: 40px;
-    border: 2px solid black;
-    position: relative;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 45%;
 }
 
-.post div {
-    position: absolute;
-    top: -15px;
-    left: 10px;
-    background-color: white;
-    width: 100px;
-    text-align: center;
+.post h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
 }
 
-.rankcode {
-    margin-top: 15px;
+.post ul {
+    list-style: none;
+    padding: 0;
 }
 
-.rankcode li {
-    display: inline-block;
-    width: 180px;
-    background-color: bisque;
-    border: 1px solid black;
-    margin: 5px 8px;
+.post ul li {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-.postcode {
-    display: flex;
-    flex-direction: row;
-}
-
-.postcode li {
-    display: inline-block;
-    width: 180px;
-    height: 150px;
-    background-color: bisque;
-    border: 1px solid black;
-    margin: 8px;
-    margin-top: 18px;
+.post ul li:hover {
+    background-color: #f0f0f0;
 }
 
 .home_right {
-    align-items: center;
     display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s;
 }
 
-.home_right>div {
-    cursor: pointer;
-    display: inline-block;
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
+.home_right:hover {
+    transform: scale(1.1);
+}
+
+.home_right div {
+    margin-left: 10px;
+    font-size: 18px;
+}
+
+@media (max-width: 768px) {
+    .home_mid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .post {
+        width: 80%;
+        margin-bottom: 20px;
+    }
+
+    .home_right {
+        margin-top: 20px;
+    }
 }
