@@ -28,7 +28,7 @@ function App() {
           <Route path="my_modify" element={<Mymodify />} />
           <Route path="post_main" element={<Post />} />
           <Route path="post_code" element={<CodeEditor />} />
-          <Route path="post-view" element={<PostView />} />
+          <Route path="post_view" element={<PostView />} />
           <Route path="users">
             <Route path="sign-in" element={<SignIn />} />
             <Route path="sign-up" element={<SignUp />} />
