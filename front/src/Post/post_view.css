@@ -93,6 +93,9 @@ body {
     right: 10px;
     display: none;
 }
+.feedback-button:hover {
+    background: #0056b3;
+}
 
 .feedback-button.active,
 .post-code-line:hover .feedback-button {
