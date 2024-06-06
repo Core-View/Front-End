@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 // header 여서 안나왔는데 Header 로 고쳐서 나옵니다 이제
 // Common
 import Header from "./Common/Header";
-import Sidebar from "./Common/Sidebar";
+// import Sidebar from "./Common/Sidebar";
 // Home
 import Main from "./Home/home_main";
 // My
@@ -23,7 +23,6 @@ function App() {
       <Router>
         <Header />
         <div className="main-content">
-          <Sidebar />
           <div className="content">
             <Routes>
               <Route path="/" element={<Main />} />

@@ -25,14 +25,5 @@ body {
 
 .content {
   flex: 1;
-  padding: 20px;
-  margin-left: 250px;
-  margin-right: 250px;
   overflow-y: auto;
-}
-
-@media (max-width: 768px) {
-  .content {
-    margin-left: 200px;
-  }
 }
