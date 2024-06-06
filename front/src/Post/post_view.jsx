@@ -80,9 +80,7 @@ int main() {
                         <span className="non-drag">{index} | </span>
                         <span>{line}</span>
                         <button className={`feedback-button ${feedback[index] ? 'active' : ''}`} onClick={() => handleFeedbackClick(index)}>
-                            <div className="non-drag">
-                                피드백 {feedback[index] ? `(${feedback[index].length})` : ''}
-                            </div>
+                            피드백 {feedback[index] ? `(${feedback[index].length})` : ''}
                         </button>
                         {feedback[index] && feedback[index].length > 0 && (
                             <div className="feedback-text">
