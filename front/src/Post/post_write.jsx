@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import axios from "axios";
 import "./post_write.css";
 
@@ -6,32 +6,37 @@ const PostWrite = () => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [hashtags, setHashtags] = useState("");
+    const contentRef = useRef(null);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // 서버로 보낼 데이터
         const postData = {
             title,
             content,
-            hashtags: hashtags.split(",").map((tag) => tag.trim()), // 해시태그를 배열로 변환
+            hashtags: hashtags.split(",").map((tag) => tag.trim()),
         };
 
         try {
-        // MySQL 서버에 데이터 전송
-        const response = await axios.post("YOUR_SERVER_ENDPOINT/posts", postData);
+            const response = await axios.post("YOUR_SERVER_ENDPOINT/posts", postData);
 
-        if (response.status === 200) {
-            alert("게시글이 성공적으로 등록되었습니다!");
-            // 폼 초기화
-            setTitle("");
-            setContent("");
-            setHashtags("");
-        }
+            if (response.status === 200) {
+                alert("게시글이 성공적으로 등록되었습니다!");
+                setTitle("");
+                setContent("");
+                setHashtags("");
+                contentRef.current.style.height = "auto";
+            }
         } catch (error) {
             console.error("게시글 등록 중 오류 발생:", error);
             alert("게시글 등록 중 오류가 발생했습니다.");
         }
+    };
+
+    const handleContentChange = (e) => {
+        setContent(e.target.value);
+        contentRef.current.style.height = "auto";
+        contentRef.current.style.height = `${contentRef.current.scrollHeight}px`;
     };
 
     return (
@@ -49,15 +54,6 @@ const PostWrite = () => {
             />
             </div>
             <div className="form-group">
-            <label htmlFor="content">내용</label>
-            <textarea
-                id="content"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                required
-            ></textarea>
-            </div>
-            <div className="form-group">
             <label htmlFor="hashtags">해시태그 (콤마로 구분)</label>
             <input
                 type="text"
@@ -65,6 +61,16 @@ const PostWrite = () => {
                 value={hashtags}
                 onChange={(e) => setHashtags(e.target.value)}
             />
+            </div>
+            <div className="form-group">
+            <label htmlFor="content">내용</label>
+            <textarea
+                id="content"
+                value={content}
+                onChange={handleContentChange}
+                ref={contentRef}
+                required
+            ></textarea>
             </div>
             <button type="submit">게시글 등록</button>
         </form>

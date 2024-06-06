@@ -18,13 +18,13 @@ function Header() {
             <Link to="my_main">my_main</Link>
           </li>
           <li>
-            <Link to="/post_main">post_main</Link>
+            <Link to="/post_main">전체 게시글</Link>
           </li>
           <li>
             <Link to="users/sign-in">signin_main</Link>
           </li>
           <li>
-            <Link to="post_view">post_view</Link>
+            <Link to="post_view">포스트 보기</Link>
           </li>
           <li>
             <Link to="post_write">글쓰기</Link>
