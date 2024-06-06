@@ -37,7 +37,7 @@ const Alarm = () => {
   //       es.current.close();
   //       return;
   //     }
-  //     seAlarm(event.data.alarm);
+  //     setAlarm((prevAlarms) => [...prevAlarms, JSON.parse(event.data).alarm]);
   //   };
 
   //   es.current.onerror = (err) => {
@@ -53,6 +53,26 @@ const Alarm = () => {
   //   if (es.current) {
   //     es.current.close();
   //     await fetch('http://localhost:8080/sse/streaming/stop');
+  //   }
+  // };
+
+  // const timeAgo = (timestamp) => {
+  //   const now = new Date();
+  //   const alarmTime = new Date(timestamp);
+  //   const diff = Math.abs(now - alarmTime);
+
+  //   const minutes = Math.floor(diff / (1000 * 60));
+  //   const hours = Math.floor(diff / (1000 * 60 * 60));
+  //   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+  //   if (days > 0) {
+  //     return `${days}일 전`;
+  //   } else if (hours > 0) {
+  //     return `${hours}시간 전`;
+  //   } else if (minutes > 0) {
+  //     return `${minutes}분 전`;
+  //   } else {
+  //     return '방금 전';
   //   }
   // };
   return (
@@ -78,7 +98,7 @@ const Alarm = () => {
                 </div>
                 <div className="al_time">
                   <GiBackwardTime className="timer" />
-                  <span>{a.time}</span>
+                  <span>{timeAgo(a.time)}</span>
                 </div>
               </div>
             ))}
