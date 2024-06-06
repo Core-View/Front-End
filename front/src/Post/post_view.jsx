@@ -9,11 +9,12 @@ const PostView = () => {
     const content = `
 안녕하세요.
 Hello, World!
-
+    `.trim().split('\n'); // 줄 단위로 쪼개기
+    const code = `
 #include <stdio.h>
 
 int main() {
-    printf("Hello, World!")
+    printf("Hello, World!");
 
     return 0;
 }
@@ -29,12 +30,36 @@ int main() {
         setPopup({ show: true, line: lineIndex, text: '' });
     };
 
-    const handleFeedbackSubmit = () => {
+    const handleFeedbackSubmit = async () => {
         if (popup.text.trim() === '') return;
+        
         const newFeedback = feedback[popup.line] ? [...feedback[popup.line], { userId: loggedInUserId, text: popup.text }] : [{ userId: loggedInUserId, text: popup.text }];
         setFeedback({ ...feedback, [popup.line]: newFeedback });
+
+        const feedbackData = {
+            line: popup.line,
+            userId: loggedInUserId,
+            text: popup.text,
+        };
+
+        // 서버로 피드백 데이터를 보내는 부분 (예시)
+        try {
+            const response = await fetch('https://server-endpoint.com/feedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(feedbackData),
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+        } catch (error) {
+            console.error('There was a problem with your fetch operation:', error);
+        }
+
         setPopup({ ...popup, text: '' });
-    };    
+    };
 
     return (
         <div className="post-view">
@@ -43,8 +68,15 @@ int main() {
                 <span className="post-likes">좋아요 {likes}</span>
                 <span className="post-author">{author}</span>
             </div>
-            <pre className="post-content">
+            <div className="post-content">
                 {content.map((line, index) => (
+                    <div key={index} className="post-line">
+                        <span>{line}</span>
+                    </div>
+                ))}
+            </div>
+            <pre className="post-code">
+                {code.map((line, index) => (
                     <div key={index} className="post-line">
                         <span>{line}</span>
                         <button className={`feedback-button ${feedback[index] ? 'active' : ''}`} onClick={() => handleFeedbackClick(index)}>
