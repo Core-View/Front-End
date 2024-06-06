@@ -25,10 +25,10 @@ int main() {
     const loggedInUserId = "user123";
 
     const [feedback, setFeedback] = useState({});
-    const [popup, setPopup] = useState({ show: false, line: null, text: '' });
+    const [popup, setPopup] = useState({ show: false, line: null, text: '', codeContent: '' });
 
-    const handleFeedbackClick = (lineIndex) => {
-        setPopup({ show: true, line: lineIndex, text: '' });
+    const handleFeedbackClick = (lineIndex, lineCode) => {
+        setPopup({ show: true, line: lineIndex, text: '', codeContent: lineCode }); // 코드 내용 추가
     };
 
     const handleFeedbackSubmit = async () => {
@@ -82,7 +82,7 @@ int main() {
                             <span className="line-number">{index} | </span>
                         </span>
                         <span>{line}</span>
-                        <button className={`feedback-button ${feedback[index] ? 'active' : ''}`} onClick={() => handleFeedbackClick(index)}>
+                        <button className={`feedback-button ${feedback[index] ? 'active' : ''}`} onClick={() => handleFeedbackClick(index, line)}>
                             피드백 {feedback[index] ? `(${feedback[index].length})` : ''}
                         </button>
                         {feedback[index] && feedback[index].length > 0 && (
@@ -97,6 +97,9 @@ int main() {
             </pre>
             {popup.show && (
                 <div className="popup">
+                    <h3>{popup.line}번째 줄 피드백 팝업입니다.</h3>
+                    욕설 및 비하발언은 제재 대상입니다.
+                    <div className="post-code">{popup.codeContent}</div>
                     <div className="feedback-list">
                         {feedback[popup.line] && feedback[popup.line].map((fb, fbIndex) => (
                             <div key={fbIndex} className="feedback-text">{fb.userId}: {fb.text}</div>
@@ -112,7 +115,7 @@ int main() {
                             style={{ resize: 'none' }}
                         />
                         <div className="popup-buttons">
-                            <button onClick={() => setPopup({ show: false, line: null, text: '' })}>취소</button>
+                            <button onClick={() => setPopup({ show: false, line: null, text: '', codeContent: '' })}>취소</button>
                             <button onClick={handleFeedbackSubmit}>제출</button>
                         </div>
                     </div>
