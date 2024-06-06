@@ -57,13 +57,17 @@ body {
     margin-top: 20px;
     line-height: 1.6;
     color: #fdfdfd;
+    border-radius: 5px;
+    overflow-x: auto;
     background-color: #303030;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 .post-code-line {
     position: relative;
     padding-right: 100px; /* 버튼 공간 확보 */
     margin-bottom: 10px;
+    padding: 2px 0; /* 줄 간 여백 */
     transition: background-color 0.3s;
 }
 
@@ -71,9 +75,16 @@ body {
     background-color: #3f3f3f; /* 마우스를 올렸을 때 줄의 배경색 */
 }
 
+.post-code-line .line-number {
+    color: #888; /* 줄 번호 색상 */
+    margin-right: 10px; /* 줄 번호와 코드 간 여백 */
+    user-select: none; /* 드래그 방지 */
+}
+
 /* 피드백 */
 .feedback-button {
     position: absolute;
+    border-radius: 3px;
     background: #007bff;
     border: none;
     color: white;
@@ -91,7 +102,7 @@ body {
 .feedback-text {
     margin-top: 5px;
     font-size: 0.9rem;
-    color: rgb(128, 128, 128);
+    color: #888;
 }
 
 /* 피드백 팝업 */

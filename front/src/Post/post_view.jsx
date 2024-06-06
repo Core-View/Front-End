@@ -14,11 +14,12 @@ Hello, World!
 #include <stdio.h>
 
 int main() {
+    printf("TEST인데, 이번 줄은 좀 기네요. ABCDEFG HIJKLMN OPQRSTU VWXYZ 1234567890 가나다라마바사아자차카타파하 안녕하세요. 헬로 월드가 안 나와서 질문 드립니다.\\n");
     printf("Hello, World!");
 
     return 0;
 }
-    `.trim().split('\n'); // 줄 단위로 쪼개기
+    `.trim(); // 줄 단위로 쪼개지 않음
 
     // 현재 로그인된 유저의 Id
     const loggedInUserId = "user123";
@@ -75,9 +76,11 @@ int main() {
                 ))}
             </div>
             <pre className="post-code">
-                {code.map((line, index) => (
+                {code.split('\n').map((line, index) => (
                     <div key={index} className="post-code-line">
-                        <span className="non-drag">{index} | </span>
+                        <span className="non-drag">
+                            <span className="line-number">{index} | </span>
+                        </span>
                         <span>{line}</span>
                         <button className={`feedback-button ${feedback[index] ? 'active' : ''}`} onClick={() => handleFeedbackClick(index)}>
                             피드백 {feedback[index] ? `(${feedback[index].length})` : ''}
