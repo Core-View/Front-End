@@ -7,6 +7,7 @@ body {
     padding: 0;
 }
 
+/* 포스트 전체 */
 .post-view {
     max-width: 800px;
     margin: 20px auto;
@@ -16,6 +17,7 @@ body {
     border-radius: 8px;
 }
 
+/* 제목 */
 .post-title {
     font-size: 2rem;
     margin-bottom: 10px;
@@ -27,21 +29,15 @@ body {
     margin-bottom: 20px;
 }
 
+/* 좋아요, 작성자 */
 .post-likes, .post-author {
     font-size: 1rem;
     color: #888;
 }
 
+/* 내용 */
 .post-content {
     padding: 20px;
-    margin-top: 20px;
-    line-height: 1.6;
-    color: #444;
-}
-
-.post-code {
-    padding: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     margin-top: 20px;
     line-height: 1.6;
     color: #444;
@@ -54,10 +50,28 @@ body {
     transition: background-color 0.3s;
 }
 
-.post-line:hover {
-    background-color: #e9f5ff; /* 마우스를 올렸을 때 줄의 배경색 */
+/* 코드 */
+.post-code {
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    line-height: 1.6;
+    color: #fdfdfd;
+    background-color: #303030;
 }
 
+.post-code-line {
+    position: relative;
+    padding-right: 100px; /* 버튼 공간 확보 */
+    margin-bottom: 10px;
+    transition: background-color 0.3s;
+}
+
+.post-code-line:hover {
+    background-color: #3f3f3f; /* 마우스를 올렸을 때 줄의 배경색 */
+}
+
+/* 피드백 */
 .feedback-button {
     position: absolute;
     background: #007bff;
@@ -80,6 +94,7 @@ body {
     color: rgb(128, 128, 128);
 }
 
+/* 피드백 팝업 */
 .popup {
     position: fixed;
     top: 50%;
@@ -140,4 +155,9 @@ body {
 
 .popup-buttons button:last-child:hover {
     background-color: #0056b3;
+}
+
+/* 드래그 X */
+.non-drag {
+    user-select: none;
 }

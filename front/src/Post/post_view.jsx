@@ -32,7 +32,7 @@ int main() {
 
     const handleFeedbackSubmit = async () => {
         if (popup.text.trim() === '') return;
-        
+
         const newFeedback = feedback[popup.line] ? [...feedback[popup.line], { userId: loggedInUserId, text: popup.text }] : [{ userId: loggedInUserId, text: popup.text }];
         setFeedback({ ...feedback, [popup.line]: newFeedback });
 
@@ -42,7 +42,6 @@ int main() {
             text: popup.text,
         };
 
-        // 서버로 피드백 데이터를 보내는 부분 (예시)
         try {
             const response = await fetch('https://server-endpoint.com/feedback', {
                 method: 'POST',
@@ -77,14 +76,19 @@ int main() {
             </div>
             <pre className="post-code">
                 {code.map((line, index) => (
-                    <div key={index} className="post-line">
+                    <div key={index} className="post-code-line">
+                        <span className="non-drag">{index} | </span>
                         <span>{line}</span>
                         <button className={`feedback-button ${feedback[index] ? 'active' : ''}`} onClick={() => handleFeedbackClick(index)}>
-                            피드백 {feedback[index] ? `(${feedback[index].length})` : ''}
+                            <div className="non-drag">
+                                피드백 {feedback[index] ? `(${feedback[index].length})` : ''}
+                            </div>
                         </button>
                         {feedback[index] && feedback[index].length > 0 && (
                             <div className="feedback-text">
-                                [최근 피드백] {feedback[index][feedback[index].length - 1].userId}: {feedback[index][feedback[index].length - 1].text}
+                                <div className="non-drag">
+                                    [최근 피드백] {feedback[index][feedback[index].length - 1].userId}: {feedback[index][feedback[index].length - 1].text}
+                                </div>
                             </div>
                         )}
                     </div>
