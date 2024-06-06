@@ -26,6 +26,9 @@ function Header() {
           <li>
             <Link to="post_view">post_view</Link>
           </li>
+          <li>
+            <Link to="post_write">글쓰기</Link>
+          </li>
         </ul>
       </nav>
     </header>

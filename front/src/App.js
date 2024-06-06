@@ -14,7 +14,8 @@ import SignUp from "./Sign/Sign_up/signup_main";
 // Post
 import Post from "./Post/post_main";
 import PostView from "./Post/post_view";
-import CodeEditor from "./Post/post_code_editor";
+import PostWrite from "./Post/post_write";
+// import CodeEditor from "./Post/post_code_editor";
 
 function App() {
   return (
@@ -29,8 +30,9 @@ function App() {
               <Route path="my_main" element={<Mypage />} />
               <Route path="my_modify" element={<Mymodify />} />
               <Route path="post_main" element={<Post />} />
-              <Route path="post_code" element={<CodeEditor />} />
+              {/* <Route path="post_code" element={<CodeEditor />} /> */}
               <Route path="post_view" element={<PostView />} />
+              <Route path="post_write" element={<PostWrite />} />
               <Route path="users">
                 <Route path="sign-in" element={<SignIn />} />
                 <Route path="sign-up" element={<SignUp />} />
