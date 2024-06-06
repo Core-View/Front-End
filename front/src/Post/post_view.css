@@ -50,10 +50,6 @@ body {
     transition: background-color 0.3s;
 }
 
-.post-line:hover {
-    background-color: #3f3f3f; /* 마우스를 올렸을 때 줄의 배경색 */
-}
-
 /* 코드 */
 .post-code {
     padding: 20px;
