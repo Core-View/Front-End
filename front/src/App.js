@@ -15,6 +15,8 @@ import SignUp from "./Sign/Sign_up/signup_main";
 import Post from "./Post/post_main";
 import PostView from "./Post/post_view";
 import CodeEditor from "./Post/post_code_editor";
+// Admin
+import Admin from "./Admin/Admin_main";
 
 function App() {
   return (
@@ -23,6 +25,7 @@ function App() {
         <Header />
         <Sidebar />
         <Routes>
+          <Route path="/admin" element={<Admin />} />
           <Route path="/" element={<Main />} />
           <Route path="my_main" element={<Mypage />} />
           <Route path="my_modify" element={<Mymodify />} />
