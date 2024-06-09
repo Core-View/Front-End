@@ -1,0 +1,8 @@
+.ad_post_list {
+    width: 100%;
+}
+
+.ad_post_list li {
+    border-bottom: 1px solid black;
+    margin: 5px 0px;
+}

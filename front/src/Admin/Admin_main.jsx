@@ -3,6 +3,7 @@ import "./admin_main.css";
 import { GrScorecard } from "react-icons/gr";
 import { AiFillCaretRight } from "react-icons/ai";
 import AdNotice from "./Admin_notice";
+import AdPost from "./Admin_post";
 
 const Admin = () => {
   const [selectedMenu, setSelectedMenu] = useState("어떤관리");
@@ -46,7 +47,7 @@ const Admin = () => {
       case "공지사항":
         return <AdNotice />;
       case "게시판관리":
-        return <div>게시판관리 내용</div>;
+        return <AdPost />;
       default:
         return <div>메뉴를 선택해 주세요.</div>;
     }
