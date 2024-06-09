@@ -17,6 +17,9 @@ import PostView from "./Post/post_view";
 import CodeEditor from "./Post/post_code_editor";
 // Admin
 import Admin from "./Admin/Admin_main";
+import AdminNotice from "./Admin/Admin_notice";
+import AdminNoticeView from "./Admin/Admin_notice_view";
+import AdminNoticePost from "./Admin/Admin_notice_create";
 
 function App() {
   return (
@@ -25,7 +28,12 @@ function App() {
         <Header />
         <Sidebar />
         <Routes>
+          {/* admin  */}
           <Route path="/admin" element={<Admin />} />
+          <Route path="/notice" element={<AdminNotice />} />
+          <Route path="/notice/view/:notice_id" element={<AdminNoticeView />} />
+          <Route path="/notice/post" element={<AdminNoticePost />} />
+          {/* admin  */}
           <Route path="/" element={<Main />} />
           <Route path="my_main" element={<Mypage />} />
           <Route path="my_modify" element={<Mymodify />} />
