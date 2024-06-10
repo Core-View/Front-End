@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+// import { Cookies } from 'react-cookie';
 
 import './Sign_in.css';
 
@@ -27,6 +28,7 @@ const Sign_in = () => {
       })
       .then((response) => {
         if (response.status === 200) {
+          // cookies.set('user_id', response.data.user_id);
           alert('성공');
           navigate('/'); // 상대 경로로 이동
         } else {

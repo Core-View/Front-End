@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Modal, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 import './Sign_up.css';
 

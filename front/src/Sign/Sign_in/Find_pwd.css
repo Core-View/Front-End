@@ -1,0 +1,16 @@
+.flexi {
+  height: 1200px;
+  height: 300px;
+  display: flex;
+  flex-direction: row;
+}
+.input_componentFF {
+  width: 400px;
+  height: 500px;
+}
+.input_spaceF {
+  display: flex;
+  height: 200px;
+  flex-direction: column;
+  align-content: center;
+}
