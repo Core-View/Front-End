@@ -17,12 +17,12 @@ const AdminNoticeCreate = () => {
       axios
         .post(`http://localhost:3000/notice/post`, {
           title: title,
-          content: editorInstanceRef.current.getMarkdown(),
+          content: `${editorInstanceRef.current.getMarkdown()}`,
         })
         .then((Response) => {
           if (Response.data.success === true) {
             alert("등록성공!!");
-            navigate("/notice/view");
+            navigate("/admin");
           } else if (Response.data.success === false) {
             alert("실패했습니다! 다시 시도해주세요");
           }
@@ -35,6 +35,7 @@ const AdminNoticeCreate = () => {
       console.log(editorInstanceRef.current.getHTML());
       // 입력창에 입력한 내용을 MarkDown 형태로 취득
       console.log(editorInstanceRef.current.getMarkdown());
+      console.log(typeof editorInstanceRef.current.getMarkdown());
     }
   };
 
