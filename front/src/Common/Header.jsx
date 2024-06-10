@@ -1,13 +1,17 @@
-import React from "react";
+import React from 'react';
 // npm install react-router-dom
-import { Link } from "react-router-dom";
-import "./header.css";
-
+import { Link } from 'react-router-dom';
+import './header.css';
+import Alarm from './Alarm';
 function Header() {
   return (
     <header className="header">
       <Link to="/">
-        <img src="/images/CoreView_logo_white.png" alt="Logo" className="header-logo" />
+        <img
+          src="/images/CoreView_logo_white.png"
+          alt="Logo"
+          className="header-logo"
+        />
       </Link>
       <nav className="header-nav">
         <ul>
@@ -28,6 +32,9 @@ function Header() {
           </li>
           <li>
             <Link to="post_write">글쓰기</Link>
+          </li>
+          <li>
+            <Alarm />
           </li>
         </ul>
       </nav>

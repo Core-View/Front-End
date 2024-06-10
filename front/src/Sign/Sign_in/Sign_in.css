@@ -30,7 +30,7 @@
 
 .form_si {
   width: 400px;
-  height: 250px;
+  height: 290px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -61,17 +61,29 @@
   line-height: 50px;
 }
 .submit_si button {
-  width: 150px;
+  width: 200px;
   height: 40px;
   border: none;
   font-size: 20px;
   border-radius: 5px;
 }
 .submit_si button:hover {
-  width: 150px;
+  width: 200px;
   height: 40px;
   border: none;
   font-size: 20px;
   box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.9);
   background-color: rgb(199, 199, 199);
+}
+.google {
+  width: 200px;
+  height: 50px;
+  background-image: url(../../../public/images/googleSignU.png);
+  background-size: cover;
+}
+.google:hover {
+  width: 200px;
+  height: 50px;
+  background-image: url(../../../public/images/googleSignD.png);
+  background-size: cover;
 }

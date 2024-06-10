@@ -1,0 +1,88 @@
+.al_div {
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  position: relative;
+}
+.al_num {
+  font-size: 17px;
+  width: 20px;
+  position: absolute;
+  top: 5px;
+  right: 12px;
+  color: white;
+  background-color: rgba(119, 119, 119, 0.4);
+  border-radius: 50%;
+}
+.al_num_have {
+  font-size: 17px;
+  width: 20px;
+  position: absolute;
+  top: 5px;
+  right: 12px;
+  color: white;
+  background-color: rgba(236, 72, 72);
+  border-radius: 50%;
+}
+.al {
+  margin-top: 10px;
+  font-size: 40px;
+  color: white;
+}
+.al:active {
+  margin-top: 10px;
+  font-size: 40px;
+  color: rgb(3, 202, 3);
+}
+
+.dropdown {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  right: 10px;
+  width: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown-item {
+  height: 50px;
+  border-bottom: 1px solid #000000;
+  cursor: pointer;
+  display: flex;
+}
+.al_category {
+  width: 10px;
+  font-size: 8px;
+  writing-mode: vertical-rl;
+  background-color: green;
+}
+.al_content {
+  color: #000;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 200px;
+}
+.al_content div {
+  height: 25px;
+  line-height: 25px;
+}
+.al_time {
+  min-width: 30px;
+  font-size: 10px;
+  display: flex;
+  flex-direction: column;
+  color: #3f3f3f;
+  align-items: center;
+  background-color: rgb(63, 255, 181);
+}
+.timer {
+  font-size: 30px;
+}
+.dropdown-item:hover {
+  background-color: #f1f1f1;
+}

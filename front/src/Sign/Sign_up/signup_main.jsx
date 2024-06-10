@@ -111,13 +111,11 @@ const Sign_in = () => {
       return;
     }
     axios
-      .post('url', {
-        name: name,
+      .post('http://localhost:3000/sign/signup', {
+        username: name,
         nickname: nickname,
         password: password,
-        repassword: rePassword,
         email: email,
-        checkEmail: checkEmail,
       })
       .then((response) => {
         if (response.status === 200) {
@@ -138,7 +136,7 @@ const Sign_in = () => {
       return;
     }
     axios
-      .post('url', {
+      .post('http://localhost:3000/sign/auth', {
         email: email,
       })
       .then((response) => {
@@ -156,8 +154,8 @@ const Sign_in = () => {
       return;
     }
     axios
-      .post('url', {
-        checkEmail: checkEmail,
+      .post('http://localhost:3000/sign/authcheck', {
+        authcode: checkEmail,
       })
       .then((response) => {
         if (response.status === 200) {
@@ -193,7 +191,9 @@ const Sign_in = () => {
                 (nameValid ? (
                   <p className="passRegex">사용가능 합니다</p>
                 ) : (
-                  <p>이름은 1글자이상의 글자로 이루어져야 합니다</p>
+                  <p className="nonPassRegex">
+                    이름은 1글자이상의 글자로 이루어져야 합니다
+                  </p>
                 ))}
             </div>
             <div className="input_component">
@@ -212,7 +212,9 @@ const Sign_in = () => {
                 (nicknameValid ? (
                   <p className="passRegex">사용가능 합니다</p>
                 ) : (
-                  <p>닉네임은 10글자 이하로 이루어져야 합니다</p>
+                  <p className="nonPassRegex">
+                    닉네임은 10글자 이하로 이루어져야 합니다
+                  </p>
                 ))}
             </div>
             <div className="input_component">
@@ -231,7 +233,9 @@ const Sign_in = () => {
                 (passwordValid ? (
                   <p className="passRegex">사용가능 합니다</p>
                 ) : (
-                  <p>영문자 또는 한글 과 숫자 특수문자를 꼭 포함해야 합니다</p>
+                  <p className="nonPassRegex">
+                    영문자 또는 한글 과 숫자 특수문자를 꼭 포함해야 합니다
+                  </p>
                 ))}
             </div>
             <div className="input_component">
@@ -250,7 +254,7 @@ const Sign_in = () => {
                 (rePasswordValid ? (
                   <p className="passRegex">사용가능 합니다</p>
                 ) : (
-                  <p>일치하지 않습니다</p>
+                  <p className="nonPassRegex">일치하지 않습니다</p>
                 ))}
             </div>
           </div>
@@ -274,7 +278,7 @@ const Sign_in = () => {
                 (emailValid ? (
                   <p className="passRegex">사용가능 합니다</p>
                 ) : (
-                  <p>이메일 형식에 맞춰 주세요</p>
+                  <p className="nonPassRegex">이메일 형식에 맞춰 주세요</p>
                 ))}
             </div>
             <div className="input_component">
@@ -296,12 +300,12 @@ const Sign_in = () => {
                 (checkEmailValid ? (
                   <p className="passRegex">사용가능 합니다</p>
                 ) : (
-                  <p>6글자의 숫자 입력해주세요</p>
+                  <p className="nonPassRegex">6글자의 숫자 입력해주세요</p>
                 ))}
             </div>
             <div className="input_component">
               <div className="input_space">
-                <div>개인정보 확인을 해주세요</div>
+                <div className="pernal_message">개인정보 확인을 해주세요</div>
                 <Button variant="primary" onClick={handleShow}>
                   개인정보 확인 하기
                 </Button>
