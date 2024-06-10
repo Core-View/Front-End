@@ -9,32 +9,57 @@ const PostView = () => {
     const content = `
 안녕하세요.
 Hello, World!
-
+    `.trim().split('\n'); // 줄 단위로 쪼개기
+    const code = `
 #include <stdio.h>
 
 int main() {
-    printf("Hello, World!")
+    printf("TEST인데, 이번 줄은 좀 기네요. ABCDEFG HIJKLMN OPQRSTU VWXYZ 1234567890 가나다라마바사아자차카타파하 안녕하세요. 헬로 월드가 안 나와서 질문 드립니다.\\n");
+    printf("Hello, World!");
 
     return 0;
 }
-    `.trim().split('\n'); // 줄 단위로 쪼개기
+    `.trim(); // 줄 단위로 쪼개지 않음
 
     // 현재 로그인된 유저의 Id
     const loggedInUserId = "user123";
 
     const [feedback, setFeedback] = useState({});
-    const [popup, setPopup] = useState({ show: false, line: null, text: '' });
+    const [popup, setPopup] = useState({ show: false, line: null, text: '', codeContent: '' });
 
-    const handleFeedbackClick = (lineIndex) => {
-        setPopup({ show: true, line: lineIndex, text: '' });
+    const handleFeedbackClick = (lineIndex, lineCode) => {
+        setPopup({ show: true, line: lineIndex, text: '', codeContent: lineCode }); // 코드 내용 추가
     };
 
-    const handleFeedbackSubmit = () => {
+    const handleFeedbackSubmit = async () => {
         if (popup.text.trim() === '') return;
+
         const newFeedback = feedback[popup.line] ? [...feedback[popup.line], { userId: loggedInUserId, text: popup.text }] : [{ userId: loggedInUserId, text: popup.text }];
         setFeedback({ ...feedback, [popup.line]: newFeedback });
+
+        const feedbackData = {
+            line: popup.line,
+            userId: loggedInUserId,
+            text: popup.text,
+        };
+
+        try {
+            const response = await fetch('https://server-endpoint.com/feedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(feedbackData),
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+        } catch (error) {
+            console.error('There was a problem with your fetch operation:', error);
+        }
+
         setPopup({ ...popup, text: '' });
-    };    
+    };
 
     return (
         <div className="post-view">
@@ -43,16 +68,28 @@ int main() {
                 <span className="post-likes">좋아요 {likes}</span>
                 <span className="post-author">{author}</span>
             </div>
-            <pre className="post-content">
+            <div className="post-content">
                 {content.map((line, index) => (
                     <div key={index} className="post-line">
                         <span>{line}</span>
-                        <button className={`feedback-button ${feedback[index] ? 'active' : ''}`} onClick={() => handleFeedbackClick(index)}>
+                    </div>
+                ))}
+            </div>
+            <pre className="post-code">
+                {code.split('\n').map((line, index) => (
+                    <div key={index} className="post-code-line">
+                        <span className="non-drag">
+                            <span className="line-number">{index} | </span>
+                        </span>
+                        <span>{line}</span>
+                        <button className={`feedback-button ${feedback[index] ? 'active' : ''}`} onClick={() => handleFeedbackClick(index, line)}>
                             피드백 {feedback[index] ? `(${feedback[index].length})` : ''}
                         </button>
                         {feedback[index] && feedback[index].length > 0 && (
                             <div className="feedback-text">
-                                [최근 피드백] {feedback[index][feedback[index].length - 1].userId}: {feedback[index][feedback[index].length - 1].text}
+                                <div className="non-drag">
+                                    [최근 피드백] {feedback[index][feedback[index].length - 1].userId}: {feedback[index][feedback[index].length - 1].text}
+                                </div>
                             </div>
                         )}
                     </div>
@@ -60,6 +97,9 @@ int main() {
             </pre>
             {popup.show && (
                 <div className="popup">
+                    <h3>{popup.line}번째 줄 피드백 팝업입니다.</h3>
+                    욕설 및 비하발언은 제재 대상입니다.
+                    <div className="post-code">{popup.codeContent}</div>
                     <div className="feedback-list">
                         {feedback[popup.line] && feedback[popup.line].map((fb, fbIndex) => (
                             <div key={fbIndex} className="feedback-text">{fb.userId}: {fb.text}</div>
@@ -75,7 +115,7 @@ int main() {
                             style={{ resize: 'none' }}
                         />
                         <div className="popup-buttons">
-                            <button onClick={() => setPopup({ show: false, line: null, text: '' })}>취소</button>
+                            <button onClick={() => setPopup({ show: false, line: null, text: '', codeContent: '' })}>취소</button>
                             <button onClick={handleFeedbackSubmit}>제출</button>
                         </div>
                     </div>

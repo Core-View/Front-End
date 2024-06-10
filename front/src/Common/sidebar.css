@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .sidebar {
     display: flex;
     position: fixed;
@@ -50,11 +51,49 @@
     font-size: 20px;
     font-weight: 900;
     animation: sparkle 0.3s infinite;
+=======
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
 }
 
-.rankcode {
-    list-style-type: none;
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.main-content {
+    display: flex;
+    flex: 1;
+}
+
+.sidebar {
+    background-color: #1e1e2f;
+    color: #fff;
+    width: 250px;
+    height: calc(100vh - 60px); /* 헤더 높이를 고려 */
+    position: fixed;
+    top: 60px; /* 헤더 높이를 고려 */
+    left: 0;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.sidebar .rank {
+    padding: 20px;
+>>>>>>> d26aa18063adfffa628c3085f5ba0c854a0fd62c
+}
+
+.sidebar .rank-title {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.sidebar .rankcode {
+    list-style: none;
     padding: 0;
+<<<<<<< HEAD
     margin-top: 10px;
     width: 180px;
 }
@@ -83,3 +122,34 @@
     cursor: pointer;
     z-index: 1000;
 }
+=======
+    margin: 0;
+}
+
+.sidebar .rankcode li {
+    padding: 10px;
+    border-bottom: 1px solid #444;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar .rankcode li:hover {
+    background-color: #444;
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+    margin-left: 250px;
+    overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+
+    .content {
+        margin-left: 200px;
+    }
+}
+>>>>>>> d26aa18063adfffa628c3085f5ba0c854a0fd62c
