@@ -46,13 +46,6 @@ const AdminNoticeCreate = () => {
         initialValue: "공지사항을 작성하세요.",
         initialEditType: "wysiwyg",
         previewStyle: "vertical",
-        hooks: {
-          addImageBlobHook(blob, callback) {
-            // 이미지 업로드 로직 커스텀
-            console.log(blob);
-            console.log(callback);
-          },
-        },
         language: "ko-KR",
         hideModeSwitch: true,
       });
@@ -69,7 +62,13 @@ const AdminNoticeCreate = () => {
         className="title_input"
       />
       <div id="editor" ref={editorRef}></div>
-      <button className="editor_button" onClick={handleRegisterButton}>
+      <button
+        className="editor_button"
+        onClick={(e) => {
+          e.preventDefault();
+          handleRegisterButton();
+        }}
+      >
         등록
       </button>
     </div>

@@ -77,7 +77,7 @@ const Admin = () => {
         </ul>
       </div>
       <div className="admin_menu">
-        <h3>CoReview 관리자메뉴</h3>
+        <h3 className="admin_title">CoReview 관리자메뉴</h3>
         <ul className="admin_menu_list">
           <li onClick={() => setSelectedMenu("어떤관리")}>어떤관리</li>
           <li onClick={() => setSelectedMenu("공지사항")}>공지사항</li>

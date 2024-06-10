@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import "./admin_notice_view.css";
+import { useNavigate } from "react-router-dom";
 
 const AdminNoticeView = () => {
+  const navigate = useNavigate();
+
   const { id } = useParams();
   const [noticeDetail, setNoticeDetail] = useState(null);
 
@@ -24,12 +27,26 @@ const AdminNoticeView = () => {
 
   const handleEdit = () => {
     console.log("수정!");
+    navigate(`/notice/modify/${id}`);
   };
 
   const handleDelete = () => {
     console.log("삭제!");
+    axios
+      .delete(`http://localhost:3000/notice/delete`, {
+        headers: {
+          notice_id: id,
+        },
+      })
+      .then((response) => {
+        if (response.data.success === true) {
+          alert("삭제 성공!");
+          navigate("/admin");
+        }
+      });
   };
-  console.log("아 뭔데 이거거거거거거거거", noticeDetail);
+
+  console.log("아 뭔데 이거", noticeDetail);
   if (!noticeDetail) {
     return <div>Loading...</div>;
   }
@@ -44,7 +61,13 @@ const AdminNoticeView = () => {
           <button onClick={handleEdit} className="edit_button">
             수정
           </button>
-          <button onClick={handleDelete} className="delete_button">
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              handleDelete();
+            }}
+            className="delete_button"
+          >
             삭제
           </button>
         </div>

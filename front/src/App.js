@@ -20,6 +20,7 @@ import Admin from "./Admin/Admin_main";
 import AdminNotice from "./Admin/Admin_notice";
 import AdminNoticeView from "./Admin/Admin_notice_view";
 import AdminNoticePost from "./Admin/Admin_notice_create";
+import AdminNoticeUpdate from "./Admin/Admin_notice_update";
 //test
 import Alarm from "./Common/Alarm";
 
@@ -36,6 +37,7 @@ function App() {
               <Route path="/notice" element={<AdminNotice />} />
               <Route path="/notice/view/:id" element={<AdminNoticeView />} />
               <Route path="/notice/post" element={<AdminNoticePost />} />
+              <Route path="/notice/modify" element={<AdminNoticeUpdate />} />
               {/* admin  */}
               <Route path="/" element={<Main />} />
               <Route path="my_main" element={<Mypage />} />
