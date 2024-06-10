@@ -56,7 +56,7 @@ const Admin = () => {
   return (
     <div className="admin-container">
       <div className="member">
-        <h3>회원&기여도관리</h3>
+        <h3 className="admin_title">회원&기여도관리</h3>
         <ul className="memberList">
           {member.map((a, i) => (
             <li key={i}>

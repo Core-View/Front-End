@@ -8,7 +8,7 @@
     text-align: left;
 }
 
-h3 {
+.admin_title {
     border-bottom: 3px solid black;
     margin: 0px;
     margin-bottom: 10px;

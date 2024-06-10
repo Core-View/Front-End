@@ -69,7 +69,9 @@ const AdminNoticeCreate = () => {
         className="title_input"
       />
       <div id="editor" ref={editorRef}></div>
-      <button onClick={handleRegisterButton}>등록</button>
+      <button className="editor_button" onClick={handleRegisterButton}>
+        등록
+      </button>
     </div>
   );
 };
