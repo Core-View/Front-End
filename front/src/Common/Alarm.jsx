@@ -98,7 +98,7 @@ const Alarm = () => {
                 </div>
                 <div className="al_time">
                   <GiBackwardTime className="timer" />
-                  <span>{timeAgo(a.time)}</span>
+                  {/* <span>{timeAgo(a.time)}</span> */}
                 </div>
               </div>
             ))}
