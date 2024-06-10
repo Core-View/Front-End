@@ -48,7 +48,8 @@ body {
     justify-content: center;
     padding: 20px;
     margin: 20px 20px;
-    background-color: #333; /* Green */
+    background-color: #333;
+    /* Green */
     color: white;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -57,7 +58,8 @@ body {
 }
 
 .home_right:hover {
-    background-color: #191919; /* Darker Green */
+    background-color: #191919;
+    /* Darker Green */
 }
 
 .home_right svg {

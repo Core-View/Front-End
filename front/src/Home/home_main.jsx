@@ -2,7 +2,6 @@ import React from "react";
 import "./home_main.css";
 import { SlArrowRight } from "react-icons/sl";
 import { useNavigate } from "react-router-dom";
-
 const Main = () => {
   const navigate = useNavigate();
 
@@ -12,7 +11,7 @@ const Main = () => {
     "추천 게시글 2",
     "추천 게시글 3",
     "추천 게시글 4",
-    "추천 게시글 5"
+    "추천 게시글 5",
   ];
 
   const newestPosts = [
@@ -20,7 +19,7 @@ const Main = () => {
     "최신 게시글 2",
     "최신 게시글 3",
     "최신 게시글 4",
-    "최신 게시글 5"
+    "최신 게시글 5",
   ];
 
   return (
