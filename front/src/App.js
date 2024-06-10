@@ -31,7 +31,7 @@ function App() {
           {/* admin  */}
           <Route path="/admin" element={<Admin />} />
           <Route path="/notice" element={<AdminNotice />} />
-          <Route path="/notice/view/:notice_id" element={<AdminNoticeView />} />
+          <Route path="/notice/view/:id" element={<AdminNoticeView />} />
           <Route path="/notice/post" element={<AdminNoticePost />} />
           {/* admin  */}
           <Route path="/" element={<Main />} />

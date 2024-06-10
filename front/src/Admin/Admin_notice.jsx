@@ -10,45 +10,13 @@ const AdminNotice = () => {
 
   //공지조회관련
   const getNotice = () => {
-    // axios.get(`http://localhost:3000/notice/view`).then((response) => {
-    //   if (response.data.success === true) {
-    //     let noticeList = response.data.notice;
-    //     setNoticeLists(noticeList);
-    //   }
-    // });
-    let noticeList = [
-      { notice_id: 1, notice_title: "아오하기싫어", notice_date: "2024-12-12" },
-      { notice_id: 2, notice_title: "아오하기싫어", notice_date: "2024-12-12" },
-      { notice_id: 3, notice_title: "아오하기싫어", notice_date: "2024-12-12" },
-      { notice_id: 4, notice_title: "아오하기싫어", notice_date: "2024-12-12" },
-      { notice_id: 5, notice_title: "아오하기싫어", notice_date: "2024-12-12" },
-      { notice_id: 6, notice_title: "아오하기싫어", notice_date: "2024-12-12" },
-      { notice_id: 7, notice_title: "아오하기싫어", notice_date: "2024-12-12" },
-      { notice_id: 8, notice_title: "아오하기싫어", notice_date: "2024-12-12" },
-      { notice_id: 9, notice_title: "아오하기싫어", notice_date: "2024-12-12" },
-      {
-        notice_id: 10,
-        notice_title: "아오하기싫어",
-        notice_date: "2024-12-12",
-      },
-      {
-        notice_id: 11,
-        notice_title: "아오하기싫어",
-        notice_date: "2024-12-12",
-      },
-      {
-        notice_id: 12,
-        notice_title: "아오하기싫어",
-        notice_date: "2024-12-12",
-      },
-      {
-        notice_id: 13,
-        notice_title: "아오하기싫어",
-        notice_date: "2024-12-12",
-      },
-    ];
-
-    setNoticeLists(noticeList);
+    axios.get(`http://localhost:3000/notice/view`).then((response) => {
+      if (response.data.success === true) {
+        let noticeList = response.data.notice;
+        setNoticeLists(noticeList);
+        console.log(noticeList);
+      }
+    });
   };
 
   useEffect(() => {
@@ -89,12 +57,12 @@ const AdminNotice = () => {
           <li
             key={i}
             onClick={() => {
-              navigate(`/notice/view/${notice.notice_id}`);
+              navigate(`/notice/view/${notice.NOTICE_ID}`);
             }}
           >
-            <span className="ad_notice_id">{notice.notice_id}</span>
-            <span className="ad_notice_title">{notice.notice_title}</span>
-            <span className="ad_notice_date">{notice.notice_date}</span>
+            <span className="ad_notice_id">{notice.NOTICE_ID}</span>
+            <span className="ad_notice_title">{notice.NOTICE_TITLE}</span>
+            <span className="ad_notice_date">{notice.NOTICE_DATE}</span>
           </li>
         ))}
       </ul>
