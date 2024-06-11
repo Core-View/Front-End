@@ -37,7 +37,10 @@ function App() {
               <Route path="/notice" element={<AdminNotice />} />
               <Route path="/notice/view/:id" element={<AdminNoticeView />} />
               <Route path="/notice/post" element={<AdminNoticePost />} />
-              <Route path="/notice/modify" element={<AdminNoticeUpdate />} />
+              <Route
+                path="/notice/modify/:id"
+                element={<AdminNoticeUpdate />}
+              />
               {/* admin  */}
               <Route path="/" element={<Main />} />
               <Route path="my_main" element={<Mypage />} />
