@@ -47,6 +47,10 @@
     border-bottom: 1px solid black;
 }
 
+.nickname {
+    display: flex;
+}
+
 .memberList li .name {
     z-index: 2;
     position: relative;
@@ -67,6 +71,7 @@
     /* 반투명 초록색 게이지 */
     z-index: 1;
     /* 포인트 스팬 아래에 오도록 설정 */
+    border-left: 3px solid black;
 }
 
 .admin_menu {
