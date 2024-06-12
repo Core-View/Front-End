@@ -7,6 +7,8 @@ import Main from "./Home/home_main";
 // My
 import Mypage from "./My/my_main";
 import Mymodify from "./My/my_modify";
+import Myposting from "./My/my_posting";
+import Mycomment from "./My/my_comment";
 // Sign
 import SignIn from "./Sign/Sign_in/signin_main";
 import SignUp from "./Sign/Sign_up/signup_main";
@@ -40,9 +42,11 @@ function App() {
               <Route path="/" element={<Main />} />
               <Route path="my_main" element={<Mypage />} />
               <Route path="my_modify" element={<Mymodify />} />
+              <Route path="my_posting" element={<Myposting />} />
+              <Route path="my_comment" element={<Mycomment />} />
               <Route path="post_main" element={<Post />} />
               <Route path="post_code" element={<CodeEditor />} />
-              <Route path="post-view" element={<PostView />} />
+              <Route path="post_view" element={<PostView />} />
               <Route path="post_write" element={<PostWrite />} />
               <Route path="users">
                 <Route path="sign-in" element={<SignIn />} />
