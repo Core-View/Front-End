@@ -1,28 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./post_main.css";
 import { useNavigate } from "react-router-dom";
 import { PiPencilLineFill } from "react-icons/pi";
 import { TbListSearch } from "react-icons/tb";
+import axios from "axios";
 
 const Empty = () => {
   const navigate = useNavigate();
-
-  // 하드코딩된 게시글 데이터
-  const posts = [
-    "Hello, World가 안 나와요.",
-    "제가 원하는 결과가 안 나와요.",
-    "React와 Node.js를 이용한 웹 개발 질문",
-    "Python으로 데이터 분석",
-    "JavaScript 비동기 프로그래밍 관련 질문",
-    "HTML5와 CSS3의 새로운 기능",
-    "Machine Learning에서 기초 수학은 뭘 배우나요?",
-    "Git과 GitHub을 이용한 버전 관리는 어떻게 하나요?",
-    "Docker와 Kubernetes로 애플리케이션 배포"
-  ];
-
-  // 상태 관리
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredPosts, setFilteredPosts] = useState(posts);
+  const [posts, setPosts] = useState([]);
+  const [filteredPosts, setFilteredPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    // 서버에서 게시글 데이터를 가져옴
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/post/latest");
+        setPosts(response.data);
+        setFilteredPosts(response.data);
+        setLoading(false);
+      } catch (err) {
+        setError("게시글을 가져오는 데 실패했습니다.");
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
 
   // 검색 핸들러
   const handleSearch = (e) => {
@@ -30,7 +36,7 @@ const Empty = () => {
     setSearchQuery(query);
     setFilteredPosts(
       posts.filter((post) =>
-        post.toLowerCase().includes(query.toLowerCase())
+        post.title.toLowerCase().includes(query.toLowerCase())
       )
     );
   };
@@ -40,23 +46,24 @@ const Empty = () => {
     navigate("/post_view", { state: { post } });
   };
 
+  if (loading) {
+    return <div>로딩 중...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
   return (
-    <div className="Poster-container">
+    <div className="poster-container">
       <section className="post-top">
         <div className="post-top-left">
-          {/* <div className="new-hot">
-            <div>New</div>
-            <div>Hot</div>
-          </div>
-          <ul className="keyword">
-            <li>많이뜨는</li>
-            <li>키워드</li>
-          </ul> */}
+          {/* 추가 기능을 위한 공간 */}
         </div>
         <div className="post-top-right">
           <div className="pencil">
             <PiPencilLineFill
-              className="post_search "
+              className="post_search"
               onClick={() => {
                 navigate("/post_code");
               }}
@@ -87,7 +94,7 @@ const Empty = () => {
           {filteredPosts.length > 0 ? (
             filteredPosts.map((post, index) => (
               <li key={index} onClick={() => handlePostClick(post)}>
-                {post}
+                {post.title}
               </li>
             ))
           ) : (
