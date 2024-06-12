@@ -12,6 +12,11 @@ const Main = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // 게시글 클릭 핸들러
+  const handlePostClick = (post) => {
+    navigate(`/post_view/${post.post_id}`, { state: { post } });
+  };
+
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -40,6 +45,13 @@ const Main = () => {
     return <div>{error}</div>;
   }
 
+  const languageIcons = {
+    c: "/images/language_icons/c_icon.png",
+    cpp: "/images/language_icons/cpp_icon.png",
+    java: "/images/language_icons/java_icon.png",
+    python: "/images/language_icons/python_icon.png",
+  };
+
   return (
     <div className="home-container">
       <section className="home_mid">
@@ -47,7 +59,21 @@ const Main = () => {
           <h2>추천 게시글</h2>
           <ul className="postcode">
             {recommendedPosts.map((post, index) => (
-              <li key={index}>{post.post_title}</li>
+              <li key={index} onClick={() => handlePostClick(post)}>
+                <div className="post-main-meta">
+                  <div>
+                    <img
+                      src={languageIcons[post.language]}
+                      alt=""
+                      className="post-main-language-icon"
+                    />{" "}
+                    {post.post_title}
+                  </div>
+                  <div>
+                    {post.user_id} | {new Date(post.post_date).toLocaleDateString()}
+                  </div>
+                </div>
+              </li>
             ))}
           </ul>
         </div>
@@ -55,7 +81,21 @@ const Main = () => {
           <h2>최신 게시글</h2>
           <ul className="postcode">
             {newestPosts.map((post, index) => (
-              <li key={index}>{post.post_title}</li>
+              <li key={index} onClick={() => handlePostClick(post)}>
+                <div className="post-main-meta">
+                  <div>
+                    <img
+                      src={languageIcons[post.language]}
+                      alt=""
+                      className="post-main-language-icon"
+                    />{" "}
+                    {post.post_title}
+                  </div>
+                  <div>
+                    {post.user_id} | {new Date(post.post_date).toLocaleDateString()}
+                  </div>
+                </div>
+              </li>
             ))}
           </ul>
         </div>
