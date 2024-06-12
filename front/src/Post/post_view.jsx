@@ -75,6 +75,7 @@ const PostView = () => {
                 <span className="post-date">{new Date(date).toLocaleDateString()}</span>
                 <span className="post-language">{language}</span>
             </div>
+            <br></br>
             <div className="post-meta">
                 <span className="post-likes">좋아요 {likes}</span>
                 <span className="post-author">작성자 {author}</span>
@@ -108,7 +109,7 @@ const PostView = () => {
             </pre>
             {popup.show && (
                 <div className="popup">
-                    <h3>Line: {popup.line} 피드백 팝업</h3>
+                    <h3>Line: {popup.line + 1} 피드백 팝업</h3>
                     욕설 및 비하발언은 제재 대상입니다.
                     <div className="post-code">{popup.codeContent}</div>
                     <div className="feedback-list">
