@@ -131,32 +131,38 @@
     cursor: pointer;
 }
 
-.post-bot {
-    text-align: center;
-}
-
-.post-bot ul {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    gap: 5px;
-}
-
-.post-bot li {
-    padding: 8px 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.post-bot li:hover {
-    background-color: #1e90ff;
-    color: white;
-}
-
 .post-main-language-icon {
     max-width: 25px; /* 최대 너비 설정 */
     margin-left: 10px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: auto;
+    list-style: none;
+    padding: 0;
+}
+
+.pagination li {
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.pagination li a {
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #333;
+    text-decoration: none;
+}
+
+.pagination li.active a {
+    background-color: #3d3d3d;
+    color: white;
+}
+
+.pagination li:hover a {
+    background-color: #191919;
+    color: white;
 }

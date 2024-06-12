@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./post_main.css";
 import { useNavigate } from "react-router-dom";
 import { PiPencilLineFill } from "react-icons/pi";
-import { TbListSearch } from "react-icons/tb";
 import axios from "axios";
+import ReactPaginate from "react-paginate";
 
 const Empty = () => {
   const navigate = useNavigate();
@@ -12,13 +12,15 @@ const Empty = () => {
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+  const [currentPage, setCurrentPage] = useState(0);
+  const postsPerPage = 10; // 페이지당 게시글 수
+
   const languageIcons = {
     c: "/images/language_icons/c_icon.png",
     cpp: "/images/language_icons/cpp_icon.png",
     java: "/images/language_icons/java_icon.png",
     python: "/images/language_icons/python_icon.png",
-  }
+  };
 
   useEffect(() => {
     // 서버에서 게시글 데이터를 가져옴
@@ -41,17 +43,25 @@ const Empty = () => {
   const handleSearch = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
-    setFilteredPosts(
-      posts.filter((post) =>
-        post.post_title.toLowerCase().includes(query.toLowerCase())
-      )
+    const filtered = posts.filter((post) =>
+      post.post_title.toLowerCase().includes(query.toLowerCase())
     );
+    setFilteredPosts(filtered);
+    setCurrentPage(0); // 검색 시 첫 페이지로 이동
   };
 
   // 게시글 클릭 핸들러
   const handlePostClick = (post) => {
     navigate(`/post_view/${post.post_id}`, { state: { post } });
   };
+
+  // 페이지 변경 핸들러
+  const handlePageClick = (data) => {
+    setCurrentPage(data.selected);
+  };
+
+  const offset = currentPage * postsPerPage;
+  const currentPageData = filteredPosts.slice(offset, offset + postsPerPage);
 
   if (loading) {
     return <div>로딩 중...</div>;
@@ -64,8 +74,7 @@ const Empty = () => {
   return (
     <div className="poster-container">
       <section className="post-top">
-        <div className="post-top-left">
-        </div>
+        <div className="post-top-left"></div>
         <div className="post-top-right">
           <div className="pencil">
             <PiPencilLineFill
@@ -96,8 +105,8 @@ const Empty = () => {
           <div>
             <h4>전체 게시글</h4>
           </div>
-          {filteredPosts.length > 0 ? (
-            filteredPosts.map((post, index) => (
+          {currentPageData.length > 0 ? (
+            currentPageData.map((post, index) => (
               <li key={index} onClick={() => handlePostClick(post)}>
                 <div className="post-main-meta">
                   <div>
@@ -105,8 +114,12 @@ const Empty = () => {
                       src={languageIcons[post.language]}
                       alt=""
                       className="post-main-language-icon"
-                    /> {post.post_title}</div>
-                  <div>{post.user_id} | {new Date(post.post_date).toLocaleDateString()}</div>
+                    />{" "}
+                    {post.post_title}
+                  </div>
+                  <div>
+                    {post.user_id} | {new Date(post.post_date).toLocaleDateString()}
+                  </div>
                 </div>
               </li>
             ))
@@ -116,11 +129,18 @@ const Empty = () => {
         </ul>
       </section>
       <section className="post-bot">
-        <ul>
-          <li>1</li>
-          <li>2</li>
-          <li>3</li>
-        </ul>
+        <ReactPaginate
+          previousLabel={"이전"}
+          nextLabel={"다음"}
+          breakLabel={"..."}
+          breakClassName={"break-me"}
+          pageCount={Math.ceil(filteredPosts.length / postsPerPage)}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+        />
       </section>
     </div>
   );
