@@ -85,38 +85,54 @@ const PostWrite = () => {
                     <div className="language-buttons">
                         <button
                             type="button"
+                            className={language === "" ? "active" : ""}
+                            onClick={() => handleLanguageChange("")}
+                        >
+                            기타
+                        </button>
+                        <button
+                            type="button"
                             className={language === "c" ? "active" : ""}
                             onClick={() => handleLanguageChange("c")}
                         >
-                            C
+                            <img
+                                src="/images/language_icons/c_icon.png"
+                                alt=""
+                                className="write-language-icon"
+                            /> C
                         </button>
                         <button
                             type="button"
                             className={language === "cpp" ? "active" : ""}
                             onClick={() => handleLanguageChange("cpp")}
                         >
-                            C++
+                            <img
+                                src="/images/language_icons/cpp_icon.png"
+                                alt=""
+                                className="write-language-icon"
+                            /> C++
                         </button>
                         <button
                             type="button"
                             className={language === "java" ? "active" : ""}
                             onClick={() => handleLanguageChange("java")}
                         >
-                            Java
+                            <img
+                                src="/images/language_icons/java_icon.png"
+                                alt=""
+                                className="write-language-icon"
+                            /> Java
                         </button>
                         <button
                             type="button"
                             className={language === "python" ? "active" : ""}
                             onClick={() => handleLanguageChange("python")}
                         >
-                            Python
-                        </button>
-                        <button
-                            type="button"
-                            className={language === "Another" ? "active" : ""}
-                            onClick={() => handleLanguageChange("")}
-                        >
-                            기타
+                            <img
+                                src="/images/language_icons/python_icon.png"
+                                alt=""
+                                className="write-language-icon"
+                            /> Python
                         </button>
                     </div>
                 </div>

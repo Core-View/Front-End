@@ -45,7 +45,7 @@ body {
 }
 
 button[type="submit"] {
-    background-color: #007bff;
+    background-color: #3d3d3d;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -56,7 +56,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: #0056b3;
+    background-color: #191919;
 }
 
 .language-buttons {
@@ -69,15 +69,21 @@ button[type="submit"]:hover {
     padding: 5px 10px;
     border: 1px solid #ccc;
     background-color: #f9f9f9;
+    color: black;
     cursor: pointer;
 }
 
 .language-buttons button.active {
-    background-color: #007bff;
+    background-color: #191919;
     color: white;
-    border: 1px solid #007bff;
+    border: 1px solid #191919;
 }
 
 .language-buttons button:hover {
-    background-color: #e2e6ea;
+    color: white;
+    background-color: #191919;
+}
+
+.write-language-icon {
+    max-width: 20px; /* 최대 너비 설정 */
 }
