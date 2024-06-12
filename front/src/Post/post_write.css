@@ -8,7 +8,7 @@ body {
 }
 
 .post-write-container {
-    max-width: 800px;
+    max-width: 100%;
     margin: 20px auto;
     padding: 20px;
     background: white;
@@ -18,7 +18,8 @@ body {
 
 .post-write-form {
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
+    justify-content: space-between;
 }
 
 .form-group {
@@ -86,4 +87,22 @@ button[type="submit"]:hover {
 
 .write-language-icon {
     max-width: 20px; /* 최대 너비 설정 */
+}
+
+.write-box {
+    width: 49%;
+}
+
+button[type="submit"] {
+    background-color: #3d3d3d;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
 }

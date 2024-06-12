@@ -61,99 +61,103 @@ const PostWrite = () => {
         <div className="post-write-container">
             <h2>게시글 작성</h2>
             <form onSubmit={handleSubmit} className="post-write-form">
-                <div className="form-group">
-                    <label htmlFor="title">제목</label>
-                    <input
-                        type="text"
-                        id="title"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="hashtags">해시태그 (콤마로 구분)</label>
-                    <input
-                        type="text"
-                        id="hashtags"
-                        value={hashtags}
-                        onChange={(e) => setHashtags(e.target.value)}
-                    />
-                </div>
-                <div className="form-group">
-                    <label>언어 선택</label>
-                    <div className="language-buttons">
-                        <button
-                            type="button"
-                            className={language === "" ? "active" : ""}
-                            onClick={() => handleLanguageChange("")}
-                        >
-                            기타
-                        </button>
-                        <button
-                            type="button"
-                            className={language === "c" ? "active" : ""}
-                            onClick={() => handleLanguageChange("c")}
-                        >
-                            <img
-                                src="/images/language_icons/c_icon.png"
-                                alt=""
-                                className="write-language-icon"
-                            /> C
-                        </button>
-                        <button
-                            type="button"
-                            className={language === "cpp" ? "active" : ""}
-                            onClick={() => handleLanguageChange("cpp")}
-                        >
-                            <img
-                                src="/images/language_icons/cpp_icon.png"
-                                alt=""
-                                className="write-language-icon"
-                            /> C++
-                        </button>
-                        <button
-                            type="button"
-                            className={language === "java" ? "active" : ""}
-                            onClick={() => handleLanguageChange("java")}
-                        >
-                            <img
-                                src="/images/language_icons/java_icon.png"
-                                alt=""
-                                className="write-language-icon"
-                            /> Java
-                        </button>
-                        <button
-                            type="button"
-                            className={language === "python" ? "active" : ""}
-                            onClick={() => handleLanguageChange("python")}
-                        >
-                            <img
-                                src="/images/language_icons/python_icon.png"
-                                alt=""
-                                className="write-language-icon"
-                            /> Python
-                        </button>
+                <div className="write-box">
+                    <div className="form-group">
+                        <label htmlFor="title">제목</label>
+                        <input
+                            type="text"
+                            id="title"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            required
+                        />
+                    </div>
+                    {/* <div className="form-group">
+                        <label htmlFor="hashtags">해시태그 (콤마로 구분)</label>
+                        <input
+                            type="text"
+                            id="hashtags"
+                            value={hashtags}
+                            onChange={(e) => setHashtags(e.target.value)}
+                        />
+                    </div> */}
+                    <div className="form-group">
+                        <label htmlFor="content">내용</label>
+                        <textarea
+                            id="content"
+                            value={content}
+                            onChange={handleContentChange}
+                            ref={contentRef}
+                            required
+                        ></textarea>
                     </div>
                 </div>
-                <div className="form-group">
-                    <label htmlFor="content">내용</label>
-                    <textarea
-                        id="content"
-                        value={content}
-                        onChange={handleContentChange}
-                        ref={contentRef}
-                        required
-                    ></textarea>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="code">코드</label>
-                    <textarea
-                        id="code"
-                        value={code}
-                        onChange={handleCodeChange}
-                        ref={codeRef}
-                    ></textarea>
+                <div className="write-box">
+                    <div className="form-group">
+                        <label>언어 선택</label>
+                        <div className="language-buttons">
+                            <button
+                                type="button"
+                                className={language === "" ? "active" : ""}
+                                onClick={() => handleLanguageChange("")}
+                            >
+                                기타
+                            </button>
+                            <button
+                                type="button"
+                                className={language === "c" ? "active" : ""}
+                                onClick={() => handleLanguageChange("c")}
+                            >
+                                <img
+                                    src="/images/language_icons/c_icon.png"
+                                    alt=""
+                                    className="write-language-icon"
+                                /> C
+                            </button>
+                            <button
+                                type="button"
+                                className={language === "cpp" ? "active" : ""}
+                                onClick={() => handleLanguageChange("cpp")}
+                            >
+                                <img
+                                    src="/images/language_icons/cpp_icon.png"
+                                    alt=""
+                                    className="write-language-icon"
+                                /> C++
+                            </button>
+                            <button
+                                type="button"
+                                className={language === "java" ? "active" : ""}
+                                onClick={() => handleLanguageChange("java")}
+                            >
+                                <img
+                                    src="/images/language_icons/java_icon.png"
+                                    alt=""
+                                    className="write-language-icon"
+                                /> Java
+                            </button>
+                            <button
+                                type="button"
+                                className={language === "python" ? "active" : ""}
+                                onClick={() => handleLanguageChange("python")}
+                            >
+                                <img
+                                    src="/images/language_icons/python_icon.png"
+                                    alt=""
+                                    className="write-language-icon"
+                                /> Python
+                            </button>
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="code">코드</label>
+                        <textarea
+                            id="code"
+                            value={code}
+                            onChange={handleCodeChange}
+                            ref={codeRef}
+                        ></textarea>
+                    </div>
                 </div>
                 <button type="submit">게시글 등록</button>
             </form>
