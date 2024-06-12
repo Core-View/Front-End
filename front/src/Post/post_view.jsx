@@ -8,9 +8,9 @@ const PostView = () => {
     const { post } = location.state;
 
     const title = post.post_title;
-    const likes = -1;
+    const likes = -1; // 좋아요 기능이 구현되지 않아서 임시로 -1 설정
     const author = post.user_id;
-    const language = post.lagnuage;
+    const language = post.language; // 오타 수정
     const date = post.post_date;
     const content = post.post_content.trim().split('\n'); // 줄 단위로 쪼개기
     const code = post.post_code.trim(); // 줄 단위로 쪼개지 않음
@@ -59,8 +59,12 @@ const PostView = () => {
         <div className="post-view">
             <h1 className="post-title">{title}</h1>
             <div className="post-meta">
+                <span className="post-date">{new Date(date).toLocaleDateString()}</span>
+                <span className="post-language">{language}</span>
+            </div>
+            <div className="post-meta">
                 <span className="post-likes">좋아요 {likes}</span>
-                <span className="post-author">{author}</span>
+                <span className="post-author">작성자 {author}</span>
             </div>
             <div className="post-content">
                 {content.map((line, index) => (
@@ -73,7 +77,7 @@ const PostView = () => {
                 {code.split('\n').map((line, index) => (
                     <div key={index} className="post-code-line">
                         <span className="non-drag">
-                            <span className="line-number">{index} | </span>
+                            <span className="line-number">{index + 1} | </span>
                         </span>
                         <span>{line}</span>
                         <button className={`feedback-button ${feedback[index] ? 'active' : ''}`} onClick={() => handleFeedbackClick(index, line)}>
@@ -91,7 +95,7 @@ const PostView = () => {
             </pre>
             {popup.show && (
                 <div className="popup">
-                    <h3>{popup.line}번째 줄 피드백 팝업입니다.</h3>
+                    <h3>Line: {popup.line} 피드백 팝업</h3>
                     욕설 및 비하발언은 제재 대상입니다.
                     <div className="post-code">{popup.codeContent}</div>
                     <div className="feedback-list">

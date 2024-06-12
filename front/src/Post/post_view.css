@@ -32,6 +32,12 @@ body {
 /* 좋아요, 작성자 */
 .post-likes, .post-author {
     font-size: 1rem;
+    color: #000000;
+}
+
+/* 좋아요, 작성자 */
+.post-date, .post-language {
+    font-size: 1rem;
     color: #888;
 }
 
