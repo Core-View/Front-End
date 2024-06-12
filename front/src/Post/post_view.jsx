@@ -15,6 +15,13 @@ const PostView = () => {
     const content = post.post_content.trim().split('\n'); // 줄 단위로 쪼개기
     const code = post.post_code.trim(); // 줄 단위로 쪼개지 않음
 
+    const languageIcons = {
+        c: "/images/language_icons/c_icon.png",
+        cpp: "/images/language_icons/cpp_icon.png",
+        java: "/images/language_icons/java_icon.png",
+        python: "/images/language_icons/python_icon.png",
+    }
+
     // 현재 로그인된 유저의 Id
     const loggedInUserId = "user123";
 
@@ -58,7 +65,11 @@ const PostView = () => {
     return (
         <div className="post-view">
             <h1 className="post-title">
-                [{language}] {title}
+                <img
+                    src={languageIcons[language]}
+                    alt=""
+                    className="language-icon"
+                /> {title}
             </h1>
             <div className="post-meta">
                 <span className="post-date">{new Date(date).toLocaleDateString()}</span>

@@ -26,7 +26,6 @@ body {
 .post-meta {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 20px;
 }
 
 /* 좋아요, 작성자 */
@@ -180,4 +179,9 @@ body {
 /* 드래그 X */
 .non-drag {
     user-select: none;
+}
+
+.language-icon {
+    max-width: 40px; /* 최대 너비 설정 */
+    margin-left: 10px;
 }

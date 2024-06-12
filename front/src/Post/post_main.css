@@ -9,10 +9,9 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.post-meta {
+.post-main-meta {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 20px;
 }
 
 .post-top, .post-mid, .post-bot {
@@ -155,4 +154,9 @@
 .post-bot li:hover {
     background-color: #1e90ff;
     color: white;
+}
+
+.post-main-language-icon {
+    max-width: 25px; /* 최대 너비 설정 */
+    margin-left: 10px;
 }

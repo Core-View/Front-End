@@ -12,6 +12,13 @@ const Empty = () => {
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  const languageIcons = {
+    c: "/images/language_icons/c_icon.png",
+    cpp: "/images/language_icons/cpp_icon.png",
+    java: "/images/language_icons/java_icon.png",
+    python: "/images/language_icons/python_icon.png",
+  }
 
   useEffect(() => {
     // 서버에서 게시글 데이터를 가져옴
@@ -92,8 +99,13 @@ const Empty = () => {
           {filteredPosts.length > 0 ? (
             filteredPosts.map((post, index) => (
               <li key={index} onClick={() => handlePostClick(post)}>
-                <div className="post-meta">
-                  <div>[{post.language}] {post.post_title}</div>
+                <div className="post-main-meta">
+                  <div>
+                    <img
+                      src={languageIcons[post.language]}
+                      alt=""
+                      className="post-main-language-icon"
+                    /> {post.post_title}</div>
                   <div>{post.user_id} | {new Date(post.post_date).toLocaleDateString()}</div>
                 </div>
               </li>
