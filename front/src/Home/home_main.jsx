@@ -56,7 +56,7 @@ const Main = () => {
     <div className="home-container">
       <section className="home_mid">
         <div className="post recommend">
-          <h2>추천 게시글</h2>
+          <h2>추천 게시글 (좋아요 순)</h2>
           <ul className="postcode">
             {recommendedPosts.map((post, index) => (
               <li key={index} onClick={() => handlePostClick(post)}>
@@ -78,7 +78,7 @@ const Main = () => {
           </ul>
         </div>
         <div className="post newest">
-          <h2>최신 게시글</h2>
+          <h2>최신 게시글 (시간 순)</h2>
           <ul className="postcode">
             {newestPosts.map((post, index) => (
               <li key={index} onClick={() => handlePostClick(post)}>
