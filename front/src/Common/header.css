@@ -5,15 +5,21 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header-logo-container {
+    display: flex;
+    align-items: center;
 }
 
 .header-logo {
-    max-width: 80px; /* 최대 너비 설정 */
-    margin-left: 10px;
+    max-width: 100px; /* 로고 크기 조정 */
+    transition: transform 0.3s ease;
 }
 
-.header-title {
-    font-size: 1.5em;
+.header-logo:hover {
+    transform: scale(1.1); /* 로고에 호버 효과 추가 */
 }
 
 .header-nav ul {
@@ -27,8 +33,23 @@
 .header-nav a {
     color: white;
     text-decoration: none;
+    padding: 10px 15px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border-radius: 5px;
 }
 
 .header-nav a:hover {
-    text-decoration: underline;
+    background-color: #ffffff;
+    color: #282c34;
+}
+
+@media (max-width: 768px) {
+    .header-nav ul {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }
