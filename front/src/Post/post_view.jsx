@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useLocation, useParams } from "react-router-dom";
-import './post_view.css'; // CSS 파일 import
+
+import './post_view.css';
+import './post_view_fb.css';
+import './post_view_fb_popup.css';
 
 const PostView = () => {
     const { post_id } = useParams();

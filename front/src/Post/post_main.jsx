@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
-import "./post_main.css";
 import { useNavigate } from "react-router-dom";
 import { PiPencilLineFill } from "react-icons/pi";
 import axios from "axios";
 import ReactPaginate from "react-paginate";
+
+import "./post_main_pagination.css";
+import "./post_main.css";
 
 const Empty = () => {
   const navigate = useNavigate();

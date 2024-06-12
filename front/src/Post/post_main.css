@@ -135,34 +135,3 @@
     max-width: 25px; /* 최대 너비 설정 */
     margin-left: 10px;
 }
-
-.pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: auto;
-    list-style: none;
-    padding: 0;
-}
-
-.pagination li {
-    margin: 0 5px;
-    cursor: pointer;
-}
-
-.pagination li a {
-    padding: 10px 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    color: #333;
-    text-decoration: none;
-}
-
-.pagination li.active a {
-    background-color: #3d3d3d;
-    color: white;
-}
-
-.pagination li:hover a {
-    background-color: #191919;
-    color: white;
-}

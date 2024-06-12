@@ -1,0 +1,26 @@
+/* 피드백 */
+.feedback-button {
+    position: absolute;
+    border-radius: 3px;
+    background: #007bff;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    cursor: pointer;
+    right: 10px;
+    display: none;
+}
+.feedback-button:hover {
+    background: #0056b3;
+}
+
+.feedback-button.active,
+.post-code-line:hover .feedback-button {
+    display: inline-block;
+}
+
+.feedback-text {
+    margin-top: 5px;
+    font-size: 0.9rem;
+    color: #888;
+}
