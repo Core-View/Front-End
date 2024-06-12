@@ -36,14 +36,14 @@ const Empty = () => {
     setSearchQuery(query);
     setFilteredPosts(
       posts.filter((post) =>
-        post.title.toLowerCase().includes(query.toLowerCase())
+        post.post_title.toLowerCase().includes(query.toLowerCase())
       )
     );
   };
 
   // 게시글 클릭 핸들러
   const handlePostClick = (post) => {
-    navigate("/post_view", { state: { post } });
+    navigate(`/post_view/${post.post_id}`, { state: { post } });
   };
 
   if (loading) {
@@ -94,7 +94,7 @@ const Empty = () => {
           {filteredPosts.length > 0 ? (
             filteredPosts.map((post, index) => (
               <li key={index} onClick={() => handlePostClick(post)}>
-                {post.title}
+                {post.post_title}
               </li>
             ))
           ) : (

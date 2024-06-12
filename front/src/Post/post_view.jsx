@@ -1,25 +1,19 @@
 import React, { useState } from 'react';
+import { useLocation, useParams } from "react-router-dom";
 import './post_view.css'; // CSS 파일 import
 
 const PostView = () => {
-    // 서버에서 받아올 데이터는 일단 하드코딩된 변수로 저장
-    const title = "헬로 월드가 안 나와요.";
-    const likes = 42;
-    const author = "홍길동";
-    const content = `
-안녕하세요.
-Hello, World!
-    `.trim().split('\n'); // 줄 단위로 쪼개기
-    const code = `
-#include <stdio.h>
+    const { post_id } = useParams();
+    const location = useLocation();
+    const { post } = location.state;
 
-int main() {
-    printf("TEST인데, 이번 줄은 좀 기네요. ABCDEFG HIJKLMN OPQRSTU VWXYZ 1234567890 가나다라마바사아자차카타파하 안녕하세요. 헬로 월드가 안 나와서 질문 드립니다.\\n");
-    printf("Hello, World!");
-
-    return 0;
-}
-    `.trim(); // 줄 단위로 쪼개지 않음
+    const title = post.post_title;
+    const likes = -1;
+    const author = post.user_id;
+    const language = post.lagnuage;
+    const date = post.post_date;
+    const content = post.post_content.trim().split('\n'); // 줄 단위로 쪼개기
+    const code = post.post_code.trim(); // 줄 단위로 쪼개지 않음
 
     // 현재 로그인된 유저의 Id
     const loggedInUserId = "user123";
