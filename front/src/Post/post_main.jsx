@@ -94,7 +94,10 @@ const Empty = () => {
           {filteredPosts.length > 0 ? (
             filteredPosts.map((post, index) => (
               <li key={index} onClick={() => handlePostClick(post)}>
-                [{post.language}] {post.post_title}
+                <div className="post-meta">
+                  <div>[{post.language}] {post.post_title}</div>
+                  <div>{post.user_id} | {new Date(post.post_date).toLocaleDateString()}</div>
+                </div>
               </li>
             ))
           ) : (
