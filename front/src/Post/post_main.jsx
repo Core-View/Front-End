@@ -94,7 +94,7 @@ const Empty = () => {
           {filteredPosts.length > 0 ? (
             filteredPosts.map((post, index) => (
               <li key={index} onClick={() => handlePostClick(post)}>
-                {post.post_title}
+                [{post.language}] {post.post_title}
               </li>
             ))
           ) : (

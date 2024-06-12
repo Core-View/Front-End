@@ -57,7 +57,9 @@ const PostView = () => {
 
     return (
         <div className="post-view">
-            <h1 className="post-title">{title}</h1>
+            <h1 className="post-title">
+                [{language}] {title}
+            </h1>
             <div className="post-meta">
                 <span className="post-date">{new Date(date).toLocaleDateString()}</span>
                 <span className="post-language">{language}</span>
