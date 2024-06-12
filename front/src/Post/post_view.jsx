@@ -62,6 +62,15 @@ const PostView = () => {
         setPopup({ ...popup, text: '' });
     };
 
+    const truncateText = (text, maxLength) => {
+        if (text.length <= maxLength) {
+            return text;
+        }
+        return text.slice(0, maxLength) + '...';
+    };
+
+    const maxLength = 50; // 원하는 길이로 설정
+
     return (
         <div className="post-view">
             <h1 className="post-title">
@@ -100,7 +109,7 @@ const PostView = () => {
                         {feedback[index] && feedback[index].length > 0 && (
                             <div className="feedback-text">
                                 <div className="non-drag">
-                                    [최근 피드백] {feedback[index][feedback[index].length - 1].userId}: {feedback[index][feedback[index].length - 1].text}
+                                    [최근 피드백] {feedback[index][feedback[index].length - 1].userId}: {truncateText(feedback[index][feedback[index].length - 1].text, maxLength)}
                                 </div>
                             </div>
                         )}
@@ -114,10 +123,10 @@ const PostView = () => {
                     <div className="post-code">{popup.codeContent}</div>
                     <div className="feedback-list">
                         {feedback[popup.line] && feedback[popup.line].map((fb, fbIndex) => (
-                            <div key={fbIndex} className="feedback-text">{fb.userId}: {fb.text}</div>
+                            <div key={fbIndex} className="feedback-text">{fb.userId}: {truncateText(fb.text, maxLength)}</div>
                         ))}
                     </div>
-                    <p></p>
+                    <br></br>
                     <div className="popup-inner">
                         <textarea
                             rows="4"
