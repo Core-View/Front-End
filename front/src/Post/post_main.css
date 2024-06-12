@@ -1,5 +1,5 @@
 .poster-container {
-    width: 80%;
+    width: 100%;
     margin: 0 auto;
     padding: 20px;
     font-family: 'Arial', sans-serif;
@@ -108,17 +108,17 @@
 }
 
 .post-cate {
-    width: 20%;
+    width: 15%;
 }
 
 .post-list {
-    width: 75%;
+    width: 85%;
 }
 
 .post-cate h4, .post-list h4 {
     margin-bottom: 10px;
     font-size: 18px;
-    color: #1e90ff;
+    color: #191919;
 }
 
 .post-cate li, .post-list li {

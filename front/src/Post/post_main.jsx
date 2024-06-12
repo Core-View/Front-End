@@ -58,18 +58,16 @@ const Empty = () => {
     <div className="poster-container">
       <section className="post-top">
         <div className="post-top-left">
-          {/* 추가 기능을 위한 공간 */}
         </div>
         <div className="post-top-right">
           <div className="pencil">
             <PiPencilLineFill
               className="post_search"
               onClick={() => {
-                navigate("/post_code");
+                navigate("/post_write");
               }}
             />
           </div>
-          <TbListSearch className="post_search" />
           <input
             type="text"
             value={searchQuery}
