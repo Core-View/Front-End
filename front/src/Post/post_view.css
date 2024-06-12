@@ -9,7 +9,7 @@ body {
 
 /* 포스트 전체 */
 .post-view {
-    max-width: 80%;
+    max-width: 100%;
     margin: 20px auto;
     padding: 20px;
     background: white;
