@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./admin_main.css";
-import { GrScorecard } from "react-icons/gr";
 import { AiFillCaretRight } from "react-icons/ai";
 import AdNotice from "./Admin_notice";
 import AdPost from "./Admin_post";
@@ -22,7 +21,7 @@ const Admin = () => {
 
   useEffect(() => {
     getMember();
-  }, []);
+  }, [<AdUsers />]);
 
   const renderMenuContent = () => {
     switch (selectedMenu) {
