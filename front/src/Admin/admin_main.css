@@ -37,14 +37,12 @@
 }
 
 .memberList li {
-    height: 30px;
+    height: 25px;
     display: flex;
     justify-content: space-between;
     position: relative;
     /* 게이지의 절대 위치를 위한 상대 위치 */
-    margin-bottom: 5px;
-    margin-top: 5px;
-    border-bottom: 1px solid black;
+    border-bottom: 3px solid black;
 }
 
 .nickname {

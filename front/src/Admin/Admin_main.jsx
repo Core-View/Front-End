@@ -4,6 +4,7 @@ import { GrScorecard } from "react-icons/gr";
 import { AiFillCaretRight } from "react-icons/ai";
 import AdNotice from "./Admin_notice";
 import AdPost from "./Admin_post";
+import AdUsers from "./Admin_user";
 import axios from "axios";
 
 const Admin = () => {
@@ -26,7 +27,7 @@ const Admin = () => {
   const renderMenuContent = () => {
     switch (selectedMenu) {
       case "회원관리":
-        return <div>회원관리 내용</div>;
+        return <AdUsers />;
       case "공지사항":
         return <AdNotice />;
       case "게시판관리":
