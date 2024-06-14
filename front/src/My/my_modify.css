@@ -1,28 +1,221 @@
 .form-container {
     display: flex;
-  justify-content: center;
-  margin: 0;
+    justify-content: center;
+    margin: 0;
 }
 
 .modi_field{
     width: 50%; /* fieldset의 너비를 50%로 설정 */
     border: 2px solid #ccc; /* 테두리 스타일을 추가 */
     padding: 20px; /* 내부 여백을 추가 */
-    /*width: 500px;
-    padding:20px;
-    padding-bottom: 30px;
-    padding-right: 30px;
-    border: 3px solid palevioletred;*/
 }
 
-.modi_table{
-    height: 300%;
+.file-upload-btn {
+    width: 110px;
     text-align: center;
+    cursor: pointer;
 }
-
+  
+.file-upload-btn:hover {
+    color: #0095f6;
+} 
+  
 .prefile{
     border-radius: 50%;  /* 원형 모양을 만듭니다 */
-    width: 100px;        /* 이미지 크기를 지정합니다 */
-    height: 100px;       /* 이미지 높이를 지정합니다 */
+    width: 120px;        /* 이미지 크기를 지정합니다 */
+    height: 120px;       /* 이미지 높이를 지정합니다 */
     object-fit: cover;
+}
+
+.photo{
+    height: 180px;
+    display: flex;
+    flex-direction: row;
+}
+
+.profile_L{
+    flex:1;
+    text-align: center;
+    margin: auto;
+}
+
+.profile_D{
+    flex:4;
+    display: flex;
+    flex-direction: column;
+}
+
+.nick_zone{
+    height:50px;
+    display: flex;
+    flex-direction: row;
+}
+
+.nick_L{
+    flex:1;
+    text-align: center;
+    margin: auto;
+}
+
+.nick_D{
+    flex:4;
+    margin: auto;
+}
+
+.nick_I{
+    width: 200px;
+    height: 30px;
+    border: 1px solid #ccc;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* 기본 그림자 */
+    padding: 5px;
+    outline: none; /* 기본 아웃라인 제거 */
+    transition: box-shadow 0.3s ease; /* 그림자 변화 애니메이션 효과 */
+}
+
+.nick_I:focus{
+    box-shadow: 0 0 8px rgba(33, 3, 117, 0.8);
+}
+
+.nickname_error {
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 5px;
+}
+
+.password_zone{
+    display: flex;
+    flex-direction: row;
+    height:50px;
+}
+
+.password_L{
+    flex:1;
+    text-align: center;
+    margin: auto;
+}
+
+.password_D{
+    flex:4;
+    margin: auto;
+}
+
+.password_I{
+    width: 200px;
+    height: 30px;
+    border: 1px solid #ccc;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* 기본 그림자 */
+    padding: 5px;
+    outline: none; /* 기본 아웃라인 제거 */
+    transition: box-shadow 0.3s ease; /* 그림자 변화 애니메이션 효과 */
+}
+
+.password_I:focus{
+    box-shadow: 0 0 8px rgba(33, 3, 117, 0.8);
+}
+
+.password_error {
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 5px;
+}
+
+.pcheck_zone{
+    display: flex;
+    flex-direction: row;
+    height:50px;
+}
+
+.pcheck_L{
+    flex:1;
+    text-align: center;
+    margin: auto;
+}
+
+.pcheck_D{
+    flex:4;
+    margin: auto;
+}
+
+.pcheck_I{
+    width: 200px;
+    height: 30px;
+    border: 1px solid #ccc;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* 기본 그림자 */
+    padding: 5px;
+    outline: none; /* 기본 아웃라인 제거 */
+    transition: box-shadow 0.3s ease; /* 그림자 변화 애니메이션 효과 */
+}
+
+.pcheck_I:focus{
+    box-shadow: 0 0 8px rgba(33, 3, 117, 0.8);
+}
+
+.introduce_zone{
+    display: flex;
+    flex-direction: row;
+    height:50px;
+}
+
+.intro_L{
+    flex:1;
+    text-align: center;
+    margin: auto;
+}
+
+.intro_D{
+    flex:4;
+    margin: auto;
+}
+
+.intro_I{
+    width: 370px;
+    height: 30px;
+    border: 1px solid #ccc;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* 기본 그림자 */
+    padding: 5px;
+    outline: none; /* 기본 아웃라인 제거 */
+    transition: box-shadow 0.3s ease; /* 그림자 변화 애니메이션 효과 */
+}
+
+.intro_I:focus{
+    box-shadow: 0 0 8px rgba(33, 3, 117, 0.8);
+}
+
+.intro_error {
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 5px;
+}  
+.button_zone{
+    display: flex;
+}
+.submit_D{
+    flex:1;
+}
+.submit_B{
+    background-color: #a5b4c4; /* 밝은 파란색 배경 */
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 5px #666; /* 그림자 효과 */
+    cursor: pointer;
+    outline: none; /* 포커스 아웃라인 제거 */
+    transition: all 0.3s; /* 부드러운 전환 효과 */
+}
+
+.submit_B:hover{
+    background-color: #98a0a7; /* 호버 시 색상 어둡게 */
+    box-shadow: 0 4px #444; /* 호버 시 그림자 조정 */
+    transform: translateY(-2px); /* 버튼을 약간 위로 이동 */
+}
+
+.submit_B:active{
+    box-shadow: 0 2px #333; /* 클릭 시 그림자 조정 */
+    transform: translateY(4px); /* 클릭 시 버튼을 아래로 이동 */
+}
+.delete_D{
+    flex: 1;
+    text-align: right;
+    align-items: end
 }

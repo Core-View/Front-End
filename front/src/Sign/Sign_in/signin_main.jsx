@@ -1,40 +1,51 @@
-import React, { useCallback, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useCallback, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
-import './Sign_in.css';
+import "./Sign_in.css";
 
 const Sign_in = () => {
   const navigate = useNavigate();
-  const [nickname, setNickname] = useState('');
-  const [password, setPassword] = useState('');
-  const onchangeNickname = useCallback((e) => {
-    setNickname(e.target.value);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const onchangeEmail = useCallback((e) => {
+    setEmail(e.target.value);
   }, []);
   const onchangePassword = useCallback((e) => {
     setPassword(e.target.value);
   }, []);
-  const onsubmit = () => {
-    if (nickname.length === 0 || password.length === 0) {
-      alert('아이디와 비밀번호를 모두 입력 해주세요');
+  const onsubmit = (e) => {
+    e.preventDefault();
+    if (email.length === 0 || password.length === 0) {
+      alert("아이디와 비밀번호를 모두 입력 해주세요");
       return;
     }
     axios
-      .post('url', {
-        nickname: nickname,
-        password: password,
+      .post("http://localhost:3000/login", {
+        user_email: email,
+        user_password: password,
       })
-      .then((respnse) => {
-        if (respnse.status === 200) {
-          alert('성공');
-          navigate('/');
+      .then((response) => {
+        if (response.status === 200) {
+          alert("성공");
+          navigate("/"); // 상대 경로로 이동
         } else {
-          alert('비번틀림');
+          alert("비번틀림");
         }
       })
       .catch((error) => {
         alert(error.message);
       });
+  };
+
+  const googleLog = () => {
+    // axios.get('http://localhost:3000/auth/google').then((response) => {
+    //   if (response.status === 200) {
+    //     alert('성공');
+    //     navigate('/'); // 상대 경로로 이동
+    //   }
+    // });
+    navigate("/auth/google");
   };
   return (
     <div className="container_si">
@@ -46,14 +57,14 @@ const Sign_in = () => {
         <form onSubmit={onsubmit} className="form_si">
           <div className="nickname_si">
             <div className="nick_label_si">
-              <label>Nickname</label>
+              <label>E-mail</label>
             </div>
             <input
-              type="text"
+              type="email"
               id="loginNickname"
-              placeholder="nickName"
-              value={nickname}
-              onChange={onchangeNickname}
+              placeholder="Email"
+              value={email}
+              onChange={onchangeEmail}
               className="nick_input_si"
             />
           </div>
@@ -73,6 +84,7 @@ const Sign_in = () => {
           <div className="submit_si">
             <button type="submit">로그인</button>
           </div>
+          <div className="google" onClick={googleLog}></div>
         </form>
         <div>
           <div>
