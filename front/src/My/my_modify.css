@@ -194,6 +194,7 @@
 }
 .submit_D{
     flex:1;
+    text-align: right;
 }
 .submit_B{
     background-color: #a5b4c4; /* 밝은 파란색 배경 */
@@ -270,9 +271,8 @@
     align-items: center;
 }
 .modi_warning_zone{
-    font-size: 60px;
+    font-size: 85px;
     text-align: center;
-    margin-bottom: 10px;
 }
 .modi_error{
     color: red;

@@ -55,7 +55,7 @@
 
 .my_comment-list h4 {
     margin-bottom: 10px;
-    font-size: 18px;
+    font-size: 22px;
     color: #1e90ff;
 }
 
@@ -71,27 +71,36 @@
     background-color: #f1f1f1;
     cursor: pointer;
 }
-
 .my_comment-bot {
-    text-align: center;
+    display: flex;
+    justify-content: center;
 }
-
-.my_comment-bot ul {
+.my_comment_pagination {
     list-style: none;
     padding: 0;
-    display: inline-block;
+    display: flex;
 }
 
-.my_comment-bot li {
-    display: inline;
+.my_comment_page-item{
     margin: 0 5px;
-    padding: 5px 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    cursor: pointer;
 }
 
-.my_comment-bot li:hover {
-    background-color: #1e90ff;
-    color: white;
+.my_comment_page-link {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+.my_comment_page-link:hover {
+    color: #fff;
+    background-color: #4c4f51;
+}
+  
+.my_comment_page-item.active .my_comment_page-link {
+    background-color: #4c4f51;
+    color: #fff;
+    border-color: #545659;
 }

@@ -1,6 +1,7 @@
-import React, { useState, useEffect,useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate, Navigate } from 'react-router-dom';
 import './my_main.css';
+import { FaCircleCheck } from "react-icons/fa6";
 
 const Mypage = () => {
   const { id } = useParams();
@@ -49,13 +50,8 @@ const Mypage = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/mypage/1`);
+        const response = await fetch(`http://localhost:3000/mypage/5`);
         const data = await response.json();
-        /*if (data.profile_picture && data.profile_picture.type === 'Buffer') {
-          const bufferData = new Uint8Array(data.profile_picture.data);
-          const base64String = btoa(String.fromCharCode(...bufferData));
-          data.profile_picture = `data:image/png;base64,${base64String}`;
-        }*/
         setUserInfo(data);
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -63,7 +59,7 @@ const Mypage = () => {
     };
     const fetchPostData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/mypage/1/posts`);
+        const response = await fetch(`http://localhost:3000/mypage/5/posts`);
         const data = await response.json();
         setPosts(data || []); // API가 posts 배열을 반환하는지 확인하고 상태를 업데이트
       } catch (error) {
@@ -72,7 +68,7 @@ const Mypage = () => {
     };
     const fetchCommentData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/mypage/1/feedback`);
+        const response = await fetch(`http://localhost:3000/mypage/5/feedback`);
         const data = await response.json();
         setComments(data || []); // API가 posts 배열을 반환하는지 확인하고 상태를 업데이트
       } catch (error) {
@@ -91,7 +87,7 @@ const Mypage = () => {
   const handlePasswordSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3000/password/verify/1', {
+      const response = await fetch('http://localhost:3000/password/verify/5', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -114,7 +110,7 @@ const Mypage = () => {
   /*if (!isLoggenIn) {
     return <Navigate to='/users/sign-in' replace />;
   }*/
-  console.log('데이터: ',userInfo.profile_picture);
+  //console.log('데이터: ',userInfo.profile_picture);
     const totalLikes = 10;
     //const totalLikes = userInfo.post_likes.length + userInfo.feedback_likes.length;
     const handlePostClick = (post_id) => {
@@ -137,11 +133,11 @@ const Mypage = () => {
           </div>
           <div className='info_zone'>
             <div className='name_zone'>
-              <span className='my_font_nick'>{userInfo.nickname}</span>
+              <span>{userInfo.nickname ||'닉네임'}</span>
             </div>
             <br />
             <div className='intro_zone'>
-              <span className='my_font_intro'>{userInfo.introduction||'자기 소개입니다'}</span>
+              <span>{userInfo.introduction||'자기 소개입니다'}</span>
             </div>
             <br />
           </div>
@@ -151,7 +147,7 @@ const Mypage = () => {
             </div>
             <br />
             <div className='contribution'>
-              <h4>기여도</h4>
+              <span>기여도</span>
             </div>
             <br />
           </div>
@@ -168,12 +164,7 @@ const Mypage = () => {
               {posts.length > 0 ? (
                 <ul className='post_code'>
                 {posts.slice(0, 5).map(post => (
-                  /*<li key={post.post_id} style={{ listStyleType: 'none' }}>
-                    <Link to={`/post/${post.post_id}`} className='post_link_style'>
-                      {post.post_title}
-                    </Link>
-                  </li>*/
-                  <li key={post.post_id} onClick={() => handlePostClick(post.post_id)} className='my_post_font'>
+                  <li key={post.post_id} onClick={() => handlePostClick(post.post_id)}>
                     {post.post_title}
                   </li>
                 ))}
@@ -183,6 +174,11 @@ const Mypage = () => {
               )}
             </div>
           </div>
+          <br />
+          <br />
+          <hr style={{border:'1px solid #ddd'}} />
+          <br />
+          <br />
           <div className='comment_zone'>
             <div className='my_comments'>
               <Link to="/my_comment" className='all_comment_link'>내가 댓글 단 글</Link>
@@ -192,18 +188,13 @@ const Mypage = () => {
               {comments.length > 0 ? (
               <ul className='comment_code'>
                 {comments.slice(0, 5).map(comment => (
-                  /*<li key={comment.feedback_id} style={{ listStyleType: 'none'}}>
-                    <Link to={`/post/${comment.feedback_id}`} className='comment_link_style'>
-                      {comment.feedback_comment}
-                    </Link>
-                  </li>*/
-                  <li key={comment.post_id} onClick={() => handlePostClick(comment.post_id)} className='my_comment_font'>
+                  <li key={comment.post_id} onClick={() => handlePostClick(comment.post_id)}>
                     {comment.post_title}
                   </li>
                 ))}
               </ul>
               ) : (
-                <p className='my_comment_font'>댓글 단 게시글이 없습니다.</p>
+                <p>댓글 단 게시글이 없습니다.</p>
               )}
             </div>
           </div>
@@ -215,7 +206,8 @@ const Mypage = () => {
             <span className="my_close" onClick={() => setIsModalOpen(false)}>&times;</span>
           </div>
           <div className='my_modal_font'>
-            <span>비밀번호 확인</span>
+            <FaCircleCheck className='my_check_icon'/>
+            <h2>비밀번호 확인</h2>
           </div>
           <form onSubmit={handlePasswordSubmit} className='my_check_P'>
               <input

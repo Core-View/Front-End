@@ -1,28 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
-.my_font_nick{
-    font-family: "Jua", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 35px;
-}
-.my_font_intro{
-    font-family: "Jua", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 20px;
-}
-.my_post_font{
-    font-family: "Jua", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 18px;
-}
-.my_comment_font{
-    font-family: "Jua", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 18px;
-}
 .my_all{
     padding: 20px 70px; /* 위아래, 좌우 순서 */
 }
@@ -83,6 +59,7 @@
 
 .name_zone{
     text-align: center;
+    font-size: 25px;
 }
 
 .intro_zone{
@@ -97,6 +74,8 @@
     text-align: right;
     display: flex;
     justify-content: center;
+    align-items:end;
+    text-align:end;
 }
 
 .modi_link{
@@ -110,7 +89,7 @@
 
 .space2{
     flex:3;
-    padding: 20px;
+    padding: 30px 20px 30px 20px;
     display: flex;
     flex-direction: column;
 }
@@ -120,7 +99,6 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    border-bottom: 1px solid #ccc;
 }
 
 .my_posts{
@@ -152,10 +130,7 @@
     text-decoration: none;
     color: black;
     cursor: pointer;
-    font-family: "Jua", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 25px;
+    font-size: 20px;
 }
 
 .all_post_link:hover{
@@ -164,7 +139,6 @@
 
 .post_title{
     flex: 4;
-    margin-bottom: 20px;
 }
 
 .comment_zone{
@@ -182,18 +156,13 @@
     text-decoration: none;
     color: black;
     cursor: pointer;
-    font-family: "Jua", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 25px;
+    font-size: 20px;
 }
 .all_comment_link:hover{
     color: #0983d5;
 }
 .comment_title{
     flex: 4;
-    margin-top: 20px;
-    display: flex;
 }
 
 .comment_link_style{
@@ -231,17 +200,17 @@
     background-color: #ffffff;
     border-radius: 10px;
     width: 400px;
-    height: 260px;
+    height: 310px;
     padding: 15px;
 }
 
 .my_modal_font{
     margin-bottom: 8px;
     text-align: center;
-    font-family: "Jua", sans-serif;
-    font-weight: 500;
-    font-style: normal;
-    font-size: 40px;
+    font-size: 22px;
+}
+.my_check_icon{
+    font-size: 50px;
 }
 
 .my_modal-content input{
@@ -249,8 +218,6 @@
     height: 40px;
     margin-bottom: 20px;
     padding: 5px;
-    font-family: "Jua", sans-serif;
-    font-style: normal;
     font-size: 20px;
 }
 
@@ -262,7 +229,5 @@
 .my_error{
     color: red;
     margin-bottom: 10px;
-    font-family: "Jua", sans-serif;
-    font-style: normal;
     font-size: 18px;
 }
