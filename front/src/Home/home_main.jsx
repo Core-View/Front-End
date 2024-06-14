@@ -84,9 +84,7 @@ const Main = () => {
                     />{" "}
                     {post.post_title}
                   </div>
-                  <div className="post-main-user-name">
-                    {post.user_id}
-                  </div>
+                  <div className="post-main-user-name">{post.user_id}</div>
                   <div className="post-main-date">
                     {formatDate(post.post_date)}
                   </div>
@@ -109,9 +107,7 @@ const Main = () => {
                     />{" "}
                     {post.post_title}
                   </div>
-                  <div className="post-main-user-name">
-                    {post.user_id}
-                  </div>
+                  <div className="post-main-user-name">{post.user_id}</div>
                   <div className="post-main-date">
                     {formatDate(post.post_date)}
                   </div>

@@ -43,7 +43,6 @@ const AdminNotice = () => {
 
   //공지작성관련
   const createNotice = () => {
-    console.log("공지쓰자");
     navigate("/notice/post");
   };
 

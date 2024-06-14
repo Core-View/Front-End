@@ -137,7 +137,9 @@ const Empty = () => {
                     {post.post_title}
                   </div>
                   <div className="post-main-user-name">{post.user_id}</div>
-                  <div className="post-main-date">{formatDate(post.post_date)}</div>
+                  <div className="post-main-date">
+                    {formatDate(post.post_date)}
+                  </div>
                 </div>
               </li>
             ))
@@ -200,7 +202,9 @@ const Empty = () => {
                     {post.post_title}
                   </div>
                   <div className="post-main-user-name">{post.user_id}</div>
-                  <div className="post-main-date">{formatDate(post.post_date)}</div>
+                  <div className="post-main-date">
+                    {formatDate(post.post_date)}
+                  </div>
                 </div>
               </li>
             ))

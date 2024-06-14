@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./admin_main.css";
 import { LuCrown } from "react-icons/lu";
 import AdNotice from "./Admin_notice";
@@ -10,6 +10,10 @@ const Admin = () => {
   const [selectedMenu, setSelectedMenu] = useState("어떤관리");
   const [member, setMember] = useState([]);
   const [clicked, setClicked] = useState([false, false, false]);
+
+  useEffect(() => {
+    getMember();
+  }, []);
 
   const getMember = () => {
     axios.get("http://localhost:3000/notice/viewuser").then((response) => {
@@ -43,8 +47,6 @@ const Admin = () => {
   };
 
   const maxContribute = Math.max(...member.map((m) => m.USER_CONTRIBUTE));
-
-  getMember();
 
   return (
     <div className="admin-container">
