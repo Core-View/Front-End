@@ -55,6 +55,7 @@ const AdminNotice = () => {
       <ul className="ad_notice_list">
         {currentNotices.map((notice, i) => (
           <li
+            className="listnotice"
             key={i}
             onClick={() => {
               navigate(`/notice/view/${notice.NOTICE_ID}`);
@@ -71,7 +72,7 @@ const AdminNotice = () => {
           <button
             key={number}
             onClick={() => setCurrentPage(number)}
-            className={currentPage === number ? "active" : ""}
+            className={`pagebtn ${currentPage === number ? "active" : ""}`}
           >
             {number}
           </button>
