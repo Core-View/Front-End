@@ -13,6 +13,7 @@ const Empty = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [posts, setPosts] = useState([]);
+  const [notices, setNotices] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -41,6 +42,22 @@ const Empty = () => {
     };
 
     fetchPosts();
+  }, []);
+  
+  useEffect(() => {
+    // 서버에서 공지 데이터를 가져옴
+    const fetchNotices = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/post/latest");
+        setNotices(response.data);
+        setLoading(false);
+      } catch (err) {
+        setError("공지를 가져오는 데 실패했습니다.");
+        setLoading(false);
+      }
+    };
+
+    fetchNotices();
   }, []);
 
   // 검색 핸들러
@@ -90,6 +107,50 @@ const Empty = () => {
 
   return (
     <div className="poster-container">
+      <section className="post-top">
+        <div className="post-top-left">
+          <h2>공지사항</h2>
+        </div>
+      </section>
+      <section className="post-top">
+        <ul className="notice-list">
+          <h4 className="post-main-meta">
+            <div className="post-main-title">
+              제목
+            </div>
+            <div className="post-main-user-name">
+              작성자
+            </div>
+            <div className="post-main-date">
+              작성날짜
+            </div>
+          </h4>
+          {currentPageData.length > 0 ? (
+            currentPageData.map((post, index) => (
+              <li key={index} onClick={() => handlePostClick(post)}>
+                <div className="post-main-meta">
+                  <div className="post-main-title">
+                    <img
+                      src={languageIcons[post.language]}
+                      alt=""
+                      className="post-main-language-icon"
+                    />{" "}
+                    {post.post_title}
+                  </div>
+                  <div className="post-main-user-name">
+                    {post.user_id}
+                  </div>
+                  <div className="post-main-date">
+                    {formatDate(post.post_date)}
+                  </div>
+                </div>
+              </li>
+            ))
+          ) : (
+            <li>게시글이 없습니다.</li>
+          )}
+        </ul>
+      </section>
       <section className="post-top">
         <div className="post-top-left">
           <h2>전체 게시글</h2>

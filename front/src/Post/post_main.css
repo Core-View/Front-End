@@ -98,7 +98,7 @@
     gap: 20px;
 }
 
-.post-cate, .post-list {
+.post-cate, .post-list, .notice-list {
     background-color: white;
     padding: 15px;
     border-radius: 8px;
@@ -115,19 +115,23 @@
     width: 85%;
 }
 
-.post-cate h4, .post-list h4 {
+.notice-list {
+    width: 100%;
+}
+
+.post-cate h4, .post-list h4, .notice-list h4 {
     margin-bottom: 10px;
     font-size: 18px;
     color: #191919;
 }
 
-.post-cate li, .post-list li {
+.post-cate li, .post-list li, .notice-list li {
     padding: 10px;
     border-bottom: 1px solid #eee;
     transition: background-color 0.3s;
 }
 
-.post-cate li:hover, .post-list li:hover {
+.post-cate li:hover, .post-list li:hover, .notice-list li:hover {
     background-color: #f1f1f1;
     cursor: pointer;
 }
