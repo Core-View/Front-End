@@ -125,8 +125,8 @@ const Empty = () => {
               작성날짜
             </div>
           </h4>
-          {currentPageData.length > 0 ? (
-            currentPageData.map((post, index) => (
+          {notices.length > 0 ? (
+            notices.map((post, index) => (
               <li key={index} onClick={() => handlePostClick(post)}>
                 <div className="post-main-meta">
                   <div className="post-main-title">
