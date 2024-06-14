@@ -49,6 +49,13 @@ const AdminNoticeCreate = () => {
         previewStyle: "vertical",
         language: "ko-KR",
         hideModeSwitch: true,
+        hooks: {
+          addImageBlobHook(blob, callback) {
+            // 이미지 업로드 로직 커스텀
+            console.log(blob);
+            console.log(callback);
+          },
+        },
       });
     }
   }, []);
