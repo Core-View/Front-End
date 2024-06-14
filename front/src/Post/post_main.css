@@ -12,6 +12,7 @@
 .post-main-meta {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .post-top, .post-mid, .post-bot {
@@ -134,4 +135,25 @@
 .post-main-language-icon {
     max-width: 25px; /* 최대 너비 설정 */
     margin-left: 10px;
+}
+
+.post-main-title {
+    flex: 3; /* 제목은 더 많은 공간을 차지하도록 설정 */
+}
+
+.post-main-user-name {
+    flex: 1; /* 사용자 이름은 상대적으로 적은 공간을 차지하도록 설정 */
+    text-align: center; /* 텍스트를 가운데 정렬 */
+}
+
+.post-main-date {
+    flex: 1; /* 날짜는 상대적으로 적은 공간을 차지하도록 설정 */
+    text-align: right; /* 텍스트를 오른쪽 정렬 */
+}
+
+.post-main-meta div {
+    padding: 0 10px; /* 좌우 여백 추가 */
+    overflow: hidden; /* 내용이 길어질 경우 숨김 */
+    white-space: nowrap; /* 텍스트가 한 줄로 표시되도록 설정 */
+    text-overflow: ellipsis; /* 넘치는 텍스트는 ...으로 표시 */
 }

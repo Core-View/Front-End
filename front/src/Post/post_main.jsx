@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { PiPencilLineFill } from "react-icons/pi";
 import axios from "axios";
 import ReactPaginate from "react-paginate";
+import { formatDistanceToNow, parseISO } from "date-fns";
+import { ko } from "date-fns/locale"; // 한국어 로케일 import
 
 import "./post_main_pagination.css";
 import "./post_main.css";
@@ -65,6 +67,19 @@ const Empty = () => {
   const offset = currentPage * postsPerPage;
   const currentPageData = filteredPosts.slice(offset, offset + postsPerPage);
 
+  // 날짜 형식 변환 함수
+  const formatDate = (dateString) => {
+    const date = parseISO(dateString);
+    const now = new Date();
+    const differenceInDays = (now - date) / (1000 * 60 * 60 * 24);
+
+    if (differenceInDays < 1) {
+      return formatDistanceToNow(date, { addSuffix: true, locale: ko });
+    } else {
+      return date.toLocaleDateString("ko-KR");
+    }
+  };
+
   if (loading) {
     return <div>로딩 중...</div>;
   }
@@ -111,7 +126,7 @@ const Empty = () => {
             currentPageData.map((post, index) => (
               <li key={index} onClick={() => handlePostClick(post)}>
                 <div className="post-main-meta">
-                  <div>
+                  <div className="post-main-title">
                     <img
                       src={languageIcons[post.language]}
                       alt=""
@@ -119,14 +134,17 @@ const Empty = () => {
                     />{" "}
                     {post.post_title}
                   </div>
-                  <div>
-                    {post.user_id} | {new Date(post.post_date).toLocaleDateString()}
+                  <div className="post-main-user-name">
+                    {post.user_id}
+                  </div>
+                  <div className="post-main-date">
+                    {formatDate(post.post_date)}
                   </div>
                 </div>
               </li>
             ))
           ) : (
-            <li>검색 결과가 없습니다.</li>
+            <li>게시글이 없습니다.</li>
           )}
         </ul>
       </section>

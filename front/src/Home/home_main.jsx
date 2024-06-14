@@ -3,6 +3,8 @@ import "./home_main.css";
 import { SlArrowRight } from "react-icons/sl";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { formatDistanceToNow, parseISO } from "date-fns";
+import { ko } from "date-fns/locale"; // 한국어 로케일 import
 
 const Main = () => {
   const navigate = useNavigate();
@@ -11,6 +13,19 @@ const Main = () => {
   const [newestPosts, setNewestPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // 날짜 형식 변환 함수
+  const formatDate = (dateString) => {
+    const date = parseISO(dateString);
+    const now = new Date();
+    const differenceInDays = (now - date) / (1000 * 60 * 60 * 24);
+
+    if (differenceInDays < 1) {
+      return formatDistanceToNow(date, { addSuffix: true, locale: ko });
+    } else {
+      return date.toLocaleDateString("ko-KR");
+    }
+  };
 
   // 게시글 클릭 핸들러
   const handlePostClick = (post) => {
@@ -61,7 +76,7 @@ const Main = () => {
             {recommendedPosts.map((post, index) => (
               <li key={index} onClick={() => handlePostClick(post)}>
                 <div className="post-main-meta">
-                  <div>
+                  <div className="post-main-title">
                     <img
                       src={languageIcons[post.language]}
                       alt=""
@@ -69,8 +84,11 @@ const Main = () => {
                     />{" "}
                     {post.post_title}
                   </div>
-                  <div>
-                    {post.user_id} | {new Date(post.post_date).toLocaleDateString()}
+                  <div className="post-main-user-name">
+                    {post.user_id}
+                  </div>
+                  <div className="post-main-date">
+                    {formatDate(post.post_date)}
                   </div>
                 </div>
               </li>
@@ -83,7 +101,7 @@ const Main = () => {
             {newestPosts.map((post, index) => (
               <li key={index} onClick={() => handlePostClick(post)}>
                 <div className="post-main-meta">
-                  <div>
+                  <div className="post-main-title">
                     <img
                       src={languageIcons[post.language]}
                       alt=""
@@ -91,8 +109,11 @@ const Main = () => {
                     />{" "}
                     {post.post_title}
                   </div>
-                  <div>
-                    {post.user_id} | {new Date(post.post_date).toLocaleDateString()}
+                  <div className="post-main-user-name">
+                    {post.user_id}
+                  </div>
+                  <div className="post-main-date">
+                    {formatDate(post.post_date)}
                   </div>
                 </div>
               </li>
