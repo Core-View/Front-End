@@ -50,10 +50,37 @@ const AdminNoticeCreate = () => {
         language: "ko-KR",
         hideModeSwitch: true,
         hooks: {
-          addImageBlobHook(blob, callback) {
-            // 이미지 업로드 로직 커스텀
-            console.log(blob);
-            console.log(callback);
+          // addImageBlobHook(blob, callback) {
+          //   console.log(blob);
+          //   console.log(callback);
+          // },
+          async addImageBlobHook(blob, callback) {
+            try {
+              const formData = new FormData();
+              formData.append("image", blob);
+
+              // axios로 서버에 FormData 전송
+              await axios
+                .post("http://localhost:3000/notice/image", formData, {
+                  headers: {
+                    "Content-Type": "multipart/form-data",
+                  },
+                })
+                .then((response) => {
+                  if (response.data.hi === "hello") {
+                    const filename = `/images/post_notice/${blob.name}`;
+                    console.log("서버에 저장된 파일명 : ", filename);
+                    console.log(formData.get("image"));
+                    // 이미지 URL을 에디터에 렌더링
+                    const imageUrl = `${filename}`;
+                    callback(imageUrl, "image alt attribute");
+                  } else {
+                    console.error("서버에서 파일명을 받지 못했습니다.");
+                  }
+                });
+            } catch (error) {
+              console.error("업로드 실패 : ", error);
+            }
           },
         },
       });
