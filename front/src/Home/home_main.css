@@ -5,7 +5,7 @@ body {
 
 .home-container {
     display: flex;
-    padding: 20px;
+    padding: 0px 200px;
 }
 
 .home_mid {
@@ -34,7 +34,13 @@ body {
 
 .postcode li {
     padding: 10px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.3s;
+}
+
+.postcode li:hover, .post-list li:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
 }
 
 .postcode li:last-child {
