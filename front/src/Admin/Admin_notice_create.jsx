@@ -17,12 +17,12 @@ const AdminNoticeCreate = () => {
       axios
         .post(`http://localhost:3000/notice/post`, {
           title: title,
-          content: editorInstanceRef.current.getMarkdown(),
+          content: `${editorInstanceRef.current.getMarkdown()}`,
         })
         .then((Response) => {
           if (Response.data.success === true) {
             alert("등록성공!!");
-            navigate("/notice/view");
+            navigate("/admin");
           } else if (Response.data.success === false) {
             alert("실패했습니다! 다시 시도해주세요");
           }
@@ -35,6 +35,7 @@ const AdminNoticeCreate = () => {
       console.log(editorInstanceRef.current.getHTML());
       // 입력창에 입력한 내용을 MarkDown 형태로 취득
       console.log(editorInstanceRef.current.getMarkdown());
+      console.log(typeof editorInstanceRef.current.getMarkdown());
     }
   };
 
@@ -46,13 +47,6 @@ const AdminNoticeCreate = () => {
         initialValue: "공지사항을 작성하세요.",
         initialEditType: "wysiwyg",
         previewStyle: "vertical",
-        hooks: {
-          addImageBlobHook(blob, callback) {
-            // 이미지 업로드 로직 커스텀
-            console.log(blob);
-            console.log(callback);
-          },
-        },
         language: "ko-KR",
         hideModeSwitch: true,
       });
@@ -69,7 +63,15 @@ const AdminNoticeCreate = () => {
         className="title_input"
       />
       <div id="editor" ref={editorRef}></div>
-      <button onClick={handleRegisterButton}>등록</button>
+      <button
+        className="editor_button"
+        onClick={(e) => {
+          e.preventDefault();
+          handleRegisterButton();
+        }}
+      >
+        등록
+      </button>
     </div>
   );
 };

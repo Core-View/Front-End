@@ -22,8 +22,10 @@ import Admin from "./Admin/Admin_main";
 import AdminNotice from "./Admin/Admin_notice";
 import AdminNoticeView from "./Admin/Admin_notice_view";
 import AdminNoticePost from "./Admin/Admin_notice_create";
+import AdminNoticeUpdate from "./Admin/Admin_notice_update";
 //test
 import Alarm from "./Common/Alarm";
+import Find_pwd from "./Sign/Sign_in/Find_pwd";
 
 function App() {
   return (
@@ -38,6 +40,10 @@ function App() {
               <Route path="/notice" element={<AdminNotice />} />
               <Route path="/notice/view/:id" element={<AdminNoticeView />} />
               <Route path="/notice/post" element={<AdminNoticePost />} />
+              <Route
+                path="/notice/modify/:id"
+                element={<AdminNoticeUpdate />}
+              />
               {/* admin  */}
               <Route path="/" element={<Main />} />
               <Route path="my_main" element={<Mypage />} />
@@ -52,6 +58,7 @@ function App() {
                 <Route path="sign-in" element={<SignIn />} />
                 <Route path="sign-up" element={<SignUp />} />
                 <Route path="al" element={<Alarm />} />
+                <Route path="find-pwd" element={<Find_pwd />} />
               </Route>
             </Routes>
           </div>
