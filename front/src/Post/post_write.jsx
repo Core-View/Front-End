@@ -159,7 +159,7 @@ const PostWrite = () => {
                         ></textarea>
                     </div>
                 </div>
-                <button type="submit">게시글 등록</button>
+                    <button className="post-write-button" type="submit">게시글 등록</button>
             </form>
         </div>
     );

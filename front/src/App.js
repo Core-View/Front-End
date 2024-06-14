@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-// header 여서 안나왔는데 Header 로 고쳐서 나옵니다 이제
 // Common
 import Header from "./Common/Header";
 // Home
