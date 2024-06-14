@@ -1,10 +1,18 @@
+<<<<<<< HEAD
 import React, { useCallback, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+=======
+import React, { useCallback, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { Cookies } from 'react-cookie';
+>>>>>>> d237a4cc1378eeafedc8c88016996577bb356e57
 
 import "./Sign_in.css";
 
 const Sign_in = () => {
+  const cookies = new Cookies();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,11 +35,20 @@ const Sign_in = () => {
       })
       .then((response) => {
         if (response.status === 200) {
+<<<<<<< HEAD
           alert("성공");
           navigate("/"); // 상대 경로로 이동
+=======
+          console.log(response);
+          cookies.set('user_id', response.data);
+          alert('성공');
+>>>>>>> d237a4cc1378eeafedc8c88016996577bb356e57
         } else {
           alert("비번틀림");
         }
+      })
+      .then(() => {
+        navigate('/'); // 상대 경로로 이동
       })
       .catch((error) => {
         alert(error.message);
