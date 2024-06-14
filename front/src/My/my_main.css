@@ -1,9 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
 .my_all{
     padding: 20px 70px; /* 위아래, 좌우 순서 */
 }
 
 .myinfo_all{
-    border: 2px solid #ccc;
+    background-color: #f8f8f8;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border: 2px solid #eee;
     margin: 30px;
     display: flex;
     flex-direction: row;
@@ -13,10 +16,11 @@
 .contribution-bar {
     width: 100%;
     background-color: #e0e0e0; /* 백그라운드 색상 */
-    border-radius: 10px; /* 모서리를 둥글게 */
+    border-radius: 15px; /* 모서리를 둥글게 */
     overflow: hidden; /* 내용이 넘칠 경우 숨김 */
     margin: 20px 0; /* 상하 여백 */
-    height: 40px; /* 막대의 높이 */
+    height: 45px; /* 막대의 높이 */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .filled-bar {
@@ -38,7 +42,7 @@
     flex: 1;
     padding: 20px;;
     flex-direction: column;
-    border-right: 2px solid #ccc;
+    border-right: 1px solid #ccc;
 }
 
 .image_profile{
@@ -55,6 +59,7 @@
 
 .name_zone{
     text-align: center;
+    font-size: 25px;
 }
 
 .intro_zone{
@@ -67,12 +72,15 @@
 
 .modify_zone{
     text-align: right;
+    display: flex;
+    justify-content: center;
+    align-items:end;
+    text-align:end;
 }
 
 .modi_link{
-    text-decoration: none;
-    color: black;
     cursor: pointer;
+    margin-left: auto;
 }
 
 .modi_link:hover{
@@ -81,7 +89,7 @@
 
 .space2{
     flex:3;
-    padding: 20px;
+    padding: 30px 20px 30px 20px;
     display: flex;
     flex-direction: column;
 }
@@ -91,35 +99,48 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    border-bottom: 2px solid #ccc;
 }
 
 .my_posts{
     flex: 1;
     text-align: center;
 }
-
-.post_title{
-    flex: 4;
-    height: 90%;
-    background: #f9f9f9df;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 18px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
+.post_code, .comment_code, .post_title p, .comment_title p{
+    width: 95%;
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    list-style: none;
+    margin: 0;
 }
-
-.post_link_style{
-    text-decoration: none;
-    color: darkblue;
+.post_code li, .comment_code li{
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+.post_code li:last-child, .comment_code li:last-child {
+    border-bottom: none;
+}
+.post_code li:hover, .comment_code li:hover{
+    background-color: #f1f1f1;
     cursor: pointer;
 }
 
-.post_link_style:hover{
+.all_post_link{
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.all_post_link:hover{
     color: #0983d5;
 }
+
+.post_title{
+    flex: 4;
+}
+
 .comment_zone{
     flex:1;
     display: flex;
@@ -131,25 +152,82 @@
     flex: 1;
     text-align: center;
 }
-
+.all_comment_link{
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+    font-size: 20px;
+}
+.all_comment_link:hover{
+    color: #0983d5;
+}
 .comment_title{
     flex: 4;
-    height: 90%;
-    background: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 18px;
-    margin-top: 20px;
-    display: flex;
-    align-items: center;
 }
 
 .comment_link_style{
     text-decoration: none;
-    color: darkblue;
+    color: black;
     cursor: pointer;
 }
 
 .comment_link_style:hover{
     color: #0983d5;
+}
+.my_close_btn{
+    display: flex;
+    justify-content: flex-end;
+}
+.my_close {
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+  
+.my_modal {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.5);
+}
+  
+.my_modal-content {
+    background-color: #ffffff;
+    border-radius: 10px;
+    width: 400px;
+    height: 310px;
+    padding: 15px;
+}
+
+.my_modal_font{
+    margin-bottom: 8px;
+    text-align: center;
+    font-size: 22px;
+}
+.my_check_icon{
+    font-size: 50px;
+}
+
+.my_modal-content input{
+    width: 55%;
+    height: 40px;
+    margin-bottom: 20px;
+    padding: 5px;
+    font-size: 20px;
+}
+
+.my_check_P{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.my_error{
+    color: red;
+    margin-bottom: 10px;
+    font-size: 18px;
 }

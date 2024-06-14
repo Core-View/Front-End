@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Modal, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 import './Sign_up.css';
 
@@ -120,7 +120,7 @@ const Sign_in = () => {
       .then((response) => {
         if (response.status === 200) {
           alert('성공');
-          navigate('/');
+          navigate('/users/sign-in');
         } else {
           alert('비번틀림');
         }

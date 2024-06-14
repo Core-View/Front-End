@@ -6,6 +6,8 @@ import Main from "./Home/home_main";
 // My
 import Mypage from "./My/my_main";
 import Mymodify from "./My/my_modify";
+import Myposting from "./My/my_posting";
+import Mycomment from "./My/my_comment";
 // Sign
 import SignIn from "./Sign/Sign_in/signin_main";
 import SignUp from "./Sign/Sign_up/signup_main";
@@ -19,8 +21,10 @@ import Admin from "./Admin/Admin_main";
 import AdminNotice from "./Admin/Admin_notice";
 import AdminNoticeView from "./Admin/Admin_notice_view";
 import AdminNoticePost from "./Admin/Admin_notice_create";
+import AdminNoticeUpdate from "./Admin/Admin_notice_update";
 //test
 import Alarm from "./Common/Alarm";
+import Find_pwd from "./Sign/Sign_in/Find_pwd";
 
 function App() {
   return (
@@ -35,11 +39,16 @@ function App() {
               <Route path="/notice" element={<AdminNotice />} />
               <Route path="/notice/view/:id" element={<AdminNoticeView />} />
               <Route path="/notice/post" element={<AdminNoticePost />} />
+              <Route
+                path="/notice/modify/:id"
+                element={<AdminNoticeUpdate />}
+              />
               {/* admin  */}
               <Route path="/" element={<Main />} />
               <Route path="my_main" element={<Mypage />} />
               <Route path="my_modify" element={<Mymodify />} />
-              {/* post */}
+              <Route path="my_posting" element={<Myposting />} />
+              <Route path="my_comment" element={<Mycomment />} />
               <Route path="/post_main" element={<Post />} />
               <Route path="/post_view/:post_id" element={<PostView />} />
               <Route path="post_code" element={<CodeEditor />} />
@@ -48,6 +57,7 @@ function App() {
                 <Route path="sign-in" element={<SignIn />} />
                 <Route path="sign-up" element={<SignUp />} />
                 <Route path="al" element={<Alarm />} />
+                <Route path="find-pwd" element={<Find_pwd />} />
               </Route>
             </Routes>
           </div>
