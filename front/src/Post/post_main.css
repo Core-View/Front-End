@@ -1,3 +1,4 @@
+/* 기타 CSS는 생략 */
 .poster-container {
     width: 80%;
     margin: 0 auto;
@@ -67,6 +68,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    flex: 1; /* 전체 공간을 차지하도록 설정 */
 }
 
 .post-top-right .post_search {
@@ -81,15 +83,20 @@
 }
 
 .post-top-right input {
-    padding: 8px;
-    border-radius: 4px;
+    flex: 1; /* 남은 공간을 차지하도록 설정 */
+    padding: 12px 20px; /* 패딩을 늘려서 더 크고 편안하게 */
+    border-radius: 25px; /* 둥근 모서리 */
     border: 1px solid #ccc;
-    transition: border-color 0.3s;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    font-size: 1rem;
+    background-color: #f9f9f9; /* 약간의 배경색 추가 */
 }
 
 .post-top-right input:focus {
     border-color: #1e90ff;
+    box-shadow: 0 0 5px rgba(30, 144, 255, 0.5);
     outline: none;
+    background-color: #fff; /* 포커스 시 배경색 변경 */
 }
 
 .post-mid {
@@ -160,4 +167,30 @@
     overflow: hidden; /* 내용이 길어질 경우 숨김 */
     white-space: nowrap; /* 텍스트가 한 줄로 표시되도록 설정 */
     text-overflow: ellipsis; /* 넘치는 텍스트는 ...으로 표시 */
+}
+
+.posts-per-page {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+}
+
+.posts-per-page label {
+    margin-right: 10px;
+}
+
+.posts-per-page select {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 1rem;
+    color: #333;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.posts-per-page select:focus {
+    border-color: #1e90ff;
+    box-shadow: 0 0 5px rgba(30, 144, 255, 0.5);
 }

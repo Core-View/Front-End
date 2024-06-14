@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { PiPencilLineFill } from "react-icons/pi";
 import axios from "axios";
 import ReactPaginate from "react-paginate";
 import { formatDistanceToNow, parseISO } from "date-fns";
@@ -18,7 +17,7 @@ const Empty = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
-  const postsPerPage = 10; // 페이지당 게시글 수
+  const [postsPerPage, setPostsPerPage] = useState(15); // 페이지당 게시글 수 기본값
 
   const languageIcons = {
     c: "/images/language_icons/c_icon.png",
@@ -26,6 +25,22 @@ const Empty = () => {
     java: "/images/language_icons/java_icon.png",
     python: "/images/language_icons/python_icon.png",
   };
+
+  useEffect(() => {
+    // 서버에서 공지 데이터를 가져옴
+    const fetchNotices = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/post/latest");
+        setNotices(response.data);
+        setLoading(false);
+      } catch (err) {
+        setError("공지를 가져오는 데 실패했습니다.");
+        setLoading(false);
+      }
+    };
+
+    fetchNotices();
+  }, []);
 
   useEffect(() => {
     // 서버에서 게시글 데이터를 가져옴
@@ -42,22 +57,6 @@ const Empty = () => {
     };
 
     fetchPosts();
-  }, []);
-  
-  useEffect(() => {
-    // 서버에서 공지 데이터를 가져옴
-    const fetchNotices = async () => {
-      try {
-        const response = await axios.get("http://localhost:3000/post/latest");
-        setNotices(response.data);
-        setLoading(false);
-      } catch (err) {
-        setError("공지를 가져오는 데 실패했습니다.");
-        setLoading(false);
-      }
-    };
-
-    fetchNotices();
   }, []);
 
   // 검색 핸들러
@@ -79,6 +78,12 @@ const Empty = () => {
   // 페이지 변경 핸들러
   const handlePageClick = (data) => {
     setCurrentPage(data.selected);
+  };
+
+  // 페이지당 게시글 수 변경 핸들러
+  const handlePostsPerPageChange = (e) => {
+    setPostsPerPage(Number(e.target.value));
+    setCurrentPage(0); // 페이지 수 변경 시 첫 페이지로 이동
   };
 
   const offset = currentPage * postsPerPage;
@@ -115,18 +120,12 @@ const Empty = () => {
       <section className="post-top">
         <ul className="notice-list">
           <h4 className="post-main-meta">
-            <div className="post-main-title">
-              제목
-            </div>
-            <div className="post-main-user-name">
-              작성자
-            </div>
-            <div className="post-main-date">
-              작성날짜
-            </div>
+            <div className="post-main-title">제목</div>
+            <div className="post-main-user-name">작성자</div>
+            <div className="post-main-date">작성날짜</div>
           </h4>
           {notices.length > 0 ? (
-            notices.map((post, index) => (
+            notices.slice(0, 3).map((post, index) => (
               <li key={index} onClick={() => handlePostClick(post)}>
                 <div className="post-main-meta">
                   <div className="post-main-title">
@@ -137,12 +136,8 @@ const Empty = () => {
                     />{" "}
                     {post.post_title}
                   </div>
-                  <div className="post-main-user-name">
-                    {post.user_id}
-                  </div>
-                  <div className="post-main-date">
-                    {formatDate(post.post_date)}
-                  </div>
+                  <div className="post-main-user-name">{post.user_id}</div>
+                  <div className="post-main-date">{formatDate(post.post_date)}</div>
                 </div>
               </li>
             ))
@@ -156,20 +151,25 @@ const Empty = () => {
           <h2>전체 게시글</h2>
         </div>
         <div className="post-top-right">
-          <div className="pencil">
-            <PiPencilLineFill
-              className="post_search"
-              onClick={() => {
-                navigate("/post_write");
-              }}
-            />
-          </div>
           <input
             type="text"
             value={searchQuery}
             onChange={handleSearch}
-            placeholder="검색"
+            placeholder="검색어를 입력하세요."
           />
+        </div>
+        <div className="posts-per-page">
+          <label htmlFor="postsPerPage">게시글 보기: </label>
+          <select
+            id="postsPerPage"
+            value={postsPerPage}
+            onChange={handlePostsPerPageChange}
+          >
+            <option value={10}>10개 씩</option>
+            <option value={15}>15개 씩</option>
+            <option value={30}>30개 씩</option>
+            <option value={50}>50개 씩</option>
+          </select>
         </div>
       </section>
       <section className="post-mid">
@@ -183,15 +183,9 @@ const Empty = () => {
         </ul>
         <ul className="post-list">
           <h4 className="post-main-meta">
-            <div className="post-main-title">
-              제목
-            </div>
-            <div className="post-main-user-name">
-              작성자
-            </div>
-            <div className="post-main-date">
-              작성날짜
-            </div>
+            <div className="post-main-title">제목</div>
+            <div className="post-main-user-name">작성자</div>
+            <div className="post-main-date">작성날짜</div>
           </h4>
           {currentPageData.length > 0 ? (
             currentPageData.map((post, index) => (
@@ -205,12 +199,8 @@ const Empty = () => {
                     />{" "}
                     {post.post_title}
                   </div>
-                  <div className="post-main-user-name">
-                    {post.user_id}
-                  </div>
-                  <div className="post-main-date">
-                    {formatDate(post.post_date)}
-                  </div>
+                  <div className="post-main-user-name">{post.user_id}</div>
+                  <div className="post-main-date">{formatDate(post.post_date)}</div>
                 </div>
               </li>
             ))
