@@ -42,13 +42,14 @@ const PostView = () => {
         setFeedback({ ...feedback, [popup.line]: newFeedback });
 
         const feedbackData = {
-            line: popup.line,
-            userId: loggedInUserId,
-            text: popup.text,
+            post_id: post.post_id,
+            user_id: loggedInUserId,
+            feedback_comment: popup.text,
+            feedback_codenumber: popup.line,
         };
 
         try {
-            const response = await fetch('https://server-endpoint.com/feedback', {
+            const response = await fetch("http://localhost:3000/api/feedbacks", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
