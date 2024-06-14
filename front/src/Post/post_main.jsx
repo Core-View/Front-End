@@ -91,7 +91,9 @@ const Empty = () => {
   return (
     <div className="poster-container">
       <section className="post-top">
-        <div className="post-top-left"></div>
+        <div className="post-top-left">
+          <h2>전체 게시글</h2>
+        </div>
         <div className="post-top-right">
           <div className="pencil">
             <PiPencilLineFill
@@ -112,16 +114,24 @@ const Empty = () => {
       <section className="post-mid">
         <ul className="post-cate">
           <div>
-            <h4>많이 뜨는 카테고리</h4>
+            <h4>🔥Hot</h4>
           </div>
           <li>React</li>
           <li>Hello</li>
           <li>GitHub</li>
         </ul>
         <ul className="post-list">
-          <div>
-            <h4>전체 게시글</h4>
-          </div>
+          <h4 className="post-main-meta">
+            <div className="post-main-title">
+              제목
+            </div>
+            <div className="post-main-user-name">
+              작성자
+            </div>
+            <div className="post-main-date">
+              작성날짜
+            </div>
+          </h4>
           {currentPageData.length > 0 ? (
             currentPageData.map((post, index) => (
               <li key={index} onClick={() => handlePostClick(post)}>
