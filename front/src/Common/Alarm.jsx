@@ -2,13 +2,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import { PiBellFill } from 'react-icons/pi';
 import { GiBackwardTime } from 'react-icons/gi';
 import './Alarm.css';
+import { Cookies } from 'react-cookie';
+import userIdInfo from '../Sign/UserStore';
 
 const Alarm = () => {
   const [isStarted, setIsStarted] = useState(false);
   const [alarm, setAlarm] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const es = useRef(null);
-
+  const cookies = new Cookies();
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -68,14 +70,15 @@ const Alarm = () => {
       return '방금 전';
     }
   };
-
+  const { user_id } = userIdInfo();
+  console.log(user_id);
   return (
     <div>
       <div className="al_div">
-        {0 !== 0 ? (
-          <span className="al_num">3</span>
+        {cookies.get('user_id') === undefined ? (
+          <span className="al_num">0</span>
         ) : (
-          <span className="al_num_have">3</span>
+          <span className="al_num_have">{alarm.length}</span>
         )}
 
         <PiBellFill className="al" onClick={toggleDropdown} />

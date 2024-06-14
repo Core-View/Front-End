@@ -29,12 +29,15 @@ const Sign_in = () => {
       })
       .then((response) => {
         if (response.status === 200) {
-          cookies.set('user_id', response.data.user_id);
+          console.log(response);
+          cookies.set('user_id', response.data);
           alert('성공');
-          navigate('/'); // 상대 경로로 이동
         } else {
           alert('비번틀림');
         }
+      })
+      .then(() => {
+        navigate('/'); // 상대 경로로 이동
       })
       .catch((error) => {
         alert(error.message);

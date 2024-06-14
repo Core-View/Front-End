@@ -120,7 +120,7 @@ const Sign_in = () => {
       .then((response) => {
         if (response.status === 200) {
           alert('성공');
-          navigate('/');
+          navigate('/users/sign-in');
         } else {
           alert('비번틀림');
         }
