@@ -1,67 +1,67 @@
 .admin_notice_container {
-    padding: 10px;
-    margin: auto;
-    max-width: 800px;
-    background-color: #f9f9f9;
+  padding: 10px;
+  margin: auto;
+  max-width: 800px;
+  background-color: #f9f9f9;
 }
 
 .create_notice {
-    cursor: pointer;
-    width: 100px;
-    height: 30px;
-    font-size: 13px;
-    line-height: 15px;
-    background-color: #888;
+  cursor: pointer;
+  width: 100px;
+  height: 30px;
+  font-size: 13px;
+  line-height: 15px;
+  background-color: #888;
 }
 
 .create_notice:hover {
-    background-color: #333;
+  background-color: #333;
 }
 
 .ad_notice_list {
-    list-style: none;
-    height: 400px;
-    padding: 0;
+  list-style: none;
+  height: 400px;
+  padding: 0;
 }
 
-.ad_notice_list li {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-    cursor: pointer;
+.ad_notice_list .listnotice {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
 }
 
-.ad_notice_list li:hover {
-    background-color: #eaeaea;
+.ad_notice_list .listnotice:hover {
+  background-color: #eaeaea;
 }
 
 .ad_notice_id,
 .ad_notice_title,
 .ad_notice_date {
-    flex: 1;
+  flex: 1;
 }
 
 .pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
-.pagination button {
-    margin: 0 5px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: #5a5a5a;
-    color: white;
+.pagination .pagebtn {
+  margin: 0 5px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #5a5a5a;
+  color: white;
 }
 
-.pagination button.active {
-    background-color: #0056b3;
+.pagination .pagebtn.active {
+  background-color: #0056b3;
 }
 
-.pagination button:hover:not(.active) {
-    background-color: #0056b3;
+.pagination .pagebtn:hover:not(.active) {
+  background-color: #0056b3;
 }

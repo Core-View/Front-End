@@ -24,7 +24,7 @@ import AdminNoticePost from "./Admin/Admin_notice_create";
 import AdminNoticeUpdate from "./Admin/Admin_notice_update";
 //test
 import Alarm from "./Common/Alarm";
-import Find_pwd from "./Sign/Sign_in/Find_pwd";
+import FindPwd from "./Sign/Sign_in/Find_pwd";
 
 function App() {
   return (
@@ -59,7 +59,7 @@ function App() {
                 <Route path="sign-in" element={<SignIn />} />
                 <Route path="sign-up" element={<SignUp />} />
                 <Route path="al" element={<Alarm />} />
-                <Route path="find-pwd" element={<Find_pwd />} />
+                <Route path="find-pwd" element={<FindPwd />} />
               </Route>
             </Routes>
           </div>

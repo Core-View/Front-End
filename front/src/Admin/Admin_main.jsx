@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./admin_main.css";
 import { LuCrown } from "react-icons/lu";
 import AdNotice from "./Admin_notice";
@@ -55,7 +55,7 @@ const Admin = () => {
         </h3>
         <ul className="memberList">
           {member.map((a, i) => (
-            <li key={i}>
+            <li className="listMember" key={i}>
               <span className="nickname">
                 <LuCrown
                   style={{
@@ -83,7 +83,7 @@ const Admin = () => {
         <h3 className="admin_title">CoReview 관리자메뉴</h3>
         <ul className="admin_menu_list">
           <li
-            className={`menu1 ${clicked[0] ? "nowshow" : ""}`}
+            className={`menu1 menuer ${clicked[0] ? "nowshow" : ""}`}
             onClick={() => {
               setSelectedMenu("회원관리");
               setClicked([true, false, false]);
@@ -92,7 +92,7 @@ const Admin = () => {
             회원관리
           </li>
           <li
-            className={`menu2 ${clicked[1] ? "nowshow" : ""}`}
+            className={`menu2 menuer ${clicked[1] ? "nowshow" : ""}`}
             onClick={() => {
               setSelectedMenu("공지사항");
               setClicked([false, true, false]);
@@ -101,7 +101,7 @@ const Admin = () => {
             공지사항
           </li>
           <li
-            className={`menu3 ${clicked[2] ? "nowshow" : ""}`}
+            className={`menu3 menuer ${clicked[2] ? "nowshow" : ""}`}
             onClick={() => {
               setSelectedMenu("게시판관리");
               setClicked([false, false, true]);

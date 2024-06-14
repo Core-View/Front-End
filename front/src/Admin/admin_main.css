@@ -36,7 +36,7 @@
   height: 550px;
 }
 
-.memberList li {
+.memberList .listMember {
   height: 25px;
   display: flex;
   justify-content: space-between;
@@ -47,16 +47,16 @@
 
 .nickname {
   display: flex;
-  width: 70px;
+  width: 100px;
   line-height: 25px;
 }
 
-.memberList li .name {
+.memberList .listMember .name {
   z-index: 2;
   position: relative;
 }
 
-.memberList li .point {
+.memberList .listMember .point {
   z-index: 2;
   position: relative;
   margin-left: 10px;
@@ -85,7 +85,7 @@
   width: 100%;
 }
 
-.admin_menu .admin_menu_list li {
+.admin_menu .admin_menu_list .menuer {
   border: 1px solid black;
   width: 100px;
   height: 30px;
@@ -94,7 +94,7 @@
   cursor: pointer;
 }
 
-.admin_menu .admin_menu_list li:hover {
+.admin_menu .admin_menu_list .menuer:hover {
   background-color: #333;
   color: white;
 }
