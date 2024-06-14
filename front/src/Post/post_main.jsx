@@ -131,7 +131,7 @@ const Empty = () => {
                 <div className="post-main-meta">
                   <div className="post-main-title">
                     <img
-                      src={languageIcons[post.language]}
+                      src="/icons/notice_icon.png"
                       alt=""
                       className="post-main-language-icon"
                     />{" "}
