@@ -1,50 +1,83 @@
-import React, { useState } from 'react';
-import './post_view.css'; // CSS 파일 import
+import React, { useState, useEffect } from 'react';
+import { useLocation, useParams } from "react-router-dom";
+import axios from "axios";
+
+import './post_view.css';
+import './post_view_fb.css';
+import './post_view_fb_popup.css';
 
 const PostView = () => {
-    // 서버에서 받아올 데이터는 일단 하드코딩된 변수로 저장
-    const title = "헬로 월드가 안 나와요.";
-    const likes = 42;
-    const author = "홍길동";
-    const content = `
-안녕하세요.
-Hello, World!
-    `.trim().split('\n'); // 줄 단위로 쪼개기
-    const code = `
-#include <stdio.h>
+    const { post_id } = useParams();
+    const location = useLocation();
+    const { post } = location.state;
 
-int main() {
-    printf("TEST인데, 이번 줄은 좀 기네요. ABCDEFG HIJKLMN OPQRSTU VWXYZ 1234567890 가나다라마바사아자차카타파하 안녕하세요. 헬로 월드가 안 나와서 질문 드립니다.\\n");
-    printf("Hello, World!");
+    const title = post.post_title;
+    const likes = -1; // 좋아요 기능이 구현되지 않아서 임시로 -1 설정
+    const author = post.user_id;
+    const language = post.language;
+    const date = post.post_date;
+    const content = post.post_content.trim().split('\n'); // 줄 단위로 쪼개기
+    const code = post.post_code.trim(); // 줄 단위로 쪼개지 않음
 
-    return 0;
-}
-    `.trim(); // 줄 단위로 쪼개지 않음
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [feedback, setFeedback] = useState({});
+    const [popup, setPopup] = useState({ show: false, line: null, text: '', codeContent: '' });
+
+    const languageIcons = {
+        c: "/images/language_icons/c_icon.png",
+        cpp: "/images/language_icons/cpp_icon.png",
+        java: "/images/language_icons/java_icon.png",
+        python: "/images/language_icons/python_icon.png",
+    }
+
+    useEffect(() => {
+        // 서버에서 피드백 데이터를 가져옴
+        const fetchFeedback = async () => {
+            try {
+                const response = await axios.get(`http://localhost:3000/api/feedbacks?post_id=${post_id}`);
+                const feedbackData = response.data.reduce((acc, fb) => {
+                    if (!acc[fb.feedback_codenumber]) {
+                        acc[fb.feedback_codenumber] = [];
+                    }
+                    acc[fb.feedback_codenumber].push(fb);
+                    return acc;
+                }, {});
+                setFeedback(feedbackData);
+                setLoading(false);
+            } catch (err) {
+                setError("피드백을 가져오는 데 실패했습니다.");
+                setLoading(false);
+            }
+        };
+
+        fetchFeedback();
+    }, [post_id]);
 
     // 현재 로그인된 유저의 Id
     const loggedInUserId = "user123";
 
-    const [feedback, setFeedback] = useState({});
-    const [popup, setPopup] = useState({ show: false, line: null, text: '', codeContent: '' });
-
+    // 피드백 버튼 클릭 핸들
     const handleFeedbackClick = (lineIndex, lineCode) => {
         setPopup({ show: true, line: lineIndex, text: '', codeContent: lineCode }); // 코드 내용 추가
     };
 
+    // 피드백 전송 핸들
     const handleFeedbackSubmit = async () => {
         if (popup.text.trim() === '') return;
 
-        const newFeedback = feedback[popup.line] ? [...feedback[popup.line], { userId: loggedInUserId, text: popup.text }] : [{ userId: loggedInUserId, text: popup.text }];
+        const newFeedback = feedback[popup.line] ? [...feedback[popup.line], { userId: loggedInUserId, feedback_comment: popup.text }] : [{ userId: loggedInUserId, feedback_comment: popup.text }];
         setFeedback({ ...feedback, [popup.line]: newFeedback });
 
         const feedbackData = {
-            line: popup.line,
-            userId: loggedInUserId,
-            text: popup.text,
+            post_id: post_id,
+            user_id: loggedInUserId,
+            feedback_comment: popup.text,
+            feedback_codenumber: popup.line,
         };
 
         try {
-            const response = await fetch('https://server-endpoint.com/feedback', {
+            const response = await fetch("http://localhost:3000/api/feedbacks", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -61,12 +94,40 @@ int main() {
         setPopup({ ...popup, text: '' });
     };
 
+    const truncateText = (text, maxLength) => {
+        if (text.length <= maxLength) {
+            return text;
+        }
+        return text.slice(0, maxLength) + '...';
+    };
+
+    const maxLength = 50; // 원하는 길이로 설정
+
+    if (loading) {
+        return <div>로딩 중...</div>;
+    }
+
+    if (error) {
+        return <div>{error}</div>;
+    }
+
     return (
         <div className="post-view">
-            <h1 className="post-title">{title}</h1>
+            <h1 className="post-title">
+                <img
+                    src={languageIcons[language]}
+                    alt=""
+                    className="language-icon"
+                /> {title}
+            </h1>
+            <div className="post-meta">
+                <span className="post-date">{date}</span>
+                <span className="post-language">{language}</span>
+            </div>
+            <br></br>
             <div className="post-meta">
                 <span className="post-likes">좋아요 {likes}</span>
-                <span className="post-author">{author}</span>
+                <span className="post-author">작성자 {author}</span>
             </div>
             <div className="post-content">
                 {content.map((line, index) => (
@@ -79,7 +140,7 @@ int main() {
                 {code.split('\n').map((line, index) => (
                     <div key={index} className="post-code-line">
                         <span className="non-drag">
-                            <span className="line-number">{index} | </span>
+                            <span className="line-number">{index + 1} | </span>
                         </span>
                         <span>{line}</span>
                         <button className={`feedback-button ${feedback[index] ? 'active' : ''}`} onClick={() => handleFeedbackClick(index, line)}>
@@ -88,7 +149,7 @@ int main() {
                         {feedback[index] && feedback[index].length > 0 && (
                             <div className="feedback-text">
                                 <div className="non-drag">
-                                    [최근 피드백] {feedback[index][feedback[index].length - 1].userId}: {feedback[index][feedback[index].length - 1].text}
+                                    [최근 피드백] {feedback[index][feedback[index].length - 1].user_id}: {truncateText(feedback[index][feedback[index].length - 1].feedback_comment, maxLength)}
                                 </div>
                             </div>
                         )}
@@ -97,15 +158,15 @@ int main() {
             </pre>
             {popup.show && (
                 <div className="popup">
-                    <h3>{popup.line}번째 줄 피드백 팝업입니다.</h3>
+                    <h3>Line: {popup.line + 1} 피드백 팝업</h3>
                     욕설 및 비하발언은 제재 대상입니다.
                     <div className="post-code">{popup.codeContent}</div>
                     <div className="feedback-list">
                         {feedback[popup.line] && feedback[popup.line].map((fb, fbIndex) => (
-                            <div key={fbIndex} className="feedback-text">{fb.userId}: {fb.text}</div>
+                            <div key={fbIndex} className="feedback-text">{fb.user_id}: {fb.feedback_comment}</div>
                         ))}
                     </div>
-                    <p></p>
+                    <br></br>
                     <div className="popup-inner">
                         <textarea
                             rows="4"

@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-// header 여서 안나왔는데 Header 로 고쳐서 나옵니다 이제
 // Common
 import Header from "./Common/Header";
 // Home
@@ -35,6 +34,7 @@ function App() {
         <div className="main-content">
           <div className="content">
             <Routes>
+              <Route path="/" element={<Main />} />
               {/* admin  */}
               <Route path="/admin" element={<Admin />} />
               <Route path="/notice" element={<AdminNotice />} />
@@ -44,16 +44,17 @@ function App() {
                 path="/notice/modify/:id"
                 element={<AdminNoticeUpdate />}
               />
-              {/* admin  */}
-              <Route path="/" element={<Main />} />
+              {/* my  */}
               <Route path="my_main" element={<Mypage />} />
               <Route path="my_modify" element={<Mymodify />} />
               <Route path="my_posting" element={<Myposting />} />
               <Route path="my_comment" element={<Mycomment />} />
-              <Route path="post_main" element={<Post />} />
+              {/* post  */}
+              <Route path="/post_main" element={<Post />} />
+              <Route path="/post_view/:post_id" element={<PostView />} />
               <Route path="post_code" element={<CodeEditor />} />
-              <Route path="post_view" element={<PostView />} />
               <Route path="post_write" element={<PostWrite />} />
+              {/* user  */}
               <Route path="users">
                 <Route path="sign-in" element={<SignIn />} />
                 <Route path="sign-up" element={<SignUp />} />
