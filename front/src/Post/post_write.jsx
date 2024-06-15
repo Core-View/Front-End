@@ -6,7 +6,6 @@ const PostWrite = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [code, setCode] = useState('');
-  const [hashtags, setHashtags] = useState('');
   const [language, setLanguage] = useState(''); // 언어 상태 추가
   const contentRef = useRef(null);
   const codeRef = useRef(null);
@@ -33,7 +32,6 @@ const PostWrite = () => {
         setTitle('');
         setContent('');
         setCode('');
-        setHashtags('');
         setLanguage('');
         contentRef.current.style.height = 'auto';
         codeRef.current.style.height = 'auto';
