@@ -50,7 +50,7 @@ const Mypage = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/mypage/5`);
+        const response = await fetch(`http://localhost:3000/mypage/17`);
         const data = await response.json();
         setUserInfo(data);
       } catch (error) {
@@ -59,7 +59,7 @@ const Mypage = () => {
     };
     const fetchPostData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/mypage/5/posts`);
+        const response = await fetch(`http://localhost:3000/mypage/17/posts`);
         const data = await response.json();
         setPosts(data || []); // API가 posts 배열을 반환하는지 확인하고 상태를 업데이트
       } catch (error) {
@@ -68,7 +68,7 @@ const Mypage = () => {
     };
     const fetchCommentData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/mypage/5/feedback`);
+        const response = await fetch(`http://localhost:3000/mypage/17/feedback`);
         const data = await response.json();
         setComments(data || []); // API가 posts 배열을 반환하는지 확인하고 상태를 업데이트
       } catch (error) {
@@ -87,7 +87,7 @@ const Mypage = () => {
   const handlePasswordSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3000/password/verify/5', {
+      const response = await fetch('http://localhost:3000/password/verify/17', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -113,8 +113,8 @@ const Mypage = () => {
   //console.log('데이터: ',userInfo.profile_picture);
     const totalLikes = 10;
     //const totalLikes = userInfo.post_likes.length + userInfo.feedback_likes.length;
-    const handlePostClick = (post_id) => {
-      navigate(`/post_view/${post_id}`);
+    const handlePostClick = (post) => {
+      navigate(`/post_view/${post.post_id}`,{ state: { post } });
     };
   return (
     <div className='my_all'>
