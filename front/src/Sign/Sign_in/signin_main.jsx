@@ -30,9 +30,7 @@ const Sign_in = () => {
       .then((response) => {
         if (response.status === 200) {
           console.log(response);
-          cookies.set('user_id', response.data);
-          alert('성공');
-          cookies.set('user_id', response.data);
+          cookies.set('user_id', response.data.user_id);
           alert('성공');
         } else {
           alert('비번틀림');
@@ -40,6 +38,7 @@ const Sign_in = () => {
       })
       .then(() => {
         navigate('/'); // 상대 경로로 이동
+        window.location.reload();
       })
       .catch((error) => {
         alert(error.message);

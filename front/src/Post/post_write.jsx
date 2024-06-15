@@ -19,7 +19,7 @@ const PostWrite = () => {
       language, // 언어 추가
       content,
       code,
-      userId: 123, // 임시 userId
+      user_id: 18, // 임시 userId
     };
 
     try {
