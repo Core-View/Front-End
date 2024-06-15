@@ -2,89 +2,99 @@
 
 /* 포스트 전체 */
 .post-view {
-    max-width: 80%;
-    margin: 20px auto;
-    padding: 20px;
-    background: white;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+  max-width: 80%;
+  margin: 20px auto;
+  padding: 20px;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
 }
 
 /* 제목 */
 .post-title {
-    font-size: 2rem;
-    margin-bottom: 10px;
+  font-size: 2rem;
+  margin-bottom: 10px;
 }
 
 .post-meta {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 /* 좋아요, 작성자 */
-.post-likes, .post-author {
-    font-size: 1rem;
-    color: #000000;
+.post-likes,
+.post-author {
+  font-size: 1rem;
+  color: #000000;
 }
 
 /* 날짜, 언어 */
-.post-date, .post-language {
-    font-size: 1rem;
-    color: #888;
+.post-date,
+.post-language {
+  font-size: 1rem;
+  color: #888;
 }
 
 /* 내용 */
 .post-content {
-    padding: 20px;
-    margin-top: 20px;
-    line-height: 1.6;
-    color: #444;
+  padding: 20px;
+  margin-top: 20px;
+  line-height: 1.6;
+  color: #444;
 }
 
 .post-line {
-    position: relative;
-    padding-right: 100px; /* 버튼 공간 확보 */
-    margin-bottom: 10px;
-    transition: background-color 0.3s;
+  position: relative;
+  padding-right: 100px;
+  /* 버튼 공간 확보 */
+  margin-bottom: 10px;
+  transition: background-color 0.3s;
 }
 
 /* 코드 */
 .post-code {
-    padding: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
-    line-height: 1.6;
-    color: #fdfdfd;
-    border-radius: 5px;
-    overflow-x: auto;
-    background-color: #303030;
-    font-family: 'Courier New', Courier, monospace;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+  line-height: 1.6;
+  color: #fdfdfd;
+  border-radius: 5px;
+  overflow-x: auto;
+  background-color: #303030;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 .post-code-line {
-    position: relative;
-    padding-right: 100px; /* 버튼 공간 확보 */
-    margin-bottom: 10px;
-    padding: 2px 0; /* 줄 간 여백 */
-    transition: background-color 0.3s;
+  position: relative;
+  padding-right: 100px;
+  /* 버튼 공간 확보 */
+  margin-bottom: 10px;
+  padding: 2px 0;
+  /* 줄 간 여백 */
+  transition: background-color 0.3s;
 }
 
 .post-code-line:hover {
-    background-color: #3f3f3f; /* 마우스를 올렸을 때 줄의 배경색 */
+  background-color: #3f3f3f;
+  /* 마우스를 올렸을 때 줄의 배경색 */
 }
 
 .post-code-line .line-number {
-    color: #888; /* 줄 번호 색상 */
-    margin-right: 10px; /* 줄 번호와 코드 간 여백 */
-    user-select: none; /* 드래그 방지 */
+  color: #888;
+  /* 줄 번호 색상 */
+  margin-right: 10px;
+  /* 줄 번호와 코드 간 여백 */
+  user-select: none;
+  /* 드래그 방지 */
 }
 
 /* 드래그 X */
 .non-drag {
-    user-select: none;
+  user-select: none;
 }
 
 .language-icon {
-    max-width: 40px; /* 최대 너비 설정 */
-    margin-left: 10px;
+  max-width: 40px;
+  /* 최대 너비 설정 */
+  margin-left: 10px;
 }

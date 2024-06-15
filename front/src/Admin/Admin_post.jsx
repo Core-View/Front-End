@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect } from 'react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import "./admin_post.css";
-import axios from "axios";
+import './admin_post.css';
+import axios from 'axios';
 
 const AdminPost = () => {
   const [postlist, setPostList] = useState([]);
@@ -11,10 +11,10 @@ const AdminPost = () => {
   const postsPerPage = 10;
 
   const getAdminPosts = () => {
-    axios.get("http://localhost:3000/post/latest").then((response) => {
+    axios.get('http://localhost:3000/post/latest').then((response) => {
       setPostList(response.data);
       console.log(postlist);
-      console.log("ji");
+      console.log('ji');
     });
   };
 
@@ -43,12 +43,12 @@ const AdminPost = () => {
 
   // 게시글 삭제 관련
   const deletePoster = (post_id) => {
-    if (window.confirm("삭제하시겠습니까?")) {
-      axios.delete("http://localhost:3000/api/delete", {
+    if (window.confirm('삭제하시겠습니까?')) {
+      axios.delete('http://localhost:3000/api/delete', {
         postId: post_id,
       });
     } else {
-      alert("취소하였습니다.");
+      alert('취소하였습니다.');
     }
   };
 
@@ -89,7 +89,7 @@ const AdminPost = () => {
           <button
             key={number}
             onClick={() => setCurrentPage(number)}
-            className={`pagebtn ${currentPage === number ? "active" : ""}`}
+            className={`pagebtn ${currentPage === number ? 'active' : ''}`}
           >
             {number}
           </button>

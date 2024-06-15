@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import "./home_main.css";
-import { SlArrowRight } from "react-icons/sl";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { formatDistanceToNow, parseISO } from "date-fns";
-import { ko } from "date-fns/locale"; // 한국어 로케일 import
+import React, { useState, useEffect } from 'react';
+import './home_main.css';
+import { SlArrowRight } from 'react-icons/sl';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { formatDistanceToNow, parseISO } from 'date-fns';
+import { ko } from 'date-fns/locale'; // 한국어 로케일 import
 
 const Main = () => {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ const Main = () => {
     if (differenceInDays < 1) {
       return formatDistanceToNow(date, { addSuffix: true, locale: ko });
     } else {
-      return date.toLocaleDateString("ko-KR");
+      return date.toLocaleDateString('ko-KR');
     }
   };
 
@@ -36,8 +36,8 @@ const Main = () => {
     const fetchPosts = async () => {
       try {
         const [latestResponse, likesResponse] = await Promise.all([
-          axios.get("http://localhost:3000/post/latest"),
-          axios.get("http://localhost:3000/post/latest"),
+          axios.get('http://localhost:3000/post/latest'),
+          axios.get('http://localhost:3000/post/latest'),
         ]);
 
         setNewestPosts(latestResponse.data.slice(0, 5));
@@ -61,10 +61,10 @@ const Main = () => {
   }
 
   const languageIcons = {
-    c: "/images/language_icons/c_icon.png",
-    cpp: "/images/language_icons/cpp_icon.png",
-    java: "/images/language_icons/java_icon.png",
-    python: "/images/language_icons/python_icon.png",
+    c: '/images/language_icons/c_icon.png',
+    cpp: '/images/language_icons/cpp_icon.png',
+    java: '/images/language_icons/java_icon.png',
+    python: '/images/language_icons/python_icon.png',
   };
 
   return (
@@ -81,7 +81,7 @@ const Main = () => {
                       src={languageIcons[post.language]}
                       alt=""
                       className="post-main-language-icon"
-                    />{" "}
+                    />{' '}
                     {post.post_title}
                   </div>
                   <div className="post-main-user-name">{post.user_id}</div>
@@ -104,7 +104,7 @@ const Main = () => {
                       src={languageIcons[post.language]}
                       alt=""
                       className="post-main-language-icon"
-                    />{" "}
+                    />{' '}
                     {post.post_title}
                   </div>
                   <div className="post-main-user-name">{post.user_id}</div>
@@ -117,8 +117,8 @@ const Main = () => {
           </ul>
         </div>
       </section>
-      <section className="home_right" onClick={() => navigate("/post_main")}>
-        <SlArrowRight style={{ fontSize: "60px" }} />
+      <section className="home_right" onClick={() => navigate('/post_main')}>
+        <SlArrowRight style={{ fontSize: '60px' }} />
         <div>전체 보기</div>
       </section>
     </div>

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import "./admin_notice.css";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import './admin_notice.css';
+import { useNavigate } from 'react-router-dom';
 
 const AdminNotice = () => {
   const [noticeLists, setNoticeLists] = useState([]);
@@ -43,7 +43,7 @@ const AdminNotice = () => {
 
   //공지작성관련
   const createNotice = () => {
-    navigate("/notice/post");
+    navigate('/notice/post');
   };
 
   return (
@@ -76,7 +76,7 @@ const AdminNotice = () => {
           <button
             key={number}
             onClick={() => setCurrentPage(number)}
-            className={`pagebtn ${currentPage === number ? "active" : ""}`}
+            className={`pagebtn ${currentPage === number ? 'active' : ''}`}
           >
             {number}
           </button>

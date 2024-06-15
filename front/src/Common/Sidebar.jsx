@@ -1,5 +1,6 @@
 import React from 'react';
 import './sidebar.css';
+import { useState, useEffect } from 'react';
 
 const Sidebar = () => {
   let ranker = [

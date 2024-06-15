@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react";
-import "./admin_main.css";
-import { LuCrown } from "react-icons/lu";
-import AdNotice from "./Admin_notice";
-import AdPost from "./Admin_post";
-import AdUsers from "./Admin_user";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import './admin_main.css';
+import { LuCrown } from 'react-icons/lu';
+import AdNotice from './Admin_notice';
+import AdPost from './Admin_post';
+import AdUsers from './Admin_user';
+import axios from 'axios';
 
 const Admin = () => {
-  const [selectedMenu, setSelectedMenu] = useState("어떤관리");
+  const [selectedMenu, setSelectedMenu] = useState('어떤관리');
   const [member, setMember] = useState([]);
   const [clicked, setClicked] = useState([false, false, false]);
 
   const getMember = () => {
-    axios.get("http://localhost:3000/notice/viewuser").then((response) => {
+    axios.get('http://localhost:3000/notice/viewuser').then((response) => {
       if (response.data.success === true) {
         setMember(response.data.user);
       }
@@ -20,7 +20,7 @@ const Admin = () => {
   };
 
   const handleDelete = (userId) => {
-    if (window.confirm("삭제하시겠습니까?")) {
+    if (window.confirm('삭제하시겠습니까?')) {
       axios
         .delete(`http://localhost:3000/mypage/${userId}/delete`)
         .then((response) => {
@@ -29,17 +29,17 @@ const Admin = () => {
           }
         });
     } else {
-      alert("취소하였습니다.");
+      alert('취소하였습니다.');
     }
   };
 
   const renderMenuContent = () => {
     switch (selectedMenu) {
-      case "회원관리":
+      case '회원관리':
         return <AdUsers userdata={member} onDelete={handleDelete} />;
-      case "공지사항":
+      case '공지사항':
         return <AdNotice />;
-      case "게시판관리":
+      case '게시판관리':
         return <AdPost />;
       default:
         return <div>메뉴를 선택해 주세요.</div>;
@@ -68,8 +68,8 @@ const Admin = () => {
               <LuCrown
                 className="tier"
                 style={{
-                  marginTop: "5px",
-                  width: "40px",
+                  marginTop: '5px',
+                  width: '40px',
                 }}
               />
               <div className="contribute-container">
@@ -89,27 +89,27 @@ const Admin = () => {
         <h3 className="admin_title">CoReview 관리자 메뉴</h3>
         <ul className="admin_menu_list">
           <li
-            className={`menu1 menuer ${clicked[0] ? "nowshow" : ""}`}
+            className={`menu1 menuer ${clicked[0] ? 'nowshow' : ''}`}
             onClick={() => {
-              setSelectedMenu("회원관리");
+              setSelectedMenu('회원관리');
               setClicked([true, false, false]);
             }}
           >
             회원관리
           </li>
           <li
-            className={`menu2 menuer ${clicked[1] ? "nowshow" : ""}`}
+            className={`menu2 menuer ${clicked[1] ? 'nowshow' : ''}`}
             onClick={() => {
-              setSelectedMenu("공지사항");
+              setSelectedMenu('공지사항');
               setClicked([false, true, false]);
             }}
           >
             공지사항
           </li>
           <li
-            className={`menu3 menuer ${clicked[2] ? "nowshow" : ""}`}
+            className={`menu3 menuer ${clicked[2] ? 'nowshow' : ''}`}
             onClick={() => {
-              setSelectedMenu("게시판관리");
+              setSelectedMenu('게시판관리');
               setClicked([false, false, true]);
             }}
           >

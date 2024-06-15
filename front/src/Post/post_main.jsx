@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import ReactPaginate from "react-paginate";
-import { formatDistanceToNow, parseISO } from "date-fns";
-import { ko } from "date-fns/locale"; // 한국어 로케일 import
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import ReactPaginate from 'react-paginate';
+import { formatDistanceToNow, parseISO } from 'date-fns';
+import { ko } from 'date-fns/locale'; // 한국어 로케일 import
 
-import "./post_main_pagination.css";
-import "./post_main.css";
+import './post_main_pagination.css';
+import './post_main.css';
 
 const Empty = () => {
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [posts, setPosts] = useState([]);
   const [notices, setNotices] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
@@ -20,21 +20,21 @@ const Empty = () => {
   const [postsPerPage, setPostsPerPage] = useState(15); // 페이지당 게시글 수 기본값
 
   const languageIcons = {
-    c: "/images/language_icons/c_icon.png",
-    cpp: "/images/language_icons/cpp_icon.png",
-    java: "/images/language_icons/java_icon.png",
-    python: "/images/language_icons/python_icon.png",
+    c: '/images/language_icons/c_icon.png',
+    cpp: '/images/language_icons/cpp_icon.png',
+    java: '/images/language_icons/java_icon.png',
+    python: '/images/language_icons/python_icon.png',
   };
 
   useEffect(() => {
     // 서버에서 공지 데이터를 가져옴
     const fetchNotices = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/post/latest");
+        const response = await axios.get('http://localhost:3000/post/latest');
         setNotices(response.data);
         setLoading(false);
       } catch (err) {
-        setError("공지를 가져오는 데 실패했습니다.");
+        setError('공지를 가져오는 데 실패했습니다.');
         setLoading(false);
       }
     };
@@ -46,12 +46,12 @@ const Empty = () => {
     // 서버에서 게시글 데이터를 가져옴
     const fetchPosts = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/post/latest");
+        const response = await axios.get('http://localhost:3000/post/latest');
         setPosts(response.data);
         setFilteredPosts(response.data);
         setLoading(false);
       } catch (err) {
-        setError("게시글을 가져오는 데 실패했습니다.");
+        setError('게시글을 가져오는 데 실패했습니다.');
         setLoading(false);
       }
     };
@@ -98,7 +98,7 @@ const Empty = () => {
     if (differenceInDays < 1) {
       return formatDistanceToNow(date, { addSuffix: true, locale: ko });
     } else {
-      return date.toLocaleDateString("ko-KR");
+      return date.toLocaleDateString('ko-KR');
     }
   };
 
@@ -133,7 +133,7 @@ const Empty = () => {
                       src="/icons/notice_icon.png"
                       alt=""
                       className="post-main-language-icon"
-                    />{" "}
+                    />{' '}
                     {post.post_title}
                   </div>
                   <div className="post-main-user-name">{post.user_id}</div>
@@ -198,7 +198,7 @@ const Empty = () => {
                       src={languageIcons[post.language]}
                       alt=""
                       className="post-main-language-icon"
-                    />{" "}
+                    />{' '}
                     {post.post_title}
                   </div>
                   <div className="post-main-user-name">{post.user_id}</div>
@@ -215,16 +215,16 @@ const Empty = () => {
       </section>
       <section className="post-bot">
         <ReactPaginate
-          previousLabel={"이전"}
-          nextLabel={"다음"}
-          breakLabel={"..."}
-          breakClassName={"break-me"}
+          previousLabel={'이전'}
+          nextLabel={'다음'}
+          breakLabel={'...'}
+          breakClassName={'break-me'}
           pageCount={Math.ceil(filteredPosts.length / postsPerPage)}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={handlePageClick}
-          containerClassName={"pagination"}
-          activeClassName={"active"}
+          containerClassName={'pagination'}
+          activeClassName={'active'}
         />
       </section>
     </div>
