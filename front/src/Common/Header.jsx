@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 // npm install react-router-dom
-import { Link } from 'react-router-dom';
+import { Link, redirect } from 'react-router-dom';
 import './header.css';
 import Alarm from './Alarm';
+import { Cookies } from 'react-cookie';
 
 function Header() {
+  const cookies = new Cookies();
+  const [userId, setUserId] = useState(cookies.get('user_id'));
+  const deleteCookies = () => {
+    cookies.remove('user_id');
+    setUserId(undefined);
+    window.location.reload();
+  };
   return (
     <header className="header">
       <div className="header-logo-container">
@@ -28,7 +36,13 @@ function Header() {
             <Link to="/my_main">내 정보</Link>
           </li>
           <li>
-            <Link to="/users/sign-in">로그인</Link>
+            {userId === undefined ? (
+              <Link to="/users/sign-in">로그인</Link>
+            ) : (
+              <Link to="/" onClick={deleteCookies}>
+                로그아웃
+              </Link>
+            )}
           </li>
           <li>
             <Alarm />
