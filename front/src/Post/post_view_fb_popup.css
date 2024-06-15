@@ -26,8 +26,7 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: 10px;
-  resize: none;
-  /* textarea 크기 조정 불가능하게 설정 */
+  resize: none; /* textarea 크기 조정 불가능하게 설정 */
 }
 
 .popup-buttons {

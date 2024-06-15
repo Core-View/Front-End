@@ -199,7 +199,7 @@ const Empty = () => {
                       alt=""
                       className="post-main-language-icon"
                     />{' '}
-                    {post.post_title}
+                    {post.post_id}. {post.post_title}
                   </div>
                   <div className="post-main-user-name">{post.user_id}</div>
                   <div className="post-main-date">
