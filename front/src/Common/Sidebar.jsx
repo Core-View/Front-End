@@ -1,12 +1,13 @@
 import React from 'react';
 import './sidebar.css';
+import { useState, useEffect } from 'react';
 
 const Sidebar = () => {
   let ranker = [
     '박지훈',
     '김민주',
     '서원준',
-    '형준',
+    '김형준',
     '김해진',
     '이승진',
     '김장윤',

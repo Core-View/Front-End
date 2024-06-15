@@ -1,30 +1,29 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 // Common
-import Header from "./Common/Header";
+import Header from './Common/Header';
 // Home
-import Main from "./Home/home_main";
+import Main from './Home/home_main';
 // My
-import Mypage from "./My/my_main";
-import Mymodify from "./My/my_modify";
-import Myposting from "./My/my_posting";
-import Mycomment from "./My/my_comment";
+import Mypage from './My/my_main';
+import Mymodify from './My/my_modify';
+import Myposting from './My/my_posting';
+import Mycomment from './My/my_comment';
 // Sign
-import SignIn from "./Sign/Sign_in/signin_main";
-import SignUp from "./Sign/Sign_up/signup_main";
+import SignIn from './Sign/Sign_in/signin_main';
+import SignUp from './Sign/Sign_up/signup_main';
 // Post
-import Post from "./Post/post_main";
-import PostView from "./Post/post_view";
-import CodeEditor from "./Post/post_code_editor";
-import PostWrite from "./Post/post_write";
+import Post from './Post/post_main';
+import PostView from './Post/post_view';
+import PostWrite from './Post/post_write';
 // Admin
-import Admin from "./Admin/Admin_main";
-import AdminNotice from "./Admin/Admin_notice";
-import AdminNoticeView from "./Admin/Admin_notice_view";
-import AdminNoticePost from "./Admin/Admin_notice_create";
-import AdminNoticeUpdate from "./Admin/Admin_notice_update";
+import Admin from './Admin/Admin_main';
+import AdminNotice from './Admin/Admin_notice';
+import AdminNoticeView from './Admin/Admin_notice_view';
+import AdminNoticePost from './Admin/Admin_notice_create';
+import AdminNoticeUpdate from './Admin/Admin_notice_update';
 //test
-import Alarm from "./Common/Alarm";
-import FindPwd from "./Sign/Sign_in/Find_pwd";
+import Alarm from './Common/Alarm';
+import FindPwd from './Sign/Sign_in/Find_pwd';
 
 function App() {
   return (
@@ -52,7 +51,6 @@ function App() {
               {/* post  */}
               <Route path="/post_main" element={<Post />} />
               <Route path="/post_view/:post_id" element={<PostView />} />
-              <Route path="post_code" element={<CodeEditor />} />
               <Route path="post_write" element={<PostWrite />} />
               {/* user  */}
               <Route path="users">

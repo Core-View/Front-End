@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import "./my_comment.css";
-import { useNavigate } from "react-router-dom";
-import { TbListSearch } from "react-icons/tb";
+import React, { useState, useEffect } from 'react';
+import './my_comment.css';
+import { useNavigate } from 'react-router-dom';
+import { TbListSearch } from 'react-icons/tb';
 
 const Empty = () => {
   const navigate = useNavigate();
   const [comments, setComments] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 12;
@@ -31,7 +31,7 @@ const Empty = () => {
       try {
         const response = await fetch(`http://localhost:3000/mypage/1/feedback`);
         const data = await response.json();
-        setComments(data || []); 
+        setComments(data || []);
         setFilteredPosts(data || []); // 초기 상태를 전체 댓글로 설정
       } catch (error) {
         console.error('Error fetching feedback data:', error);
@@ -50,7 +50,9 @@ const Empty = () => {
   // 현재 페이지에 따라 표시할 게시글 계산
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = Array.isArray(filteredPosts) ? filteredPosts.slice(indexOfFirstPost, indexOfLastPost) : [];
+  const currentPosts = Array.isArray(filteredPosts)
+    ? filteredPosts.slice(indexOfFirstPost, indexOfLastPost)
+    : [];
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -74,7 +76,10 @@ const Empty = () => {
           </div>
           {currentPosts.length > 0 ? (
             currentPosts.map((comment) => (
-              <li key={comment.post_id} onClick={() => handlePostClick(comment.post_id)}>
+              <li
+                key={comment.post_id}
+                onClick={() => handlePostClick(comment.post_id)}
+              >
                 {comment.post_title}
               </li>
             ))
@@ -85,13 +90,24 @@ const Empty = () => {
       </section>
       <section className="my_comment-bot">
         <ul className="my_comment_pagination">
-          {Array.from({ length: Math.ceil(filteredPosts.length / postsPerPage) }, (_, i) => (
-            <li key={i + 1} className={`my_comment_page-item ${currentPage === i + 1 ? "active" : ""}`}>
-              <button onClick={() => paginate(i + 1)} className="my_comment_page-link">
-                {i + 1}
-              </button>
-            </li>
-          ))}
+          {Array.from(
+            { length: Math.ceil(filteredPosts.length / postsPerPage) },
+            (_, i) => (
+              <li
+                key={i + 1}
+                className={`my_comment_page-item ${
+                  currentPage === i + 1 ? 'active' : ''
+                }`}
+              >
+                <button
+                  onClick={() => paginate(i + 1)}
+                  className="my_comment_page-link"
+                >
+                  {i + 1}
+                </button>
+              </li>
+            )
+          )}
         </ul>
       </section>
     </div>

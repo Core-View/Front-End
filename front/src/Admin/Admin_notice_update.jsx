@@ -1,16 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
-import "./admin_notice_create.css";
-import Editor from "@toast-ui/editor";
-import "@toast-ui/editor/dist/toastui-editor.css"; // Editor's Style
-import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useRef, useState } from 'react';
+import './admin_notice_create.css';
+import Editor from '@toast-ui/editor';
+import '@toast-ui/editor/dist/toastui-editor.css'; // Editor's Style
+import axios from 'axios';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const AdminNoticeUpdate = () => {
   //에디터 생성 및 해당 게시글 정보 가져오기 관련
   const editorRef = useRef(null);
   const editorInstanceRef = useRef(null);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
   const { id } = useParams();
 
   const navigate = useNavigate();
@@ -37,11 +37,11 @@ const AdminNoticeUpdate = () => {
     if (editorRef.current) {
       editorInstanceRef.current = new Editor({
         el: editorRef.current,
-        height: "600px",
+        height: '600px',
         initialValue: content,
-        initialEditType: "wysiwyg",
-        previewStyle: "vertical",
-        language: "ko-KR",
+        initialEditType: 'wysiwyg',
+        previewStyle: 'vertical',
+        language: 'ko-KR',
         hideModeSwitch: true,
       });
     }
@@ -58,10 +58,10 @@ const AdminNoticeUpdate = () => {
         .then((Response) => {
           if (Response.data.success === true) {
             console.log(editorInstanceRef.current.getMarkdown());
-            alert("수정 성공!!");
-            navigate("/admin");
+            alert('수정 성공!!');
+            navigate('/admin');
           } else if (Response.data.success === false) {
-            alert("수정 실패! 다시 시도해주세요");
+            alert('수정 실패! 다시 시도해주세요');
           }
           console.log(Response);
         })

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { useParams, useNavigate } from "react-router-dom";
-import "./admin_notice_view.css";
-import Viewer from "@toast-ui/editor/dist/toastui-editor-viewer";
-import "@toast-ui/editor/dist/toastui-editor-viewer.css";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useParams, useNavigate } from 'react-router-dom';
+import './admin_notice_view.css';
+import Viewer from '@toast-ui/editor/dist/toastui-editor-viewer';
+import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 
 const AdminNoticeView = () => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const AdminNoticeView = () => {
         setNoticeDetail(response.data.notice);
       })
       .catch((error) => {
-        console.error("다시 시도해주세요", error);
+        console.error('다시 시도해주세요', error);
       });
   };
 
@@ -28,8 +28,8 @@ const AdminNoticeView = () => {
   useEffect(() => {
     if (noticeDetail) {
       const viewer = new Viewer({
-        el: document.querySelector("#viewer"),
-        height: "600px",
+        el: document.querySelector('#viewer'),
+        height: '600px',
         initialValue: noticeDetail[0].NOTICE_CONTENT,
       });
     }
@@ -44,8 +44,8 @@ const AdminNoticeView = () => {
       .delete(`http://localhost:3000/notice/delete/${id}`)
       .then((response) => {
         if (response.data.success === true) {
-          alert("삭제 성공!");
-          navigate("/admin");
+          alert('삭제 성공!');
+          navigate('/admin');
         }
       });
   };
