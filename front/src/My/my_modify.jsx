@@ -111,13 +111,10 @@ const Mymodify = () => {
       formData.append('user_image', imageFile);
 
       try {
-        const imageResponse = await fetch(
-          `http://localhost:3000/mypage/5/modifyImage`,
-          {
-            method: 'POST',
-            body: formData,
-          }
-        );
+        const imageResponse = await fetch(`http://localhost:3000/mypage/17/modifyImage`, {
+          method: 'POST',
+          body: formData,
+        });
 
         if (!imageResponse.ok) {
           throw new Error('Image upload failed');
@@ -144,7 +141,7 @@ const Mymodify = () => {
     };
 
     try {
-      const response = await fetch(`http://localhost:3000/mypage/5/modify`, {
+      const response = await fetch(`http://localhost:3000/mypage/17/modify`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -192,7 +189,7 @@ const Mymodify = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/mypage/5`);
+        const response = await fetch(`http://localhost:3000/mypage/17`);
         const data = await response.json();
         setImageSrc(data.profile_picture || '/images/original_profile.png'); // 초기 프로필 사진 설정
       } catch (error) {
@@ -213,7 +210,7 @@ const Mymodify = () => {
   const handlePasswordSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3000/password/verify/5', {
+      const response = await fetch('http://localhost:3000/password/verify/17', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
