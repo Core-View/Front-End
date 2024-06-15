@@ -14,6 +14,7 @@ const PostWrite = () => {
     e.preventDefault();
 
     const postData = {
+      // post_id, post_title, post_content, post_code, post_date, language, user_id, post_result
       title,
       language, // 언어 추가
       content,
