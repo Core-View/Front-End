@@ -1,5 +1,5 @@
-import React from "react";
-import "./admin_user.css";
+import React from 'react';
+import './admin_user.css';
 
 const AdminUser = ({ userdata, onDelete }) => {
   return (

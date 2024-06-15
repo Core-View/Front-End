@@ -111,10 +111,20 @@ const Mymodify = () => {
       formData.append('user_image', imageFile);
 
       try {
+<<<<<<< HEAD
+        const imageResponse = await fetch(
+          `http://localhost:3000/mypage/5/modifyImage`,
+          {
+            method: 'POST',
+            body: formData,
+          }
+        );
+=======
         const imageResponse = await fetch(`http://localhost:3000/mypage/17/modifyImage`, {
           method: 'POST',
           body: formData,
         });
+>>>>>>> 366fb1418231a6380ab3088fa79f254fe191dd9a
 
         if (!imageResponse.ok) {
           throw new Error('Image upload failed');

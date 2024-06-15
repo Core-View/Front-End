@@ -14,12 +14,14 @@
 }
 
 .header-logo {
-  max-width: 100px; /* 로고 크기 조정 */
+  max-width: 100px;
+  /* 로고 크기 조정 */
   transition: transform 0.3s ease;
 }
 
 .header-logo:hover {
-  transform: scale(1.1); /* 로고에 호버 효과 추가 */
+  transform: scale(1.1);
+  /* 로고에 호버 효과 추가 */
 }
 
 .header-nav ul {
@@ -49,6 +51,7 @@
     flex-direction: column;
     gap: 10px;
   }
+
   .header {
     flex-direction: column;
     align-items: flex-start;

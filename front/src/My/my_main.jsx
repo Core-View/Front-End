@@ -69,7 +69,9 @@ const Mypage = () => {
     };
     const fetchCommentData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/mypage/17/feedback`);
+        const response = await fetch(
+          `http://localhost:3000/mypage/17/feedback`
+        );
         const data = await response.json();
         setComments(data || []); // API가 posts 배열을 반환하는지 확인하고 상태를 업데이트
       } catch (error) {
@@ -112,11 +114,11 @@ const Mypage = () => {
     return <Navigate to='/users/sign-in' replace />;
   }*/
   //console.log('데이터: ',userInfo.profile_picture);
-    const totalLikes = 10;
-    //const totalLikes = userInfo.post_likes.length + userInfo.feedback_likes.length;
-    const handlePostClick = (post) => {
-      navigate(`/post_view/${post.post_id}`,{ state: { post } });
-    };
+  const totalLikes = 10;
+  //const totalLikes = userInfo.post_likes.length + userInfo.feedback_likes.length;
+  const handlePostClick = (post) => {
+    navigate(`/post_view/${post.post_id}`, { state: { post } });
+  };
   return (
     <div className="my_all">
       <div className="contribution-bar">
