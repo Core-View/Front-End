@@ -1,8 +1,144 @@
-.ad_post_list {
-    width: 100%;
+/* admin_post.css */
+
+/* 공통 스타일 */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f7fa;
+  margin: 0;
+  padding: 0;
 }
 
-.ad_post_list li {
-    border-bottom: 1px solid black;
-    margin: 5px 0px;
+/* 컨테이너 스타일 */
+.admin_post_container {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 게시글 상세 헤더 스타일 */
+.post_detail {
+  display: flex;
+  width: 100%;
+  background-color: #e0e0e0;
+  padding: 10px;
+  font-weight: bold;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.post_detail .post_id,
+.post_detail .post_title,
+.post_detail .post_user,
+.post_detail .post_date {
+  flex-basis: 10%;
+  text-align: center;
+}
+
+.post_detail .post_title {
+  flex-basis: 40%;
+}
+
+.post_detail .post_user {
+  flex-basis: 20%;
+}
+
+.post_detail .post_date {
+  flex-basis: 30%;
+}
+
+/* 게시글 리스트 스타일 */
+.ad_post_list {
+  width: 100%;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  height: 400px;
+  overflow-y: auto;
+  border-radius: 0 0 10px 10px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.ad_post_list::-webkit-scrollbar {
+  display: none;
+}
+
+.listpost {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  height: 40px;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.delete_poster {
+  display: none;
+  color: red;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+}
+
+.listpost:hover {
+  background-color: #e0e0e0;
+}
+
+.listpost:hover:hover .delete_poster {
+  display: block;
+}
+
+.line1,
+.line2,
+.line3,
+.line4 {
+  text-align: center;
+}
+
+.line1 {
+  flex-basis: 10%;
+  font-weight: bold;
+}
+
+.line2 {
+  flex-basis: 40%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.line3 {
+  flex-basis: 20%;
+}
+
+.line4 {
+  flex-basis: 30%;
+}
+
+/* 페이지네이션 스타일 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagebtn {
+  padding: 8px 12px;
+  margin: 0 4px;
+  background-color: #e0e0e0;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pagebtn:hover,
+.pagebtn.active {
+  background-color: #333;
+  color: #fff;
 }

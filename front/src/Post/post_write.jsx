@@ -15,11 +15,11 @@ const PostWrite = () => {
 
     const postData = {
       // post_id, post_title, post_content, post_code, post_date, language, user_id, post_result
-      title,
-      content,
-      code,
-      language, // 언어 추가
-      userId: 123, // 임시 userId
+      title: title,
+      language: language, // 언어 추가
+      code: code,
+      content: content,
+      user_id: 18, // 임시 userId
     };
 
     try {

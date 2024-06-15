@@ -6,7 +6,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #f8f9fa; /* 밝은 배경색 */
+  background-color: #f8f9fa;
+  /* 밝은 배경색 */
 }
 
 .flexi {
@@ -23,20 +24,26 @@
   width: 300px;
   height: 408px;
   padding: 20px;
-  border: 1px solid #ced4da; /* 밝은 회색 테두리 */
+  border: 1px solid #ced4da;
+  /* 밝은 회색 테두리 */
   border-radius: 8px;
   background-color: #ffffff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 가벼운 그림자 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* 가벼운 그림자 */
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
 
-  transition: opacity 0.3s; /* 불투명도 전환 효과 */
+  transition: opacity 0.3s;
+  /* 불투명도 전환 효과 */
 }
+
 .input_componentFF.disabled {
-  opacity: 0.6; /* 불투명도 설정 */
-  pointer-events: none; /* 사용자 이벤트 비활성화 */
+  opacity: 0.6;
+  /* 불투명도 설정 */
+  pointer-events: none;
+  /* 사용자 이벤트 비활성화 */
 }
 
 .input_spaceF {
@@ -56,38 +63,45 @@
 }
 
 .passRegex {
-  color: #28a745; /* 성공 메시지 색상 */
+  color: #28a745;
+  /* 성공 메시지 색상 */
   font-weight: 600;
   font-size: 14px;
 }
 
 .nonPassRegexF {
-  color: #dc3545; /* 오류 메시지 색상 */
+  color: #dc3545;
+  /* 오류 메시지 색상 */
   font-weight: 600;
   font-size: 14px;
 }
 
-button,
+#ChangePassword,
 .email_auth {
   width: 100%;
   padding: 10px;
   border: none;
   border-radius: 4px;
-  background-color: #007bff; /* 버튼 배경색 */
+  background-color: #007bff;
+  /* 버튼 배경색 */
   color: white;
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
+
 #ChangePassword {
   width: 280px;
 }
+
 #ChangePassword:disabled,
 .email_auth:disabled {
-  background-color: #6c757d; /* 비활성화된 버튼 배경색 */
+  background-color: #6c757d;
+  /* 비활성화된 버튼 배경색 */
   cursor: not-allowed;
 }
 
 #ChangePassword:hover:not(:disabled) .email_auth:hover:not(:disabled) {
-  background-color: #0056b3; /* 호버 시 버튼 배경색 */
+  background-color: #0056b3;
+  /* 호버 시 버튼 배경색 */
 }

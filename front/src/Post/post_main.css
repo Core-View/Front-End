@@ -85,13 +85,17 @@
 }
 
 .post-top-right input {
-  flex: 1; /* 남은 공간을 차지하도록 설정 */
-  padding: 12px 20px; /* 패딩을 늘려서 더 크고 편안하게 */
-  border-radius: 25px; /* 둥근 모서리 */
+  flex: 1;
+  /* 남은 공간을 차지하도록 설정 */
+  padding: 12px 20px;
+  /* 패딩을 늘려서 더 크고 편안하게 */
+  border-radius: 25px;
+  /* 둥근 모서리 */
   border: 1px solid #ccc;
   transition: border-color 0.3s, box-shadow 0.3s;
   font-size: 1rem;
-  background-color: #f9f9f9; /* 약간의 배경색 추가 */
+  background-color: #f9f9f9;
+  /* 약간의 배경색 추가 */
 }
 
 .post-top-right input:focus {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './my_modify.css';
-import { IoIosWarning } from "react-icons/io";
+import { IoIosWarning } from 'react-icons/io';
 
 const Mymodify = () => {
   const navigate = useNavigate();
@@ -22,7 +22,8 @@ const Mymodify = () => {
   const [user_password, setUserPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const regex = {
-    password: /^(?=.*[a-zA-Z가-힣])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z가-힣\d@$!%*?&]{8,}$/
+    password:
+      /^(?=.*[a-zA-Z가-힣])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z가-힣\d@$!%*?&]{8,}$/,
   };
 
   const isValid = useCallback((checkReg, string) => {
@@ -62,7 +63,9 @@ const Mymodify = () => {
   const validatePasswordFormat = (password) => {
     if (!isValid(regex.password, password)) {
       setPasswordValid(false);
-      setPasswordValidityMessage('비밀번호는 한글 또는 영어, 숫자, 특수문자를 포함해야 합니다.');
+      setPasswordValidityMessage(
+        '비밀번호는 한글 또는 영어, 숫자, 특수문자를 포함해야 합니다.'
+      );
     } else {
       setPasswordValid(true);
       setPasswordValidityMessage('');
@@ -108,10 +111,20 @@ const Mymodify = () => {
       formData.append('user_image', imageFile);
 
       try {
-        const imageResponse = await fetch(`http://localhost:3000/mypage/5/modifyImage`, {
+<<<<<<< HEAD
+        const imageResponse = await fetch(
+          `http://localhost:3000/mypage/5/modifyImage`,
+          {
+            method: 'POST',
+            body: formData,
+          }
+        );
+=======
+        const imageResponse = await fetch(`http://localhost:3000/mypage/17/modifyImage`, {
           method: 'POST',
           body: formData,
         });
+>>>>>>> 366fb1418231a6380ab3088fa79f254fe191dd9a
 
         if (!imageResponse.ok) {
           throw new Error('Image upload failed');
@@ -138,7 +151,7 @@ const Mymodify = () => {
     };
 
     try {
-      const response = await fetch(`http://localhost:3000/mypage/5/modify`, {
+      const response = await fetch(`http://localhost:3000/mypage/17/modify`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -164,9 +177,12 @@ const Mymodify = () => {
 
   const handleDeleteAccount = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/mypage/${userId}/delete`, {
-        method: 'DELETE',
-      });
+      const response = await fetch(
+        `http://localhost:3000/mypage/${userId}/delete`,
+        {
+          method: 'DELETE',
+        }
+      );
 
       if (!response.ok) {
         throw new Error('Account deletion failed');
@@ -183,11 +199,11 @@ const Mymodify = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/mypage/5`);
+        const response = await fetch(`http://localhost:3000/mypage/17`);
         const data = await response.json();
         setImageSrc(data.profile_picture || '/images/original_profile.png'); // 초기 프로필 사진 설정
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.error('Error fetching user data:', error);
       }
     };
     fetchUserData();
@@ -204,7 +220,7 @@ const Mymodify = () => {
   const handlePasswordSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3000/password/verify/5', {
+      const response = await fetch('http://localhost:3000/password/verify/17', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -227,88 +243,146 @@ const Mymodify = () => {
   return (
     <div>
       <form className="form-container" onSubmit={handleSubmit}>
-        <div className='modi_field'>
+        <div className="modi_field">
           <h1>내 정보</h1>
           <br />
-          <hr style={{ backgroundColor: '#ccc', height: '2px' }}/>
+          <hr style={{ backgroundColor: '#ccc', height: '2px' }} />
           <br />
-          <div className='photo'>
-            <label className='profile_L'>프로필 사진</label>
-            <div className='profile_D'>
-              {imageSrc && <img src={imageSrc} alt="preview-img" className='prefile' />}
+          <div className="photo">
+            <label className="profile_L">프로필 사진</label>
+            <div className="profile_D">
+              {imageSrc && (
+                <img src={imageSrc} alt="preview-img" className="prefile" />
+              )}
               <hr></hr>
               <label htmlFor="file-upload" className="file-upload-btn">
                 사진 변경
               </label>
-              <input id="file-upload" type="file" name="user_image" accept='image/*' onChange={(e) => {
+              <input
+                id="file-upload"
+                type="file"
+                name="user_image"
+                accept="image/*"
+                onChange={(e) => {
                   encodeFileToBase64(e.target.files[0]);
                   setImageFile(e.target.files[0]); // 파일 객체 설정
-              }} style={{ display: 'none' }} />
+                }}
+                style={{ display: 'none' }}
+              />
             </div>
           </div>
-          <div className='nick_zone'>
-            <label className='nick_L'>닉네임</label>
-            <div className='nick_D'>
-              <input type="text" name="nickname" value={nickname} onChange={handleNicknameChange}
-                className='nick_I'></input>
-              {nicknameError && <div className='nickname_error'>{nicknameError}</div>}
+          <div className="nick_zone">
+            <label className="nick_L">닉네임</label>
+            <div className="nick_D">
+              <input
+                type="text"
+                name="nickname"
+                value={nickname}
+                onChange={handleNicknameChange}
+                className="nick_I"
+              ></input>
+              {nicknameError && (
+                <div className="nickname_error">{nicknameError}</div>
+              )}
             </div>
           </div>
-          <div className='password_zone'>
-            <label className='password_L'>비밀번호</label>
-            <div className='password_D'>
-              <input type="password" name="pw" value={password} onChange={handlePasswordChange} className='password_I'></input>
-              {!passwordValid && <div className='password_error'>{passwordValidityMessage}</div>}
+          <div className="password_zone">
+            <label className="password_L">비밀번호</label>
+            <div className="password_D">
+              <input
+                type="password"
+                name="pw"
+                value={password}
+                onChange={handlePasswordChange}
+                className="password_I"
+              ></input>
+              {!passwordValid && (
+                <div className="password_error">{passwordValidityMessage}</div>
+              )}
             </div>
           </div>
-          <div className='pcheck_zone'>
-            <label className='pcheck_L'>비밀번호 확인</label>
-            <div className='pcheck_D'>
-              <input type="password" name="pw_check" value={confirmPassword} onChange={handleConfirmPasswordChange} className='pcheck_I'></input>
-              {passwordError && <div className='password_error'>{passwordError}</div>}
+          <div className="pcheck_zone">
+            <label className="pcheck_L">비밀번호 확인</label>
+            <div className="pcheck_D">
+              <input
+                type="password"
+                name="pw_check"
+                value={confirmPassword}
+                onChange={handleConfirmPasswordChange}
+                className="pcheck_I"
+              ></input>
+              {passwordError && (
+                <div className="password_error">{passwordError}</div>
+              )}
             </div>
           </div>
-          <div className='introduce_zone'>
-            <label className='intro_L'>자기소개</label>
-            <div className='intro_D'>
-              <input type="text" name="my_introduce" maxLength='30' value={intro} onChange={handleIntroChange} className='intro_I'></input>
-              {introError && <div className='intro_error'>{introError}</div>}
+          <div className="introduce_zone">
+            <label className="intro_L">자기소개</label>
+            <div className="intro_D">
+              <input
+                type="text"
+                name="my_introduce"
+                maxLength="30"
+                value={intro}
+                onChange={handleIntroChange}
+                className="intro_I"
+              ></input>
+              {introError && <div className="intro_error">{introError}</div>}
             </div>
           </div>
-          <div className='button_zone'>
-            <div className='submit_D'>
-              <input type="submit" value="수정하기"
-                className='submit_B'></input>
+          <div className="button_zone">
+            <div className="submit_D">
+              <input
+                type="submit"
+                value="수정하기"
+                className="submit_B"
+              ></input>
             </div>
           </div>
         </div>
       </form>
-      <div className='delete_D'>
-        <button type="button" onClick={() => {setIsModalOpen(true); setUserPassword('');setErrorMessage('');}}>회원탈퇴</button>
+      <div className="delete_D">
+        <button
+          type="button"
+          onClick={() => {
+            setIsModalOpen(true);
+            setUserPassword('');
+            setErrorMessage('');
+          }}
+        >
+          회원탈퇴
+        </button>
       </div>
-      {isModalOpen && <div className='modi_modal'>
-          <div className='modi_modal-content'>
-            <div className='modi_close_btn'>
-              <span className="modi_close" onClick={() => setIsModalOpen(false)}>&times;</span>
+      {isModalOpen && (
+        <div className="modi_modal">
+          <div className="modi_modal-content">
+            <div className="modi_close_btn">
+              <span
+                className="modi_close"
+                onClick={() => setIsModalOpen(false)}
+              >
+                &times;
+              </span>
             </div>
-            <div className='modi_warning_zone'>
+            <div className="modi_warning_zone">
               <IoIosWarning />
             </div>
             <h2>회원 탈퇴를 하시겠습니까?</h2>
             <h4>회원 탈퇴 시 영구히 삭제되어 복구할 수 없습니다.</h4>
-            <form onSubmit={handlePasswordSubmit} className='modi_check_P'>
-                <input
-                  type="password"
-                  value={user_password}
-                  onChange={handlePassword}
-                  placeholder="비밀번호 입력"
-                  required
-                />
-                {errorMessage && <p className="modi_error">{errorMessage}</p>}
-                <button type="submit">확인</button>
-              </form>
+            <form onSubmit={handlePasswordSubmit} className="modi_check_P">
+              <input
+                type="password"
+                value={user_password}
+                onChange={handlePassword}
+                placeholder="비밀번호 입력"
+                required
+              />
+              {errorMessage && <p className="modi_error">{errorMessage}</p>}
+              <button type="submit">확인</button>
+            </form>
           </div>
-        </div>}
+        </div>
+      )}
     </div>
   );
 };

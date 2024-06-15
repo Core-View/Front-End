@@ -14,7 +14,8 @@
 }
 
 .header-logo {
-  max-width: 100px; /* 로고 크기 조정 */
+  max-width: 100px;
+  /* 로고 크기 조정 */
   transition: transform 0.3s ease;
 }
 
@@ -25,6 +26,7 @@
 .header-nav ul {
   list-style: none;
   display: flex;
+  align-items: center;
   gap: 20px;
   margin: 0;
   padding: 0;

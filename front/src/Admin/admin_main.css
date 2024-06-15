@@ -1,112 +1,156 @@
+/* admin_main.css */
+
+/* 공통 스타일 */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f7fa;
+  margin: 0;
+  padding: 0;
+}
+
+/* 컨테이너 스타일 */
 .admin-container {
   width: 90%;
-  height: 700px;
-  margin: 0 auto;
+  margin: 20px auto;
   padding: 20px;
   display: flex;
-  justify-content: center;
-  text-align: left;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* 타이틀 스타일 */
 .admin_title {
-  border-bottom: 3px solid black;
-  margin: 0px;
-  margin-bottom: 10px;
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+  border-bottom: 2px solid #333;
+  padding-bottom: 10px;
+  width: 100%;
 }
 
-.member {
-  width: 300px;
-  margin-bottom: 10px;
-  position: relative;
+/* 섹션 스타일 */
+.member-section,
+.admin-menu-section {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+/* 멤버 리스트 스타일 */
+.memberList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  height: 300px;
+  overflow-y: auto;
+  background-color: #f8f9fa;
+  color: #495057;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  border: 1px solid #dee2e6;
 }
 
 .memberList::-webkit-scrollbar {
   display: none;
-  /* 웹킷 기반 브라우저에서 스크롤바 숨김 */
 }
 
-.memberList {
-  -ms-overflow-style: none;
-  /* IE 및 엣지 브라우저에서 스크롤바 숨김 */
-  scrollbar-width: none;
-  /* 파이어폭스에서 스크롤바 숨김 */
-  border: 1px solid black;
-  list-style: none;
-  overflow: scroll;
-  height: 550px;
-}
-
-.memberList li {
-  height: 25px;
+.member_detail {
   display: flex;
   justify-content: space-between;
-  position: relative;
-  /* 게이지의 절대 위치를 위한 상대 위치 */
-  border-bottom: 1px solid black;
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
-.nickname {
+.member_info,
+.member_tier,
+.member_point {
+  flex: 1;
+  text-align: center;
+}
+
+.listMember {
   display: flex;
-  width: 70px;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #dee2e6;
+  transition: background-color 0.3s ease;
+}
+
+.listMember:hover {
+  background-color: #e9ecef;
+}
+
+.nickname,
+.tier,
+.contribute-container {
+  padding-left: 10px;
+  flex: 1;
+  align-items: center;
+  text-align: center;
+}
+
+/* 기여도 컨테이너 스타일 */
+.contribute-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.contribute-value {
+  position: absolute;
+  z-index: 1;
   line-height: 25px;
-}
-
-.memberList li .name {
-  z-index: 2;
-  position: relative;
-}
-
-.memberList li .point {
-  z-index: 2;
-  position: relative;
-  margin-left: 10px;
+  padding-left: 5px;
+  color: #000;
 }
 
 .gauge {
-  position: absolute;
-  left: 40%;
-  top: 0;
-  height: 100%;
-  background-color: rgba(0, 128, 0, 0.4);
-  /* 반투명 초록색 게이지 */
-  z-index: 1;
-  /* 포인트 스팬 아래에 오도록 설정 */
-  border-left: 2px solid black;
+  height: 25px;
+  background-color: #666;
+  border-radius: 5px;
+  z-index: 0;
 }
 
-.admin_menu {
-  width: 100%;
-  height: 560px;
-  margin-left: 5px;
-}
-
-.admin_menu .admin_menu_list {
+/* 관리자 메뉴 스타일 */
+.admin_menu_list {
   display: flex;
-  width: 100%;
+  justify-content: space-around;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.admin_menu .admin_menu_list li {
-  border: 1px solid black;
-  width: 100px;
-  height: 30px;
-  line-height: 30px;
+.menuer {
+  flex: 1;
+  margin: 5px;
+  padding: 10px;
   text-align: center;
+  border: 1px solid #333;
+  border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.admin_menu .admin_menu_list li:hover {
+.menuer:hover,
+.menuer.nowshow {
   background-color: #333;
-  color: white;
-}
-
-.nowshow {
-  background-color: #333;
-  color: white;
+  color: #fff;
 }
 
 .show_admin_menu {
   width: 100%;
-  border: 1px solid black;
-  height: 520px;
-  padding: 10px;
+  padding: 20px;
+  border: 1px solid #333;
+  border-radius: 10px;
+  box-shadow: 2px 0px 13px 5px rgba(160, 160, 160, 0.5);
+  background-color: #fff;
 }

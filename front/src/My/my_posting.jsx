@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
-import "./my_posting.css";
-import { useNavigate } from "react-router-dom";
-import { PiPencilLineFill } from "react-icons/pi";
-import { TbListSearch } from "react-icons/tb";
+import React, { useState, useEffect } from 'react';
+import './my_posting.css';
+import { useNavigate } from 'react-router-dom';
+import { PiPencilLineFill } from 'react-icons/pi';
+import { TbListSearch } from 'react-icons/tb';
 
 const Empty = () => {
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 12;
@@ -35,7 +35,7 @@ const Empty = () => {
         setPosts(data || []);
         setFilteredPosts(data || []); // 초기 상태를 전체 게시글로 설정
       } catch (error) {
-        console.error("Error fetching post data:", error);
+        console.error('Error fetching post data:', error);
       }
     };
     fetchPostData();
@@ -51,7 +51,9 @@ const Empty = () => {
   // 현재 페이지에 따라 표시할 게시글 계산
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = Array.isArray(filteredPosts) ? filteredPosts.slice(indexOfFirstPost, indexOfLastPost) : [];
+  const currentPosts = Array.isArray(filteredPosts)
+    ? filteredPosts.slice(indexOfFirstPost, indexOfLastPost)
+    : [];
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -63,7 +65,7 @@ const Empty = () => {
             <PiPencilLineFill
               className="my_post_search"
               onClick={() => {
-                navigate("/post_write");
+                navigate('/post_write');
               }}
             />
           </div>
@@ -83,7 +85,10 @@ const Empty = () => {
           </div>
           {currentPosts.length > 0 ? (
             currentPosts.map((post) => (
-              <li key={post.post_id} onClick={() => handlePostClick(post.post_id)}>
+              <li
+                key={post.post_id}
+                onClick={() => handlePostClick(post.post_id)}
+              >
                 {post.post_title}
               </li>
             ))
@@ -94,13 +99,24 @@ const Empty = () => {
       </section>
       <section className="my_post-bot">
         <ul className="my_post_pagination">
-          {Array.from({ length: Math.ceil(filteredPosts.length / postsPerPage) }, (_, i) => (
-            <li key={i + 1} className={`my_post_page-item ${currentPage === i + 1 ? "active" : ""}`}>
-              <button onClick={() => paginate(i + 1)} className="my_post_page-link">
-                {i + 1}
-              </button>
-            </li>
-          ))}
+          {Array.from(
+            { length: Math.ceil(filteredPosts.length / postsPerPage) },
+            (_, i) => (
+              <li
+                key={i + 1}
+                className={`my_post_page-item ${
+                  currentPage === i + 1 ? 'active' : ''
+                }`}
+              >
+                <button
+                  onClick={() => paginate(i + 1)}
+                  className="my_post_page-link"
+                >
+                  {i + 1}
+                </button>
+              </li>
+            )
+          )}
         </ul>
       </section>
     </div>

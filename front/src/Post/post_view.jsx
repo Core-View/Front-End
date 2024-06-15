@@ -62,7 +62,7 @@ const PostView = () => {
   }, [post_id]);
 
   // 현재 로그인된 유저의 Id
-  const loggedInUserId = '123';
+  const loggedInUserId = '18';
 
   // 피드백 버튼 클릭 핸들
   const handleFeedbackClick = (lineIndex, lineCode) => {

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import "./admin_notice.css";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import './admin_notice.css';
+import { useNavigate } from 'react-router-dom';
 
 const AdminNotice = () => {
   const [noticeLists, setNoticeLists] = useState([]);
@@ -43,8 +43,7 @@ const AdminNotice = () => {
 
   //공지작성관련
   const createNotice = () => {
-    console.log("공지쓰자");
-    navigate("/notice/post");
+    navigate('/notice/post');
   };
 
   return (
@@ -52,9 +51,15 @@ const AdminNotice = () => {
       <button className="create_notice" onClick={createNotice}>
         공지작성
       </button>
+      <div className="notice_detail">
+        <div className="notice_id">번호</div>
+        <div className="notice_title">제목</div>
+        <div className="notice_date">작성일자</div>
+      </div>
       <ul className="ad_notice_list">
         {currentNotices.map((notice, i) => (
           <li
+            className="listnotice"
             key={i}
             onClick={() => {
               navigate(`/notice/view/${notice.NOTICE_ID}`);
@@ -71,7 +76,7 @@ const AdminNotice = () => {
           <button
             key={number}
             onClick={() => setCurrentPage(number)}
-            className={currentPage === number ? "active" : ""}
+            className={`pagebtn ${currentPage === number ? 'active' : ''}`}
           >
             {number}
           </button>
