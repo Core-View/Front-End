@@ -112,10 +112,10 @@ const Sign_in = () => {
     }
     axios
       .post('http://localhost:3000/sign/signup', {
-        username: name,
-        nickname: nickname,
-        password: password,
-        email: email,
+        user_name: name,
+        user_nickname: nickname,
+        user_password: password,
+        user_email: email,
       })
       .then((response) => {
         if (response.status === 200) {
@@ -137,7 +137,7 @@ const Sign_in = () => {
     }
     axios
       .post('http://localhost:3000/sign/auth', {
-        email: email,
+        user_email: email,
       })
       .then((response) => {
         if (response.status === 200) {
@@ -155,7 +155,8 @@ const Sign_in = () => {
     }
     axios
       .post('http://localhost:3000/sign/authcheck', {
-        authcode: checkEmail,
+        user_email: email,
+        user_authcode: checkEmail,
       })
       .then((response) => {
         if (response.status === 200) {

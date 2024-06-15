@@ -3,7 +3,6 @@ import { PiBellFill } from 'react-icons/pi';
 import { GiBackwardTime } from 'react-icons/gi';
 import './Alarm.css';
 import { Cookies } from 'react-cookie';
-import userIdInfo from '../Sign/UserStore';
 
 const Alarm = () => {
   const [isStarted, setIsStarted] = useState(false);
@@ -16,7 +15,9 @@ const Alarm = () => {
   };
 
   useEffect(() => {
-    es.current = new EventSource('http://localhost:3000/sse/streaming/start');
+    es.current = new EventSource(
+      `http://localhost:3000/sse/streaming/start/${cookies.get('user_id')}`
+    );
 
     console.log({ es });
 
@@ -70,13 +71,11 @@ const Alarm = () => {
       return '방금 전';
     }
   };
-  const { user_id } = userIdInfo();
-  console.log(user_id);
   return (
     <div>
       <div className="al_div">
         {cookies.get('user_id') === undefined ? (
-          <span className="al_num">0</span>
+          <span className="al_num">{alarm.length}</span>
         ) : (
           <span className="al_num_have">{alarm.length}</span>
         )}
