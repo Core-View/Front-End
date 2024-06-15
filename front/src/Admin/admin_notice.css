@@ -1,33 +1,83 @@
+/* admin_notice.css */
+
+/* 공통 스타일 */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f7fa;
+  margin: 0;
+  padding: 0;
+}
+
+/* 컨테이너 스타일 */
 .admin_notice_container {
   width: 100%;
-  margin: 0px;
-  padding: 0px;
-  background-color: white;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   position: relative;
 }
 
+/* 버튼 스타일 */
 .create_notice {
-  display: block;
-  width: 100px;
-  height: 30px;
-  background-color: #007bff;
+  position: absolute;
+  top: 475px;
+  left: 750px;
+  display: inline-block;
+  width: 120px;
+  height: 40px;
+  background-color: #333;
   color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
-  position: absolute;
-  top: -45px;
-  left: 550px;
+  transition: background-color 0.3s ease, opacity 0.3s ease;
+  margin-bottom: 20px;
+  opacity: 0.5;
 }
 
 .create_notice:hover {
-  background-color: #333;
+  background-color: #000;
+  opacity: 1;
 }
 
+/* 공지 사항 디테일 스타일 */
+.notice_detail {
+  display: flex;
+  width: 100%;
+  background-color: #e0e0e0;
+  padding: 10px;
+  font-weight: bold;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.notice_detail .notice_id,
+.notice_detail .notice_title,
+.notice_detail .notice_date {
+  flex-basis: 10%;
+  text-align: center;
+}
+
+.notice_detail .notice_title {
+  flex-basis: 70%;
+}
+
+/* 공지 사항 리스트 스타일 */
 .ad_notice_list {
   list-style-type: none;
   padding: 0;
-  height: 440px;
+  margin: 0;
+  width: 100%;
+  height: 400px;
+  overflow-y: auto;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.ad_notice_list::-webkit-scrollbar {
+  display: none;
 }
 
 .listnotice {
@@ -35,17 +85,20 @@
   align-items: center;
   padding: 10px;
   height: 40px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #ccc;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .listnotice:hover {
-  background-color: #f0f0f0;
+  background-color: #e0e0e0;
 }
 
-.ad_notice_id {
+.ad_notice_id,
+.ad_notice_title,
+.ad_notice_date {
   flex-basis: 10%;
-  font-weight: bold;
+  text-align: center;
 }
 
 .ad_notice_title {
@@ -60,6 +113,7 @@
   text-align: right;
 }
 
+/* 페이지네이션 스타일 */
 .pagination {
   display: flex;
   justify-content: center;
@@ -69,13 +123,15 @@
 .pagebtn {
   padding: 8px 12px;
   margin: 0 4px;
-  background-color: #f0f0f0;
+  background-color: #e0e0e0;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
+.pagebtn:hover,
 .pagebtn.active {
-  background-color: #007bff;
+  background-color: #333;
   color: #fff;
 }

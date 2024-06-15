@@ -51,6 +51,11 @@ const AdminNotice = () => {
       <button className="create_notice" onClick={createNotice}>
         공지작성
       </button>
+      <div className="notice_detail">
+        <div className="notice_id">번호</div>
+        <div className="notice_title">제목</div>
+        <div className="notice_date">작성일자</div>
+      </div>
       <ul className="ad_notice_list">
         {currentNotices.map((notice, i) => (
           <li

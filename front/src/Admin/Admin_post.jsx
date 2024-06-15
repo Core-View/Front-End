@@ -10,10 +10,6 @@ const AdminPost = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 10;
 
-  const deletePosts = () => {
-    axios.delete("");
-  };
-
   const getAdminPosts = () => {
     axios.get("http://localhost:3000/post/latest").then((response) => {
       setPostList(response.data);
@@ -45,8 +41,25 @@ const AdminPost = () => {
     pageNumbers.push(i);
   }
 
+  // 게시글 삭제 관련
+  const deletePoster = (post_id) => {
+    if (window.confirm("삭제하시겠습니까?")) {
+      axios.delete("http://localhost:3000/api/delete", {
+        postId: post_id,
+      });
+    } else {
+      alert("취소하였습니다.");
+    }
+  };
+
   return (
     <div className="admin_post_container">
+      <div className="post_detail">
+        <div className="post_id">번호</div>
+        <div className="post_title">제목</div>
+        <div className="post_user">작성자</div>
+        <div className="post_date">작성일자</div>
+      </div>
       <ul className="ad_post_list">
         {currentPosts.map((a, i) => (
           <li
@@ -60,6 +73,14 @@ const AdminPost = () => {
             <div className="line2">{a.post_title}</div>
             <div className="line3">{a.user_id}</div>
             <div className="line4">{a.post_date}</div>
+            <div
+              className="delete_poster"
+              onClick={() => {
+                deletePoster(a.post_id);
+              }}
+            >
+              X
+            </div>
           </li>
         ))}
       </ul>

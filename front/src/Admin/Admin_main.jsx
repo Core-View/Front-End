@@ -11,10 +11,6 @@ const Admin = () => {
   const [member, setMember] = useState([]);
   const [clicked, setClicked] = useState([false, false, false]);
 
-  useEffect(() => {
-    getMember();
-  }, []);
-
   const getMember = () => {
     axios.get("http://localhost:3000/notice/viewuser").then((response) => {
       if (response.data.success === true) {
@@ -24,13 +20,17 @@ const Admin = () => {
   };
 
   const handleDelete = (userId) => {
-    axios
-      .delete(`http://localhost:3000/mypage/${userId}/delete`)
-      .then((response) => {
-        if (response.data.success) {
-          getMember(); // 회원 삭제 후 목록을 새로 불러옴
-        }
-      });
+    if (window.confirm("삭제하시겠습니까?")) {
+      axios
+        .delete(`http://localhost:3000/mypage/${userId}/delete`)
+        .then((response) => {
+          if (response.data.success) {
+            getMember(); // 회원 삭제 후 목록을 새로 불러옴
+          }
+        });
+    } else {
+      alert("취소하였습니다.");
+    }
   };
 
   const renderMenuContent = () => {
@@ -48,41 +48,45 @@ const Admin = () => {
 
   const maxContribute = Math.max(...member.map((m) => m.USER_CONTRIBUTE));
 
+  useEffect(() => {
+    getMember();
+  }, []);
+
   return (
     <div className="admin-container">
-      <div className="member">
-        <h3 className="admin_title">
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;멤버&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&
-          &nbsp;&nbsp;기여도현황
-        </h3>
+      <div className="member-section">
+        <h3 className="admin_title">멤버 기여도 현황</h3>
+        <div className="member_detail">
+          <div className="member_info">멤버</div>
+          <div className="member_tier">등급</div>
+          <div className="member_point">기여도</div>
+        </div>
         <ul className="memberList">
           {member.map((a, i) => (
             <li className="listMember" key={i}>
-              <span className="nickname">
-                <LuCrown
-                  style={{
-                    marginTop: "5px",
-                    marginRight: "5px",
-                    marginLeft: "5px",
-                  }}
-                />
-                <div>{a.USER_NICKNAME}</div>
-              </span>
-              <span style={{ width: "140px", lineHeight: "25px" }}>
-                {a.USER_CONTRIBUTE}
-              </span>
-              <div
-                className="gauge"
+              <span className="nickname">{a.USER_NICKNAME}</span>
+              <LuCrown
+                className="tier"
                 style={{
-                  width: `${(a.USER_CONTRIBUTE / maxContribute) * 50}%`,
+                  marginTop: "5px",
+                  width: "40px",
                 }}
-              ></div>
+              />
+              <div className="contribute-container">
+                <span className="contribute-value">{a.USER_CONTRIBUTE}</span>
+                <div
+                  className="gauge"
+                  style={{
+                    width: `${(a.USER_CONTRIBUTE / maxContribute) * 100}%`,
+                  }}
+                ></div>
+              </div>
             </li>
           ))}
         </ul>
       </div>
-      <div className="admin_menu">
-        <h3 className="admin_title">CoReview 관리자메뉴</h3>
+      <div className="admin-menu-section">
+        <h3 className="admin_title">CoReview 관리자 메뉴</h3>
         <ul className="admin_menu_list">
           <li
             className={`menu1 menuer ${clicked[0] ? "nowshow" : ""}`}
