@@ -14,7 +14,6 @@ import SignUp from './Sign/Sign_up/signup_main';
 // Post
 import Post from './Post/post_main';
 import PostView from './Post/post_view';
-import CodeEditor from './Post/post_code_editor';
 import PostWrite from './Post/post_write';
 // Admin
 import Admin from './Admin/Admin_main';
@@ -52,7 +51,6 @@ function App() {
               {/* post  */}
               <Route path="/post_main" element={<Post />} />
               <Route path="/post_view/:post_id" element={<PostView />} />
-              <Route path="post_code" element={<CodeEditor />} />
               <Route path="post_write" element={<PostWrite />} />
               {/* user  */}
               <Route path="users">
