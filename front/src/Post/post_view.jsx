@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { Cookies } from 'react-cookie';
 
 import './post_view.css';
 import './post_view_fb.css';
@@ -10,6 +11,8 @@ const PostView = () => {
   const { post_id } = useParams();
   const location = useLocation();
   const { post } = location.state;
+  const cookies = new Cookies();
+  const loggedInUserId = cookies.get('user_id'); // 로그인된 사용자 ID 가져오기
 
   const title = post.post_title;
   const likes = -1; // 좋아요 기능이 구현되지 않아서 임시로 -1 설정
@@ -28,8 +31,8 @@ const PostView = () => {
     text: '',
     codeContent: '',
   });
-
   const [userInfos, setUserInfos] = useState({});
+  const [loginError, setLoginError] = useState(''); // 로그인 에러 상태 추가
 
   const languageIcons = {
     c: '/images/language_icons/c_icon.png',
@@ -98,9 +101,6 @@ const PostView = () => {
 
     fetchFeedback();
   }, [post_id, authorId]);
-
-  // 현재 로그인된 유저의 Id
-  const loggedInUserId = '18';
 
   // 피드백 버튼 클릭 핸들
   const handleFeedbackClick = (lineIndex, lineCode) => {
@@ -179,7 +179,7 @@ const PostView = () => {
       <div className="post-meta">
         <span className="post-likes">좋아요 {likes}</span>
         <span className="post-author">
-          작성자 {userInfos[authorId]?.nickname || '탈퇴한 회원'}
+          {userInfos[authorId]?.nickname || '탈퇴한 회원'}
         </span>
       </div>
       <div className="post-content">
@@ -239,10 +239,15 @@ const PostView = () => {
           <div className="popup-inner">
             <textarea
               rows="4"
-              placeholder="피드백을 남겨주세요."
+              placeholder={
+                loggedInUserId
+                  ? '피드백을 남겨주세요.'
+                  : '로그인 후 이용해주세요.'
+              }
               value={popup.text}
               onChange={(e) => setPopup({ ...popup, text: e.target.value })}
               style={{ resize: 'none' }}
+              disabled={!loggedInUserId} // 로그인이 안된 경우 비활성화
             />
             <div className="popup-buttons">
               <button
@@ -257,11 +262,17 @@ const PostView = () => {
               >
                 취소
               </button>
-              <button onClick={handleFeedbackSubmit}>제출</button>
+              <button
+                onClick={handleFeedbackSubmit}
+                disabled={!loggedInUserId} // 로그인이 안된 경우 비활성화
+              >
+                제출
+              </button>
             </div>
           </div>
         </div>
       )}
+      {loginError && <div className="login-error">{loginError}</div>}
     </div>
   );
 };
