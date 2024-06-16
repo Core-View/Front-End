@@ -8,38 +8,57 @@
   background: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
-/* 제목 */
+/* 제목과 메타데이터 섹션 */
+.post-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
 .post-title {
-  font-size: 2rem;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
   margin-bottom: 10px;
 }
 
 .post-meta {
   display: flex;
-  justify-content: space-between;
-}
-
-/* 좋아요, 작성자 */
-.post-likes,
-.post-author {
-  font-size: 1rem;
-  color: #000000;
-}
-
-/* 날짜, 언어 */
-.post-date,
-.post-language {
+  justify-content: center;
+  align-items: center;
   font-size: 1rem;
   color: #888;
+}
+
+.post-date {
+  margin-right: 20px;
+}
+
+.post-likes {
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  margin-right: 5px;
+  color: #ff4500;
+}
+
+/* 작성자 */
+.post-author {
+  display: block;
+  margin-top: 10px;
+  font-size: 1.2rem;
+  color: #555;
 }
 
 /* 내용 */
 .post-content {
   padding: 20px;
   margin-top: 20px;
-  line-height: 1.6;
+  line-height: 1.8;
   color: #444;
 }
 
@@ -91,6 +110,7 @@
   margin-left: 10px;
 }
 
+/* 코드 실행 결과 */
 .post-result {
   padding: 20px;
   margin-top: 20px;

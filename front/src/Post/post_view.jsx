@@ -4,6 +4,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Cookies } from 'react-cookie';
 import FeedbackPopup from './post_feedback_popup';
+import { MdFavoriteBorder, MdFavorite } from 'react-icons/md';
 
 import './post_view.css';
 import './post_view_fb.css';
@@ -37,9 +38,6 @@ const PostView = () => {
         );
         const postData = response.data;
 
-        const userIds = [...new Set([postData.user_id])];
-        await fetchUserInfos(userIds);
-
         setPost(postData);
         setLoading(false);
       } catch (err) {
@@ -54,46 +52,13 @@ const PostView = () => {
   // const post_id = post.post_id;
   const title = post.post_title;
   const likes = post.likes;
-  console.log('좋아요');
-  console.log(likes);
-  const authorId = post.user_id;
+  const author = post.user_nickname;
   const language = post.language;
   const date = post.post_date;
   const content = post.post_content ? post.post_content.trim().split('\n') : []; // 줄 단위로 쪼개기
   const code = post.post_code ? post.post_code.trim() : ''; // 줄 단위로 쪼개지 않음
   const result = post.post_result; // post_result 가져오기
   // ============================================================= Post Details End =============================================================
-
-  // ============================================================= User Info Start =============================================================
-  const [userInfos, setUserInfos] = useState({});
-
-  const fetchUserInfos = async (userIds) => {
-    const userInfoPromises = userIds.map((id) =>
-      axios
-        .get(`http://localhost:3000/mypage/${id}`)
-        .then((response) => ({
-          userId: id,
-          data: response.data,
-        }))
-        .catch(() => ({
-          userId: id,
-          data: { nickname: '탈퇴한 회원' }, // 사용자 정보가 없는 경우 처리
-        }))
-    );
-
-    const userInfoResponses = await Promise.all(userInfoPromises);
-
-    const newUserInfos = {};
-    userInfoResponses.forEach((response) => {
-      newUserInfos[response.userId] = response.data;
-    });
-
-    setUserInfos((prevUserInfos) => ({
-      ...prevUserInfos,
-      ...newUserInfos,
-    }));
-  };
-  // ============================================================= User Info End =============================================================
 
   // ============================================================= Feedback Data Start =============================================================
   const [feedback, setFeedback] = useState({});
@@ -105,38 +70,35 @@ const PostView = () => {
     feedback: [],
   });
 
-  useEffect(() => {
-    const fetchFeedback = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3000/api/feedbacks/post/${post_id}`
-        );
-        const feedbackData = response.data.reduce((acc, fb) => {
-          if (!acc[fb.feedback_codenumber]) {
-            acc[fb.feedback_codenumber] = [];
-          }
-          acc[fb.feedback_codenumber].push(fb);
-          return acc;
-        }, {});
-        const userIds = [
-          ...new Set([authorId, ...response.data.map((fb) => fb.user_id)]),
-        ];
-        await fetchUserInfos(userIds);
-        setFeedback(feedbackData);
-        setLoading(false);
-      } catch (err) {
-        if (err.response && err.response.status === 404) {
-          // 피드백이 없을 경우, feedback 상태를 빈 객체로 설정
-          setFeedback({});
-        } else {
-          setError(`피드백을 가져오는 데 실패했습니다: ${err.message}`);
+  const fb_users = [];
+  const fetchFeedback = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/api/feedbacks/post/${post_id}`
+      );
+      const feedbackData = response.data.reduce((acc, fb) => {
+        if (!acc[fb.feedback_codenumber]) {
+          acc[fb.feedback_codenumber] = [];
         }
-        setLoading(false);
+        acc[fb.feedback_codenumber].push(fb);
+        return acc;
+      }, {});
+      setFeedback(feedbackData);
+      setLoading(false);
+    } catch (err) {
+      if (err.response && err.response.status === 404) {
+        // 피드백이 없을 경우, feedback 상태를 빈 객체로 설정
+        setFeedback({});
+      } else {
+        setError(`피드백을 가져오는 데 실패했습니다: ${err.message}`);
       }
-    };
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchFeedback();
-  }, [post_id, authorId]);
+  }, [post_id, fb_users]);
   // ============================================================= Feedback Data End =============================================================
 
   // ============================================================= HANDLE Start =============================================================
@@ -163,7 +125,7 @@ const PostView = () => {
       : [{ user_id: loggedInUserId, feedback_comment: popup.text }];
     setFeedback({ ...feedback, [popup.line]: newFeedback });
 
-    const feedbackData = {
+    const feedbackHandleData = {
       post_id: post_id,
       user_id: loggedInUserId,
       feedback_comment: popup.text,
@@ -171,23 +133,28 @@ const PostView = () => {
     };
 
     try {
-      console.log(feedbackData);
       const response = await fetch('http://localhost:3000/api/feedbacks', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(feedbackData),
+        body: JSON.stringify(feedbackHandleData),
       });
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
+
+      // 피드백 전송 후 팝업 상태 업데이트
+      setPopup((prevPopup) => ({
+        ...prevPopup,
+        feedback: newFeedback,
+        text: '',
+      }));
     } catch (error) {
       console.error('There was a problem with your fetch operation:', error);
     }
-
-    setPopup({ ...popup, text: '' });
   };
+
   // ============================================================= HANDLE End =============================================================
 
   const truncateText = (text, maxLength) => {
@@ -212,20 +179,19 @@ const PostView = () => {
   // ============================================================= Return Start =============================================================
   return (
     <div className="post-view">
-      <h1 className="post-title">
-        <img src={languageIcons[language]} alt="" className="language-icon" />{' '}
-        {title}
-      </h1>
-      <div className="post-meta">
-        <span className="post-date">{date}</span>
-        <span className="post-language">{language}</span>
-      </div>
-      <br></br>
-      <div className="post-meta">
-        <span className="post-likes">좋아요 {likes}</span>
-        <span className="post-author">
-          {userInfos[authorId]?.nickname || '탈퇴한 회원'}
-        </span>
+      <div className="post-header">
+        <h1 className="post-title">
+          <img src={languageIcons[language]} alt="" className="language-icon" />{' '}
+          {title}
+        </h1>
+        <div className="post-meta">
+          <span className="post-date">{date}</span>
+          <span className="post-likes">
+            <MdFavoriteBorder className="icon" />
+            <MdFavorite className="icon" /> {likes}
+          </span>
+        </div>
+        <span className="post-author">{author}</span>
       </div>
       <div className="post-content">
         {content.map((line, index) => (
@@ -251,10 +217,6 @@ const PostView = () => {
               <div className="feedback-text">
                 <div className="non-drag">
                   [최근 피드백]{' '}
-                  {userInfos[
-                    feedback[index][feedback[index].length - 1].user_id
-                  ]?.nickname || '탈퇴한 회원'}
-                  :{' '}
                   {truncateText(
                     feedback[index][feedback[index].length - 1]
                       .feedback_comment,
