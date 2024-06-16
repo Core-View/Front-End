@@ -19,11 +19,40 @@ const Empty = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [postsPerPage, setPostsPerPage] = useState(15); // 페이지당 게시글 수 기본값
 
+  const [userInfos, setUserInfos] = useState({});
+
   const languageIcons = {
     c: '/images/language_icons/c_icon.png',
     cpp: '/images/language_icons/cpp_icon.png',
     java: '/images/language_icons/java_icon.png',
     python: '/images/language_icons/python_icon.png',
+  };
+
+  const fetchUserInfos = async (userIds) => {
+    const userInfoPromises = userIds.map((id) =>
+      axios
+        .get(`http://localhost:3000/mypage/${id}`)
+        .then((response) => ({
+          userId: id,
+          data: response.data,
+        }))
+        .catch(() => ({
+          userId: id,
+          data: { nickname: '탈퇴한 회원' }, // 사용자 정보가 없는 경우 처리
+        }))
+    );
+
+    const userInfoResponses = await Promise.all(userInfoPromises);
+
+    const newUserInfos = {};
+    userInfoResponses.forEach((response) => {
+      newUserInfos[response.userId] = response.data;
+    });
+
+    setUserInfos((prevUserInfos) => ({
+      ...prevUserInfos,
+      ...newUserInfos,
+    }));
   };
 
   useEffect(() => {
@@ -47,8 +76,13 @@ const Empty = () => {
     const fetchPosts = async () => {
       try {
         const response = await axios.get('http://localhost:3000/post/latest');
-        setPosts(response.data);
-        setFilteredPosts(response.data);
+        const postsData = response.data;
+
+        const userIds = [...new Set(postsData.map((post) => post.user_id))];
+        await fetchUserInfos(userIds);
+
+        setPosts(postsData);
+        setFilteredPosts(postsData);
         setLoading(false);
       } catch (err) {
         setError('게시글을 가져오는 데 실패했습니다.');
@@ -136,7 +170,9 @@ const Empty = () => {
                     />{' '}
                     {post.post_title}
                   </div>
-                  <div className="post-main-user-name">{post.user_id}</div>
+                  <div className="post-main-user-name">
+                    {userInfos[post.user_id]?.nickname || '탈퇴한 회원'}
+                  </div>
                   <div className="post-main-date">
                     {formatDate(post.post_date)}
                   </div>
@@ -201,7 +237,9 @@ const Empty = () => {
                     />{' '}
                     {post.post_id}. {post.post_title}
                   </div>
-                  <div className="post-main-user-name">{post.user_id}</div>
+                  <div className="post-main-user-name">
+                    {userInfos[post.user_id]?.nickname || '탈퇴한 회원'}
+                  </div>
                   <div className="post-main-date">
                     {formatDate(post.post_date)}
                   </div>

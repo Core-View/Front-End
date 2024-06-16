@@ -12,6 +12,40 @@ const Main = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // 사용자 정보를 저장할 상태
+  const [userInfos, setUserInfos] = useState({});
+
+  const [recommendedPosts, setRecommendedPosts] = useState([]);
+  const [newestPosts, setNewestPosts] = useState([]);
+  const [ranking, setRanking] = useState([]);
+
+  const fetchUserInfos = async (userIds) => {
+    const userInfoPromises = userIds.map((id) =>
+      axios
+        .get(`http://localhost:3000/mypage/${id}`)
+        .then((response) => ({
+          userId: id,
+          data: response.data,
+        }))
+        .catch(() => ({
+          userId: id,
+          data: { nickname: '탈퇴한 회원' }, // 사용자 정보가 없는 경우 처리
+        }))
+    );
+
+    const userInfoResponses = await Promise.all(userInfoPromises);
+
+    const newUserInfos = {};
+    userInfoResponses.forEach((response) => {
+      newUserInfos[response.userId] = response.data;
+    });
+
+    setUserInfos((prevUserInfos) => ({
+      ...prevUserInfos,
+      ...newUserInfos,
+    }));
+  };
+
   // 날짜 형식 변환 함수
   const formatDate = (dateString) => {
     const date = parseISO(dateString);
@@ -30,61 +64,41 @@ const Main = () => {
     navigate(`/post_view/${post.post_id}`, { state: { post } });
   };
 
-  const [userInfo, setUserInfo] = useState([]);
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchPostsAndRankings = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/mypage/17`);
-        const data = await response.json();
-        setUserInfo(data);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
+        const [latestResponse, likesResponse, rankingResponse] =
+          await Promise.all([
+            axios.get('http://localhost:3000/post/latest'),
+            axios.get('http://localhost:3000/post/mostlike'),
+            axios.get('http://localhost:3000/post/top-contributors'),
+          ]);
 
-    fetchUserData();
-  }, []);
+        const newestPostsData = latestResponse.data.slice(0, 5);
+        const recommendedPostsData = likesResponse.data.slice(0, 5);
+        const rankingData = rankingResponse.data;
 
-  const [ranking, setRanking] = useState([]);
-  useEffect(() => {
-    // 서버에서 기여도 랭킹 가져옴
-    const fetchFeedback = async () => {
-      try {
-        const rankingResponse = await axios.get(
-          `http://localhost:3000/post/top-contributors`
-        );
+        const userIds = [
+          ...new Set([
+            ...newestPostsData.map((post) => post.user_id),
+            ...recommendedPostsData.map((post) => post.user_id),
+            ...rankingData.map((rank) => rank.user_id),
+          ]),
+        ];
 
-        setRanking(rankingResponse.data);
+        await fetchUserInfos(userIds);
+
+        setNewestPosts(newestPostsData);
+        setRecommendedPosts(recommendedPostsData);
+        setRanking(rankingData);
         setLoading(false);
       } catch (err) {
-        setError(`랭킹을 가져오는 데 실패했습니다: ${err.message}`);
+        setError(`데이터를 가져오는 데 실패했습니다: ${err.message}`);
         setLoading(false);
       }
     };
 
-    fetchFeedback();
-  }, []);
-
-  const [recommendedPosts, setRecommendedPosts] = useState([]);
-  const [newestPosts, setNewestPosts] = useState([]);
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const [latestResponse, likesResponse] = await Promise.all([
-          axios.get('http://localhost:3000/post/latest'),
-          axios.get('http://localhost:3000/post/mostlike'),
-        ]);
-
-        setNewestPosts(latestResponse.data.slice(0, 5));
-        setRecommendedPosts(likesResponse.data.slice(0, 5));
-        setLoading(false);
-      } catch (err) {
-        setError(`게시글을 가져오는 데 실패했습니다: ${err.message}`);
-        setLoading(false);
-      }
-    };
-
-    fetchPosts();
+    fetchPostsAndRankings();
   }, []);
 
   if (loading) {
@@ -111,7 +125,9 @@ const Main = () => {
             {ranking.map((user, index) => (
               <li key={index}>
                 <div className="ranking-meta">
-                  <div className="ranking-user-id">{user.user_id}</div>
+                  <div className="ranking-user-id">
+                    {userInfos[user.user_id]?.nickname || '탈퇴한 회원'}
+                  </div>
                   <div className="ranking-contribution">
                     {user.total_contribution}
                   </div>
@@ -136,7 +152,9 @@ const Main = () => {
                     />{' '}
                     {post.post_title}
                   </div>
-                  <div className="post-main-user-name">{post.user_id}</div>
+                  <div className="post-main-user-name">
+                    {userInfos[post.user_id]?.nickname || '탈퇴한 회원'}
+                  </div>
                   <div className="post-main-date">
                     {formatDate(post.post_date)}
                   </div>
@@ -159,7 +177,9 @@ const Main = () => {
                     />{' '}
                     {post.post_title}
                   </div>
-                  <div className="post-main-user-name">{post.user_id}</div>
+                  <div className="post-main-user-name">
+                    {userInfos[post.user_id]?.nickname || '탈퇴한 회원'}
+                  </div>
                   <div className="post-main-date">
                     {formatDate(post.post_date)}
                   </div>
