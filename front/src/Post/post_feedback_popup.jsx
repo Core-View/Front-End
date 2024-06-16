@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import './post_feedback_popup.css';
+import { FaRegThumbsUp, FaThumbsUp } from 'react-icons/fa';
 
 const FeedbackPopup = ({
   popup,
@@ -42,10 +43,15 @@ const FeedbackPopup = ({
             {popup.feedback &&
               popup.feedback.map((fb, fbIndex) => (
                 <div key={fbIndex} className="feedback-text">
-                  <span className="feedback-nickname">
-                    {fb.nickname || '탈퇴한 회원'}
+                  <div>
+                    <span className="feedback-nickname">
+                      {fb.nickname || '탈퇴한 회원'}
+                    </span>
+                    : {fb.feedback_comment}
+                  </div>
+                  <span className="thumbs-up-icon">
+                    <FaRegThumbsUp />
                   </span>
-                  : {fb.feedback_comment}
                 </div>
               ))}
           </div>
