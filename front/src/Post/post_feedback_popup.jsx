@@ -1,5 +1,4 @@
-// FeedbackPopup.jsx
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import './post_feedback_popup.css';
 
 const FeedbackPopup = ({
@@ -9,14 +8,37 @@ const FeedbackPopup = ({
   loggedInUserId,
   loginError,
 }) => {
+  const feedbackListRef = useRef(null);
+
+  useEffect(() => {
+    if (feedbackListRef.current) {
+      feedbackListRef.current.scrollTop = feedbackListRef.current.scrollHeight;
+    }
+  }, [popup.feedback]);
+
   return (
     <>
       {popup.show && (
         <div className="popup">
-          <h3>Line: {popup.line + 1} 피드백 팝업</h3>
-          욕설 및 비하발언은 제재 대상입니다.
+          <div className="popup-header">
+            <h3>Line: {popup.line + 1} 피드백 팝업</h3>
+            <button
+              className="popup-close"
+              onClick={() =>
+                setPopup({
+                  show: false,
+                  line: null,
+                  text: '',
+                  codeContent: '',
+                })
+              }
+            >
+              &times;
+            </button>
+          </div>
+          <p className="warning-text">욕설 및 비하발언은 제재 대상입니다.</p>
           <div className="post-code">{popup.codeContent}</div>
-          <div className="feedback-list">
+          <div className="feedback-list" ref={feedbackListRef}>
             {popup.feedback &&
               popup.feedback.map((fb, fbIndex) => (
                 <div key={fbIndex} className="feedback-text">
@@ -40,6 +62,7 @@ const FeedbackPopup = ({
             />
             <div className="popup-buttons">
               <button
+                className="cancel-button"
                 onClick={() =>
                   setPopup({
                     show: false,
@@ -52,6 +75,7 @@ const FeedbackPopup = ({
                 취소
               </button>
               <button
+                className="submit-button"
                 onClick={handleFeedbackSubmit}
                 disabled={!loggedInUserId} // 로그인이 안된 경우 비활성화
               >
