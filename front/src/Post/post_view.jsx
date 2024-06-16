@@ -13,7 +13,7 @@ const PostView = () => {
 
   const title = post.post_title;
   const likes = -1; // 좋아요 기능이 구현되지 않아서 임시로 -1 설정
-  const author = post.user_id;
+  const authorId = post.user_id;
   const language = post.language;
   const date = post.post_date;
   const content = post.post_content.trim().split('\n'); // 줄 단위로 쪼개기
@@ -29,11 +29,40 @@ const PostView = () => {
     codeContent: '',
   });
 
+  const [userInfos, setUserInfos] = useState({});
+
   const languageIcons = {
     c: '/images/language_icons/c_icon.png',
     cpp: '/images/language_icons/cpp_icon.png',
     java: '/images/language_icons/java_icon.png',
     python: '/images/language_icons/python_icon.png',
+  };
+
+  const fetchUserInfos = async (userIds) => {
+    const userInfoPromises = userIds.map((id) =>
+      axios
+        .get(`http://localhost:3000/mypage/${id}`)
+        .then((response) => ({
+          userId: id,
+          data: response.data,
+        }))
+        .catch(() => ({
+          userId: id,
+          data: { nickname: '탈퇴한 회원' }, // 사용자 정보가 없는 경우 처리
+        }))
+    );
+
+    const userInfoResponses = await Promise.all(userInfoPromises);
+
+    const newUserInfos = {};
+    userInfoResponses.forEach((response) => {
+      newUserInfos[response.userId] = response.data;
+    });
+
+    setUserInfos((prevUserInfos) => ({
+      ...prevUserInfos,
+      ...newUserInfos,
+    }));
   };
 
   useEffect(() => {
@@ -50,16 +79,25 @@ const PostView = () => {
           acc[fb.feedback_codenumber].push(fb);
           return acc;
         }, {});
+        const userIds = [
+          ...new Set([authorId, ...response.data.map((fb) => fb.user_id)]),
+        ];
+        await fetchUserInfos(userIds);
         setFeedback(feedbackData);
         setLoading(false);
       } catch (err) {
-        setError(`피드백을 가져오는 데 실패했습니다: ${err.message}`);
+        if (err.response && err.response.status === 404) {
+          // 피드백이 없을 경우, feedback 상태를 빈 객체로 설정
+          setFeedback({});
+        } else {
+          setError(`피드백을 가져오는 데 실패했습니다: ${err.message}`);
+        }
         setLoading(false);
       }
     };
 
     fetchFeedback();
-  }, [post_id]);
+  }, [post_id, authorId]);
 
   // 현재 로그인된 유저의 Id
   const loggedInUserId = '18';
@@ -140,7 +178,9 @@ const PostView = () => {
       <br></br>
       <div className="post-meta">
         <span className="post-likes">좋아요 {likes}</span>
-        <span className="post-author">작성자 {author}</span>
+        <span className="post-author">
+          작성자 {userInfos[authorId]?.nickname || '탈퇴한 회원'}
+        </span>
       </div>
       <div className="post-content">
         {content.map((line, index) => (
@@ -166,7 +206,10 @@ const PostView = () => {
               <div className="feedback-text">
                 <div className="non-drag">
                   [최근 피드백]{' '}
-                  {feedback[index][feedback[index].length - 1].user_id}:{' '}
+                  {userInfos[
+                    feedback[index][feedback[index].length - 1].user_id
+                  ]?.nickname || '탈퇴한 회원'}
+                  :{' '}
                   {truncateText(
                     feedback[index][feedback[index].length - 1]
                       .feedback_comment,
@@ -187,7 +230,8 @@ const PostView = () => {
             {feedback[popup.line] &&
               feedback[popup.line].map((fb, fbIndex) => (
                 <div key={fbIndex} className="feedback-text">
-                  {fb.user_id}: {fb.feedback_comment}
+                  {userInfos[fb.user_id]?.nickname || '탈퇴한 회원'}:{' '}
+                  {fb.feedback_comment}
                 </div>
               ))}
           </div>
