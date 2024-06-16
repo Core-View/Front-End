@@ -30,7 +30,7 @@ const Empty = () => {
     // 서버에서 공지 데이터를 가져옴
     const fetchNotices = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/post/latest');
+        const response = await axios.get('http://localhost:3000/notice/view');
         setNotices(response.data);
         setLoading(false);
       } catch (err) {

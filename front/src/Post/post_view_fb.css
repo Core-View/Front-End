@@ -17,6 +17,7 @@
 
 .feedback-button.active,
 .post-code-line:hover .feedback-button {
+  user-select: none;
   display: inline-block;
 }
 
