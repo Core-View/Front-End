@@ -57,7 +57,7 @@ const Main = () => {
       try {
         const [latestResponse, likesResponse] = await Promise.all([
           axios.get('http://localhost:3000/post/latest'),
-          axios.get('http://localhost:3000/post/latest'),
+          axios.get('http://localhost:3000/post/mostlike'),
         ]);
 
         setNewestPosts(latestResponse.data.slice(0, 5));
