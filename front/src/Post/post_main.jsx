@@ -106,7 +106,6 @@ const Empty = () => {
 
   // 게시글 클릭 핸들러
   const handlePostClick = (post) => {
-    const nav_post_id = post.post_id;
     navigate(`/post_view/${post.post_id}`);
   };
 

@@ -1,11 +1,12 @@
+// PostView.jsx
 import React, { useState, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Cookies } from 'react-cookie';
+import FeedbackPopup from './post_feedback_popup';
 
 import './post_view.css';
 import './post_view_fb.css';
-import './post_view_fb_popup.css';
 
 const PostView = () => {
   const cookies = new Cookies();
@@ -100,6 +101,7 @@ const PostView = () => {
     line: null,
     text: '',
     codeContent: '',
+    feedback: [],
   });
 
   useEffect(() => {
@@ -139,7 +141,13 @@ const PostView = () => {
   // ============================================================= HANDLE Start =============================================================
   // 피드백 버튼 클릭 핸들
   const handleFeedbackClick = (lineIndex, lineCode) => {
-    setPopup({ show: true, line: lineIndex, text: '', codeContent: lineCode }); // 코드 내용 추가
+    setPopup({
+      show: true,
+      line: lineIndex,
+      text: '',
+      codeContent: lineCode,
+      feedback: feedback[lineIndex] || [],
+    }); // 코드 내용 추가
   };
 
   // 피드백 전송 핸들
@@ -162,6 +170,7 @@ const PostView = () => {
     };
 
     try {
+      console.log(feedbackData);
       const response = await fetch('http://localhost:3000/api/feedbacks', {
         method: 'POST',
         headers: {
@@ -256,58 +265,13 @@ const PostView = () => {
           </div>
         ))}
       </pre>
-      {popup.show && (
-        <div className="popup">
-          <h3>Line: {popup.line + 1} 피드백 팝업</h3>
-          욕설 및 비하발언은 제재 대상입니다.
-          <div className="post-code">{popup.codeContent}</div>
-          <div className="feedback-list">
-            {feedback[popup.line] &&
-              feedback[popup.line].map((fb, fbIndex) => (
-                <div key={fbIndex} className="feedback-text">
-                  {userInfos[fb.user_id]?.nickname || '탈퇴한 회원'}:{' '}
-                  {fb.feedback_comment}
-                </div>
-              ))}
-          </div>
-          <br></br>
-          <div className="popup-inner">
-            <textarea
-              rows="4"
-              placeholder={
-                loggedInUserId
-                  ? '피드백을 남겨주세요.'
-                  : '로그인 후 이용해주세요.'
-              }
-              value={popup.text}
-              onChange={(e) => setPopup({ ...popup, text: e.target.value })}
-              style={{ resize: 'none' }}
-              disabled={!loggedInUserId} // 로그인이 안된 경우 비활성화
-            />
-            <div className="popup-buttons">
-              <button
-                onClick={() =>
-                  setPopup({
-                    show: false,
-                    line: null,
-                    text: '',
-                    codeContent: '',
-                  })
-                }
-              >
-                취소
-              </button>
-              <button
-                onClick={handleFeedbackSubmit}
-                disabled={!loggedInUserId} // 로그인이 안된 경우 비활성화
-              >
-                제출
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-      {loginError && <div className="login-error">{loginError}</div>}
+      <FeedbackPopup
+        popup={popup}
+        setPopup={setPopup}
+        handleFeedbackSubmit={handleFeedbackSubmit}
+        loggedInUserId={loggedInUserId}
+        loginError={loginError}
+      />
     </div>
   );
   // ============================================================= Return End =============================================================
