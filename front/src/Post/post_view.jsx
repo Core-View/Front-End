@@ -55,6 +55,7 @@ const PostView = () => {
           return acc;
         }, {});
 
+        console.log(postData);
         setPost(postData);
         setFeedback(feedbackData);
         setLoading(false);
@@ -68,7 +69,7 @@ const PostView = () => {
   }, [post_id]);
 
   const title = post.post_title;
-  const likes = post.likes;
+  const likes = post.total_likes;
   const author = post.user_nickname;
   const language = post.language;
   const date = post.post_date;
@@ -160,6 +161,7 @@ const PostView = () => {
           <span className="post-likes">
             <MdFavoriteBorder className="icon" />
             <MdFavorite className="icon" /> {likes}
+            {console.log(likes)}
           </span>
         </div>
         <span className="post-author">{author}</span>
