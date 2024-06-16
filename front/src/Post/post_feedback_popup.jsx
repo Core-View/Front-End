@@ -42,7 +42,10 @@ const FeedbackPopup = ({
             {popup.feedback &&
               popup.feedback.map((fb, fbIndex) => (
                 <div key={fbIndex} className="feedback-text">
-                  {fb.nickname || '탈퇴한 회원'}: {fb.feedback_comment}
+                  <span className="feedback-nickname">
+                    {fb.nickname || '탈퇴한 회원'}
+                  </span>
+                  : {fb.feedback_comment}
                 </div>
               ))}
           </div>
