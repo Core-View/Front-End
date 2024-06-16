@@ -90,3 +90,22 @@
   max-width: 40px; /* 최대 너비 설정 */
   margin-left: 10px;
 }
+
+.post-result {
+  padding: 20px;
+  margin-top: 20px;
+  background: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.post-result h2 {
+  margin-bottom: 10px;
+}
+
+.post-result pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}

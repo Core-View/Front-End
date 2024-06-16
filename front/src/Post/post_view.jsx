@@ -61,6 +61,7 @@ const PostView = () => {
   const date = post.post_date;
   const content = post.post_content ? post.post_content.trim().split('\n') : []; // 줄 단위로 쪼개기
   const code = post.post_code ? post.post_code.trim() : ''; // 줄 단위로 쪼개지 않음
+  const result = post.post_result; // post_result 가져오기
   // ============================================================= Post Details End =============================================================
 
   // ============================================================= User Info Start =============================================================
@@ -272,6 +273,11 @@ const PostView = () => {
         loggedInUserId={loggedInUserId}
         loginError={loginError}
       />
+      <div className="post-result">
+        <h4>코드 실행 결과</h4>
+        <br></br>
+        <pre>{result}</pre>
+      </div>
     </div>
   );
   // ============================================================= Return End =============================================================
