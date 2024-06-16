@@ -27,40 +27,8 @@ const PostView = () => {
     java: '/images/language_icons/java_icon.png',
     python: '/images/language_icons/python_icon.png',
   };
-  // ============================================================= Post Details Start =============================================================
+
   const [post, setPost] = useState({});
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3000/post/details/${post_id}`
-        );
-        const postData = response.data;
-
-        setPost(postData);
-        setLoading(false);
-      } catch (err) {
-        setError(`게시글을 가져오는 데 실패했습니다: ${err.message}`);
-        setLoading(false);
-      }
-    };
-
-    fetchPosts();
-  }, [post_id]);
-
-  // const post_id = post.post_id;
-  const title = post.post_title;
-  const likes = post.likes;
-  const author = post.user_nickname;
-  const language = post.language;
-  const date = post.post_date;
-  const content = post.post_content ? post.post_content.trim().split('\n') : []; // 줄 단위로 쪼개기
-  const code = post.post_code ? post.post_code.trim() : ''; // 줄 단위로 쪼개지 않음
-  const result = post.post_result; // post_result 가져오기
-  // ============================================================= Post Details End =============================================================
-
-  // ============================================================= Feedback Data Start =============================================================
   const [feedback, setFeedback] = useState({});
   const [popup, setPopup] = useState({
     show: false,
@@ -70,38 +38,44 @@ const PostView = () => {
     feedback: [],
   });
 
-  const fb_users = [];
-  const fetchFeedback = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:3000/api/feedbacks/post/${post_id}`
-      );
-      const feedbackData = response.data.reduce((acc, fb) => {
-        if (!acc[fb.feedback_codenumber]) {
-          acc[fb.feedback_codenumber] = [];
-        }
-        acc[fb.feedback_codenumber].push(fb);
-        return acc;
-      }, {});
-      setFeedback(feedbackData);
-      setLoading(false);
-    } catch (err) {
-      if (err.response && err.response.status === 404) {
-        // 피드백이 없을 경우, feedback 상태를 빈 객체로 설정
-        setFeedback({});
-      } else {
-        setError(`피드백을 가져오는 데 실패했습니다: ${err.message}`);
-      }
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchFeedback();
-  }, [post_id, fb_users]);
-  // ============================================================= Feedback Data End =============================================================
+    const fetchPostAndFeedback = async () => {
+      try {
+        const [postResponse, feedbackResponse] = await Promise.all([
+          axios.get(`http://localhost:3000/post/details/${post_id}`),
+          axios.get(`http://localhost:3000/api/feedbacks/post/${post_id}`),
+        ]);
 
-  // ============================================================= HANDLE Start =============================================================
+        const postData = postResponse.data;
+        const feedbackData = feedbackResponse.data.reduce((acc, fb) => {
+          if (!acc[fb.feedback_codenumber]) {
+            acc[fb.feedback_codenumber] = [];
+          }
+          acc[fb.feedback_codenumber].push(fb);
+          return acc;
+        }, {});
+
+        setPost(postData);
+        setFeedback(feedbackData);
+        setLoading(false);
+      } catch (err) {
+        setError(`데이터를 가져오는 데 실패했습니다: ${err.message}`);
+        setLoading(false);
+      }
+    };
+
+    fetchPostAndFeedback();
+  }, [post_id]);
+
+  const title = post.post_title;
+  const likes = post.likes;
+  const author = post.user_nickname;
+  const language = post.language;
+  const date = post.post_date;
+  const content = post.post_content ? post.post_content.trim().split('\n') : [];
+  const code = post.post_code ? post.post_code.trim() : '';
+  const result = post.post_result;
+
   // 피드백 버튼 클릭 핸들
   const handleFeedbackClick = (lineIndex, lineCode) => {
     setPopup({
@@ -110,7 +84,7 @@ const PostView = () => {
       text: '',
       codeContent: lineCode,
       feedback: feedback[lineIndex] || [],
-    }); // 코드 내용 추가
+    });
   };
 
   // 피드백 전송 핸들
@@ -155,8 +129,6 @@ const PostView = () => {
     }
   };
 
-  // ============================================================= HANDLE End =============================================================
-
   const truncateText = (text, maxLength) => {
     const newlineIndex = text.indexOf('\n');
     if (newlineIndex !== -1 && newlineIndex <= maxLength) {
@@ -176,7 +148,6 @@ const PostView = () => {
     return <div>{error}</div>;
   }
 
-  // ============================================================= Return Start =============================================================
   return (
     <div className="post-view">
       <div className="post-header">
@@ -242,7 +213,6 @@ const PostView = () => {
       </div>
     </div>
   );
-  // ============================================================= Return End =============================================================
 };
 
 export default PostView;
