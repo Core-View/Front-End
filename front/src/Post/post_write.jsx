@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import './post_write.css';
+import { Cookies } from 'react-cookie';
 
 const PostWrite = () => {
   const [title, setTitle] = useState('');
@@ -11,6 +12,8 @@ const PostWrite = () => {
   const codeRef = useRef(null);
 
   const handleSubmit = async (e) => {
+    const cookies = new Cookies();
+    const loggedInUserId = cookies.get('user_id'); // 로그인된 사용자 ID 가져오기
     e.preventDefault();
 
     const postData = {
@@ -19,7 +22,7 @@ const PostWrite = () => {
       language: language, // 언어 추가
       code: code,
       content: content,
-      user_id: 18, // 임시 userId
+      user_id: loggedInUserId, // 임시 userId
     };
 
     try {

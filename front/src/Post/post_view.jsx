@@ -8,31 +8,16 @@ import './post_view_fb.css';
 import './post_view_fb_popup.css';
 
 const PostView = () => {
-  const { post_id } = useParams();
-  const location = useLocation();
-  const { post } = location.state;
   const cookies = new Cookies();
   const loggedInUserId = cookies.get('user_id'); // 로그인된 사용자 ID 가져오기
-
-  const title = post.post_title;
-  const likes = -1; // 좋아요 기능이 구현되지 않아서 임시로 -1 설정
-  const authorId = post.user_id;
-  const language = post.language;
-  const date = post.post_date;
-  const content = post.post_content.trim().split('\n'); // 줄 단위로 쪼개기
-  const code = post.post_code.trim(); // 줄 단위로 쪼개지 않음
+  const { post_id } = useParams();
+  // const { post } = location.state;
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [feedback, setFeedback] = useState({});
-  const [popup, setPopup] = useState({
-    show: false,
-    line: null,
-    text: '',
-    codeContent: '',
-  });
-  const [userInfos, setUserInfos] = useState({});
+  const location = useLocation();
   const [loginError, setLoginError] = useState(''); // 로그인 에러 상태 추가
+  const maxLength = 50; // 최근 피드백 출력 길이
 
   const languageIcons = {
     c: '/images/language_icons/c_icon.png',
@@ -40,6 +25,45 @@ const PostView = () => {
     java: '/images/language_icons/java_icon.png',
     python: '/images/language_icons/python_icon.png',
   };
+  // ============================================================= Post Details Start =============================================================
+  const [post, setPost] = useState({});
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/post/details/${post_id}`
+        );
+        const postData = response.data;
+
+        const userIds = [...new Set([postData.user_id])];
+        await fetchUserInfos(userIds);
+
+        setPost(postData);
+        setLoading(false);
+      } catch (err) {
+        setError(`게시글을 가져오는 데 실패했습니다: ${err.message}`);
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, [post_id]);
+
+  // const post_id = post.post_id;
+  const title = post.post_title;
+  const likes = post.likes;
+  console.log('좋아요');
+  console.log(likes);
+  const authorId = post.user_id;
+  const language = post.language;
+  const date = post.post_date;
+  const content = post.post_content ? post.post_content.trim().split('\n') : []; // 줄 단위로 쪼개기
+  const code = post.post_code ? post.post_code.trim() : ''; // 줄 단위로 쪼개지 않음
+  // ============================================================= Post Details End =============================================================
+
+  // ============================================================= User Info Start =============================================================
+  const [userInfos, setUserInfos] = useState({});
 
   const fetchUserInfos = async (userIds) => {
     const userInfoPromises = userIds.map((id) =>
@@ -67,9 +91,18 @@ const PostView = () => {
       ...newUserInfos,
     }));
   };
+  // ============================================================= User Info End =============================================================
+
+  // ============================================================= Feedback Data Start =============================================================
+  const [feedback, setFeedback] = useState({});
+  const [popup, setPopup] = useState({
+    show: false,
+    line: null,
+    text: '',
+    codeContent: '',
+  });
 
   useEffect(() => {
-    // 서버에서 피드백 데이터를 가져옴
     const fetchFeedback = async () => {
       try {
         const response = await axios.get(
@@ -101,7 +134,9 @@ const PostView = () => {
 
     fetchFeedback();
   }, [post_id, authorId]);
+  // ============================================================= Feedback Data End =============================================================
 
+  // ============================================================= HANDLE Start =============================================================
   // 피드백 버튼 클릭 핸들
   const handleFeedbackClick = (lineIndex, lineCode) => {
     setPopup({ show: true, line: lineIndex, text: '', codeContent: lineCode }); // 코드 내용 추가
@@ -143,6 +178,7 @@ const PostView = () => {
 
     setPopup({ ...popup, text: '' });
   };
+  // ============================================================= HANDLE End =============================================================
 
   const truncateText = (text, maxLength) => {
     const newlineIndex = text.indexOf('\n');
@@ -155,8 +191,6 @@ const PostView = () => {
     return text.slice(0, maxLength) + '...';
   };
 
-  const maxLength = 50; // 원하는 길이로 설정
-
   if (loading) {
     return <div>로딩 중...</div>;
   }
@@ -165,6 +199,7 @@ const PostView = () => {
     return <div>{error}</div>;
   }
 
+  // ============================================================= Return Start =============================================================
   return (
     <div className="post-view">
       <h1 className="post-title">
@@ -275,6 +310,7 @@ const PostView = () => {
       {loginError && <div className="login-error">{loginError}</div>}
     </div>
   );
+  // ============================================================= Return End =============================================================
 };
 
 export default PostView;

@@ -106,7 +106,8 @@ const Empty = () => {
 
   // 게시글 클릭 핸들러
   const handlePostClick = (post) => {
-    navigate(`/post_view/${post.post_id}`, { state: { post } });
+    const nav_post_id = post.post_id;
+    navigate(`/post_view/${post.post_id}`);
   };
 
   // 페이지 변경 핸들러
@@ -159,8 +160,8 @@ const Empty = () => {
             <div className="post-main-date">작성날짜</div>
           </h4>
           {notices.length > 0 ? (
-            notices.slice(0, 3).map((post, index) => (
-              <li key={index} onClick={() => handlePostClick(post)}>
+            notices.slice(0, 3).map((notice, index) => (
+              <li key={index} onClick={() => handlePostClick(notice)}>
                 <div className="post-main-meta">
                   <div className="post-main-title">
                     <img
@@ -168,13 +169,11 @@ const Empty = () => {
                       alt=""
                       className="post-main-language-icon"
                     />{' '}
-                    {post.post_title}
+                    {notice.notice_title}
                   </div>
-                  <div className="post-main-user-name">
-                    {userInfos[post.user_id]?.nickname || '탈퇴한 회원'}
-                  </div>
+                  <div className="post-main-user-name"></div>
                   <div className="post-main-date">
-                    {formatDate(post.post_date)}
+                    {formatDate(notice.notice_date)}
                   </div>
                 </div>
               </li>
