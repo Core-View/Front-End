@@ -9,9 +9,6 @@ import { ko } from 'date-fns/locale'; // 한국어 로케일 import
 const Main = () => {
   const navigate = useNavigate();
 
-  const [recommendedPosts, setRecommendedPosts] = useState([]);
-  const [newestPosts, setNewestPosts] = useState([]);
-  const [ranking, setRanking] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -33,6 +30,22 @@ const Main = () => {
     navigate(`/post_view/${post.post_id}`, { state: { post } });
   };
 
+  const [userInfo, setUserInfo] = useState([]);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`http://localhost:3000/mypage/17`);
+        const data = await response.json();
+        setUserInfo(data);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  const [ranking, setRanking] = useState([]);
   useEffect(() => {
     // 서버에서 기여도 랭킹 가져옴
     const fetchFeedback = async () => {
@@ -52,6 +65,8 @@ const Main = () => {
     fetchFeedback();
   }, []);
 
+  const [recommendedPosts, setRecommendedPosts] = useState([]);
+  const [newestPosts, setNewestPosts] = useState([]);
   useEffect(() => {
     const fetchPosts = async () => {
       try {

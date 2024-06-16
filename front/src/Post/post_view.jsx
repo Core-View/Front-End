@@ -41,7 +41,7 @@ const PostView = () => {
     const fetchFeedback = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/feedbacks?post_id=${post_id}`
+          `http://localhost:3000/api/feedbacks/post/${post_id}`
         );
         const feedbackData = response.data.reduce((acc, fb) => {
           if (!acc[fb.feedback_codenumber]) {
@@ -107,6 +107,10 @@ const PostView = () => {
   };
 
   const truncateText = (text, maxLength) => {
+    const newlineIndex = text.indexOf('\n');
+    if (newlineIndex !== -1 && newlineIndex <= maxLength) {
+      return text.slice(0, newlineIndex) + '...';
+    }
     if (text.length <= maxLength) {
       return text;
     }
