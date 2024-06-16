@@ -11,6 +11,7 @@ const Main = () => {
 
   const [recommendedPosts, setRecommendedPosts] = useState([]);
   const [newestPosts, setNewestPosts] = useState([]);
+  const [ranking, setRanking] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -31,6 +32,25 @@ const Main = () => {
   const handlePostClick = (post) => {
     navigate(`/post_view/${post.post_id}`, { state: { post } });
   };
+
+  useEffect(() => {
+    // 서버에서 기여도 랭킹 가져옴
+    const fetchFeedback = async () => {
+      try {
+        const rankingResponse = await axios.get(
+          `http://localhost:3000/post/top-contributors`
+        );
+
+        setRanking(rankingResponse.data);
+        setLoading(false);
+      } catch (err) {
+        setError(`랭킹을 가져오는 데 실패했습니다: ${err.message}`);
+        setLoading(false);
+      }
+    };
+
+    fetchFeedback();
+  }, []);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -69,6 +89,23 @@ const Main = () => {
 
   return (
     <div className="home-container">
+      <section className="home_left">
+        <div className="ranking">
+          <h2>기여도 랭킹</h2>
+          <ul className="ranking-list">
+            {ranking.map((user, index) => (
+              <li key={index}>
+                <div className="ranking-meta">
+                  <div className="ranking-user-id">{user.user_id}</div>
+                  <div className="ranking-contribution">
+                    {user.total_contribution}
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
       <section className="home_mid">
         <div className="post recommend">
           <h2>추천 게시글 (좋아요 순)</h2>
