@@ -1,3 +1,5 @@
+/* home_main.css */
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -18,10 +20,44 @@ body {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
 .ranking h2 {
   margin-top: 0;
+  display: flex;
+  align-items: center;
+}
+
+.tooltip {
+  display: none;
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 1000;
+  width: 100%;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.tooltip::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent rgba(0, 0, 0, 0.7) transparent;
+}
+
+.ranking h2:hover .tooltip {
+  display: block;
 }
 
 .ranking-list {
@@ -150,4 +186,10 @@ body {
 .post-main-language-icon {
   max-width: 25px;
   margin-left: 10px;
+}
+
+.tooltip-icon {
+  margin-left: 5px;
+  cursor: pointer;
+  position: relative;
 }

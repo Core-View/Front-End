@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './home_main.css';
 import { SlArrowRight } from 'react-icons/sl';
+import { AiOutlineQuestionCircle } from 'react-icons/ai'; // 툴팁 아이콘 import
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { formatDistanceToNow, parseISO } from 'date-fns';
@@ -116,11 +117,23 @@ const Main = () => {
     python: '/images/language_icons/python_icon.png',
   };
 
+  const contribute_post_like = 1;
+  const contribute_feedback = 1;
+  const contribute_feedback_like = 1;
+
   return (
     <div className="home-container">
       <section className="home_left">
         <div className="ranking">
-          <h2>기여도 랭킹</h2>
+          <h2>
+            기여도 랭킹
+            <AiOutlineQuestionCircle className="tooltip-icon" />
+            <div className="tooltip">
+              기여도는 (게시물 좋아요 x {contribute_post_like}) + (내가 달은
+              피드백 x {contribute_feedback}) + (내 피드백 좋아요 x{' '}
+              {contribute_feedback_like}) 의 연산입니다.
+            </div>
+          </h2>
           <ul className="ranking-list">
             {ranking.map((user, index) => (
               <li key={index}>
