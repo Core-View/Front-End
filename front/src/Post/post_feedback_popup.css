@@ -50,6 +50,7 @@
 }
 
 .warning-text {
+  font-size: 0.9rem;
   color: #d9534f;
   font-weight: bold;
   margin-top: 10px;
@@ -75,22 +76,33 @@
   padding: 10px;
   border-radius: 8px;
   margin-bottom: 10px;
-  border-left: 5px solid #007bff;
+  border-left: 5px solid #191919;
   display: flex;
   justify-content: space-between; /* Flexbox를 사용하여 내용과 이모티콘 사이 공간 확보 */
+  align-items: center; /* 세로 정렬을 가운데로 맞춤 */
 }
 
 .feedback-nickname {
   font-weight: bold;
-  color: #007bff;
+  color: #000000;
   margin-right: 5px;
 }
 
 .thumbs-up-icon {
-  color: #007bff;
+  color: #aaa;
   font-size: 1.2rem;
   margin-left: 10px;
   cursor: pointer;
+  transition: transform 0.2s, color 0.2s; /* 애니메이션 추가 */
+}
+
+.thumbs-up-icon.liked {
+  color: #ff4500;
+  transform: scale(1.2); /* 클릭 시 크기 확대 */
+}
+
+.thumbs-up-icon:hover {
+  color: #ff4500; /* 호버 시 색상 변경 */
 }
 
 .popup-inner {
@@ -111,7 +123,7 @@
 
 .popup-buttons {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
 }
 
 .popup-buttons button {
@@ -119,7 +131,6 @@
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  margin-left: 10px;
   transition: background-color 0.3s;
   font-size: 1rem;
 }
@@ -130,7 +141,7 @@
 }
 
 .submit-button {
-  background-color: #007bff;
+  background-color: #333;
   color: white;
 }
 
@@ -139,5 +150,5 @@
 }
 
 .submit-button:hover {
-  background-color: #0056b3;
+  background-color: #191919;
 }

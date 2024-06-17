@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './post_feedback_popup.css';
 import { FaRegThumbsUp, FaThumbsUp } from 'react-icons/fa';
 
@@ -10,12 +10,20 @@ const FeedbackPopup = ({
   loginError,
 }) => {
   const feedbackListRef = useRef(null);
+  const [likedFeedback, setLikedFeedback] = useState({});
 
   useEffect(() => {
     if (feedbackListRef.current) {
       feedbackListRef.current.scrollTop = feedbackListRef.current.scrollHeight;
     }
   }, [popup.feedback]);
+
+  const handleThumbsUpClick = (feedbackIndex) => {
+    setLikedFeedback((prevLikedFeedback) => ({
+      ...prevLikedFeedback,
+      [feedbackIndex]: !prevLikedFeedback[feedbackIndex],
+    }));
+  };
 
   return (
     <>
@@ -49,8 +57,17 @@ const FeedbackPopup = ({
                     </span>
                     : {fb.feedback_comment}
                   </div>
-                  <span className="thumbs-up-icon">
-                    <FaRegThumbsUp />
+                  <span
+                    className={`thumbs-up-icon ${
+                      likedFeedback[fbIndex] ? 'liked' : ''
+                    }`}
+                    onClick={() => handleThumbsUpClick(fbIndex)}
+                  >
+                    {likedFeedback[fbIndex] ? (
+                      <FaThumbsUp />
+                    ) : (
+                      <FaRegThumbsUp />
+                    )}
                   </span>
                 </div>
               ))}
@@ -88,7 +105,7 @@ const FeedbackPopup = ({
                 onClick={handleFeedbackSubmit}
                 disabled={!loggedInUserId} // 로그인이 안된 경우 비활성화
               >
-                제출
+                전송
               </button>
             </div>
           </div>
