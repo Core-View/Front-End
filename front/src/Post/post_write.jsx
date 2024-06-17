@@ -7,22 +7,43 @@ const PostWrite = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [code, setCode] = useState('');
-  const [language, setLanguage] = useState(''); // 언어 상태 추가
+  const [language, setLanguage] = useState('');
+  const [titleError, setTitleError] = useState('');
+  const [contentError, setContentError] = useState('');
+  const [codeError, setCodeError] = useState('');
   const contentRef = useRef(null);
   const codeRef = useRef(null);
+
+  const TITLE_MAX_LENGTH = 30;
+  const CONTENT_MAX_LENGTH = 1000;
+  const CODE_MAX_LENGTH = 65535; // LONGTEXT
 
   const handleSubmit = async (e) => {
     const cookies = new Cookies();
     const loggedInUserId = cookies.get('user_id'); // 로그인된 사용자 ID 가져오기
     e.preventDefault();
 
+    if (title.length > TITLE_MAX_LENGTH) {
+      setTitleError(`제목은 ${TITLE_MAX_LENGTH}자 이하로 작성해야 합니다.`);
+      return;
+    }
+
+    if (content.length > CONTENT_MAX_LENGTH) {
+      setContentError(`내용은 ${CONTENT_MAX_LENGTH}자 이하로 작성해야 합니다.`);
+      return;
+    }
+
+    if (code.length > CODE_MAX_LENGTH) {
+      setCodeError(`코드는 ${CODE_MAX_LENGTH}자 이하로 작성해야 합니다.`);
+      return;
+    }
+
     const postData = {
-      // post_id, post_title, post_content, post_code, post_date, language, user_id, post_result
       title: title,
-      language: language, // 언어 추가
+      language: language,
       code: code,
       content: content,
-      user_id: loggedInUserId, // 임시 userId
+      user_id: loggedInUserId,
     };
 
     try {
@@ -62,32 +83,48 @@ const PostWrite = () => {
     setLanguage(lang);
   };
 
+  const handleTitleChange = (e) => {
+    setTitle(e.target.value);
+    if (e.target.value.length <= TITLE_MAX_LENGTH) {
+      setTitleError('');
+    }
+  };
+
+  const handleContentInputChange = (e) => {
+    setContent(e.target.value);
+    if (e.target.value.length <= CONTENT_MAX_LENGTH) {
+      setContentError('');
+    }
+  };
+
+  const handleCodeInputChange = (e) => {
+    setCode(e.target.value);
+    if (e.target.value.length <= CODE_MAX_LENGTH) {
+      setCodeError('');
+    }
+  };
+
   return (
     <div className="post-write-container">
       <h2>게시글 작성</h2>
       <form onSubmit={handleSubmit} className="post-write-form">
         <div className="write-box">
           <div className="form-group">
-            <label htmlFor="title">제목</label>
+            <label htmlFor="title">제목 (최대 {TITLE_MAX_LENGTH}자)</label>
             <input
               type="text"
               id="title"
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={handleTitleChange}
               required
             />
+            {titleError && <p className="error-message">{titleError}</p>}
+            <p className="char-counter">
+              {title.length} / {TITLE_MAX_LENGTH}
+            </p>
           </div>
-          {/* <div className="form-group">
-                        <label htmlFor="hashtags">해시태그 (콤마로 구분)</label>
-                        <input
-                            type="text"
-                            id="hashtags"
-                            value={hashtags}
-                            onChange={(e) => setHashtags(e.target.value)}
-                        />
-                    </div> */}
           <div className="form-group">
-            <label htmlFor="content">내용</label>
+            <label htmlFor="content">내용 (최대 {CONTENT_MAX_LENGTH}자)</label>
             <textarea
               id="content"
               value={content}
@@ -95,6 +132,10 @@ const PostWrite = () => {
               ref={contentRef}
               required
             ></textarea>
+            {contentError && <p className="error-message">{contentError}</p>}
+            <p className="char-counter">
+              {content.length} / {CONTENT_MAX_LENGTH}
+            </p>
           </div>
         </div>
         <div className="write-box">
@@ -159,13 +200,17 @@ const PostWrite = () => {
             </div>
           </div>
           <div className="form-group">
-            <label htmlFor="code">코드</label>
+            <label htmlFor="code">코드 (최대 {CODE_MAX_LENGTH}자)</label>
             <textarea
               id="code"
               value={code}
               onChange={handleCodeChange}
               ref={codeRef}
             ></textarea>
+            {codeError && <p className="error-message">{codeError}</p>}
+            <p className="char-counter">
+              {code.length} / {CODE_MAX_LENGTH}
+            </p>
           </div>
         </div>
         <button className="write-button" type="submit">
