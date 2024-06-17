@@ -129,3 +129,39 @@
   white-space: pre-wrap;
   word-wrap: break-word;
 }
+
+/* 하트 아이콘 스타일 */
+.icon {
+  cursor: pointer;
+  transition: transform 0.3s, color 0.3s;
+}
+
+.icon:hover {
+  transform: scale(1.2);
+  color: #ff4500;
+}
+
+.icon.active {
+  color: #ff4500;
+}
+
+/* like-message 스타일 */
+.like-message {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  z-index: 1000;
+  font-size: 1.2rem;
+  transition: opacity 0.5s ease-in-out;
+  opacity: 0;
+  pointer-events: none; /* 메시지가 보이지 않을 때 클릭을 막음 */
+}
+
+.like-message.show {
+  opacity: 1;
+}

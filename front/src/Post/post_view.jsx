@@ -37,6 +37,10 @@ const PostView = () => {
     codeContent: '',
     feedback: [],
   });
+  const [liked, setLiked] = useState(false); // 좋아요 상태
+  const [likesCount, setLikesCount] = useState(0); // 좋아요 숫자 상태
+  const [message, setMessage] = useState(''); // 메시지 상태
+  const [showMessage, setShowMessage] = useState(false); // 메시지 표시 상태
 
   useEffect(() => {
     const fetchPostAndFeedback = async () => {
@@ -58,6 +62,7 @@ const PostView = () => {
         console.log(postData);
         setPost(postData);
         setFeedback(feedbackData);
+        setLikesCount(postData.total_likes);
         setLoading(false);
       } catch (err) {
         setError(`데이터를 가져오는 데 실패했습니다: ${err.message}`);
@@ -69,7 +74,6 @@ const PostView = () => {
   }, [post_id]);
 
   const title = post.post_title;
-  const likes = post.total_likes;
   const author = post.user_nickname;
   const language = post.language;
   const date = post.post_date;
@@ -141,6 +145,41 @@ const PostView = () => {
     return text.slice(0, maxLength) + '...';
   };
 
+  const handleLikeClick = async () => {
+    const newLiked = !liked;
+    setLiked(newLiked);
+    setLikesCount(newLiked ? likesCount + 1 : likesCount - 1);
+
+    const url = newLiked
+      ? `http://localhost:3000/post/like`
+      : `http://localhost:3000/post/unlike/${post_id}/${loggedInUserId}`;
+
+    const options = newLiked
+      ? {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            post_id: post_id,
+            user_id: loggedInUserId,
+          }),
+        }
+      : { method: 'POST' };
+
+    try {
+      const response = await fetch(url, options);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      setMessage(newLiked ? '좋아요를 눌렀습니다.' : '좋아요를 취소했습니다.');
+      setShowMessage(true);
+      setTimeout(() => setShowMessage(false), 2000); // 2초 후 메시지 사라짐
+    } catch (error) {
+      console.error('There was a problem with your fetch operation:', error);
+    }
+  };
+
   if (loading) {
     return <div>로딩 중...</div>;
   }
@@ -151,6 +190,11 @@ const PostView = () => {
 
   return (
     <div className="post-view">
+      {message && (
+        <div className={`like-message ${showMessage ? 'show' : ''}`}>
+          {message}
+        </div>
+      )}
       <div className="post-header">
         <h1 className="post-title">
           <img src={languageIcons[language]} alt="" className="language-icon" />{' '}
@@ -158,10 +202,13 @@ const PostView = () => {
         </h1>
         <div className="post-meta">
           <span className="post-date">{date}</span>
-          <span className="post-likes">
-            <MdFavoriteBorder className="icon" />
-            <MdFavorite className="icon" /> {likes}
-            {console.log(likes)}
+          <span className="post-likes" onClick={handleLikeClick}>
+            {liked ? (
+              <MdFavorite className="icon active" />
+            ) : (
+              <MdFavoriteBorder className="icon" />
+            )}{' '}
+            {likesCount}
           </span>
         </div>
         <span className="post-author">{author}</span>
