@@ -52,7 +52,12 @@
   padding: 0;
 }
 
-.header-nav a {
+.gotoAdmin {
+  width: 130px;
+}
+
+.header-nav a,
+.gotoAdmin {
   color: white;
   text-decoration: none;
   padding: 10px 15px;
@@ -60,9 +65,10 @@
   border-radius: 5px;
 }
 
-.header-nav a:hover {
-  background-color: #555;
-  color: white;
+.header-nav a:hover,
+.gotoAdmin:hover {
+  background-color: #ffffff;
+  color: #282c34;
 }
 
 @media (max-width: 768px) {
