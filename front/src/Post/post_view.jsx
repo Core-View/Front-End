@@ -1,4 +1,3 @@
-// PostView.jsx
 import React, { useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
@@ -11,15 +10,13 @@ import "./post_view_fb.css";
 
 const PostView = () => {
   const cookies = new Cookies();
-  const loggedInUserId = cookies.get("user_id"); // 로그인된 사용자 ID 가져오기
+  const loggedInUserId = cookies.get("user_id");
   const { post_id } = useParams();
-  // const { post } = location.state;
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const location = useLocation();
-  const [loginError, setLoginError] = useState(""); // 로그인 에러 상태 추가
-  const maxLength = 50; // 최근 피드백 출력 길이
+  const [loginError, setLoginError] = useState("");
+  const maxLength = 50;
 
   const languageIcons = {
     c: "/images/language_icons/c_icon.png",
@@ -37,43 +34,48 @@ const PostView = () => {
     codeContent: "",
     feedback: [],
   });
-  const [liked, setLiked] = useState(false); // 좋아요 상태
-  const [likesCount, setLikesCount] = useState(0); // 좋아요 숫자 상태
-  const [message, setMessage] = useState(""); // 메시지 상태
-  const [showMessage, setShowMessage] = useState(false); // 메시지 표시 상태
+  const [liked, setLiked] = useState(false);
+  const [likesCount, setLikesCount] = useState(0);
+  const [message, setMessage] = useState("");
+  const [showMessage, setShowMessage] = useState(false);
+
+  const fetchPostAndFeedback = async () => {
+    try {
+      const [postResponse, feedbackResponse] = await Promise.all([
+        axios.get(`http://localhost:3000/post/details/${post_id}`),
+        axios.get(`http://localhost:3000/api/feedbacks/post/${post_id}`),
+      ]);
+
+      const postData = postResponse.data;
+      const feedbackData = feedbackResponse.data.reduce((acc, fb) => {
+        if (!acc[fb.feedback_codenumber]) {
+          acc[fb.feedback_codenumber] = [];
+        }
+        acc[fb.feedback_codenumber].push(fb);
+        return acc;
+      }, {});
+
+      console.log(postData);
+      setPost(postData);
+      setFeedback(feedbackData);
+      setLikesCount(postData.total_likes);
+      setLoading(false);
+    } catch (err) {
+      setError(`데이터를 가져오는 데 실패했습니다: ${err.message}`);
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchPostAndFeedback = async () => {
-      try {
-        const [postResponse, feedbackResponse] = await Promise.all([
-          axios.get(`http://localhost:3000/post/details/${post_id}`),
-          axios.get(`http://localhost:3000/api/feedbacks/post/${post_id}`),
-        ]);
-
-        const postData = postResponse.data;
-        const feedbackData = feedbackResponse.data.reduce((acc, fb) => {
-          if (!acc[fb.feedback_codenumber]) {
-            acc[fb.feedback_codenumber] = [];
-          }
-          acc[fb.feedback_codenumber].push(fb);
-          return acc;
-        }, {});
-
-        console.log(postData);
-        setPost(postData);
-        setFeedback(feedbackData);
-        setLikesCount(postData.total_likes);
-        setLoading(false);
-      } catch (err) {
-        setError(`데이터를 가져오는 데 실패했습니다: ${err.message}`);
-        setLoading(false);
-      }
-    };
-
     fetchPostAndFeedback();
   }, [post_id]);
 
   const title = post.post_title;
+  let user_image = post.user_image;
+  if (user_image == null) {
+    user_image = `${process.env.PUBLIC_URL}/images/original_profile.png`;
+  }
+  console.log(user_image);
   const author = post.user_nickname;
   const language = post.language;
   const date = post.post_date;
@@ -81,7 +83,6 @@ const PostView = () => {
   const code = post.post_code ? post.post_code.trim() : "";
   const result = post.post_result;
 
-  // 피드백 버튼 클릭 핸들
   const handleFeedbackClick = (lineIndex, lineCode) => {
     setPopup({
       show: true,
@@ -92,24 +93,15 @@ const PostView = () => {
     });
   };
 
-  // 피드백 전송 핸들
   const handleFeedbackSubmit = async () => {
-    window.location.reload(); // 그냥 윈도우 새로고침 해버려..
     if (popup.text.trim() === "") return;
-
-    const newFeedback = feedback[popup.line]
-      ? [
-          ...feedback[popup.line],
-          { user_id: loggedInUserId, feedback_comment: popup.text },
-        ]
-      : [{ user_id: loggedInUserId, feedback_comment: popup.text }];
-    setFeedback({ ...feedback, [popup.line]: newFeedback });
 
     const feedbackHandleData = {
       post_id: post_id,
       user_id: loggedInUserId,
       feedback_comment: popup.text,
       feedback_codenumber: popup.line,
+      user_nickname: post.user_nickname,
     };
 
     try {
@@ -124,7 +116,27 @@ const PostView = () => {
         throw new Error("Network response was not ok");
       }
 
-      // 피드백 전송 후 팝업 상태 업데이트
+      // 새로운 피드백을 직접 추가하여 피드백 목록 업데이트
+      const newFeedback = feedback[popup.line]
+        ? [
+            ...feedback[popup.line],
+            {
+              user_id: loggedInUserId,
+              feedback_comment: popup.text,
+              user_nickname: post.user_nickname,
+            },
+          ]
+        : [
+            {
+              user_id: loggedInUserId,
+              feedback_comment: popup.text,
+              user_nickname: post.user_nickname,
+            },
+          ];
+
+      setFeedback({ ...feedback, [popup.line]: newFeedback });
+
+      // popup 상태도 업데이트하여 새 피드백이 바로 보이도록 함
       setPopup((prevPopup) => ({
         ...prevPopup,
         feedback: newFeedback,
@@ -175,7 +187,7 @@ const PostView = () => {
       }
       setMessage(newLiked ? "좋아요를 눌렀습니다." : "좋아요를 취소했습니다.");
       setShowMessage(true);
-      setTimeout(() => setShowMessage(false), 2000); // 2초 후 메시지 사라짐
+      setTimeout(() => setShowMessage(false), 2000);
     } catch (error) {
       console.error("There was a problem with your fetch operation:", error);
     }
@@ -212,7 +224,10 @@ const PostView = () => {
             {likesCount}
           </span>
         </div>
-        <span className="post-author">{author}</span>
+        <div className="post-author-container">
+          <img src={user_image} alt="profile" className="profile-image" />
+          <span className="post-author">{author}</span>
+        </div>
       </div>
       <div className="post-content">
         {content.map((line, index) => (
@@ -255,6 +270,7 @@ const PostView = () => {
         handleFeedbackSubmit={handleFeedbackSubmit}
         loggedInUserId={loggedInUserId}
         loginError={loginError}
+        refreshFeedback={fetchPostAndFeedback} // 추가된 부분
       />
       <div className="post-result">
         <h4>코드 실행 결과</h4>

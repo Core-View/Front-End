@@ -9,6 +9,7 @@ const FeedbackPopup = ({
   handleFeedbackSubmit,
   loggedInUserId,
   loginError,
+  refreshFeedback, // 추가된 부분
 }) => {
   const feedbackListRef = useRef(null);
   const [likedFeedback, setLikedFeedback] = useState({});
@@ -24,6 +25,11 @@ const FeedbackPopup = ({
       ...prevLikedFeedback,
       [feedbackIndex]: !prevLikedFeedback[feedbackIndex],
     }));
+  };
+
+  const handleFeedbackSubmitWithRefresh = async () => {
+    await handleFeedbackSubmit();
+    await refreshFeedback(); // 피드백 목록 새로고침
   };
 
   return (
@@ -103,7 +109,7 @@ const FeedbackPopup = ({
               </button>
               <button
                 className="submit-button"
-                onClick={handleFeedbackSubmit}
+                onClick={handleFeedbackSubmitWithRefresh} // 변경된 부분
                 disabled={!loggedInUserId} // 로그인이 안된 경우 비활성화
               >
                 전송
