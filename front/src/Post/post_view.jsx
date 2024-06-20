@@ -57,8 +57,6 @@ const PostView = () => {
         setLoading(false);
       }
     };
-
-    fetchFeedback();
   }, [post_id]);
 
   // 현재 로그인된 유저의 Id

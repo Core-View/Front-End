@@ -5,6 +5,7 @@ import AdNotice from './Admin_notice';
 import AdPost from './Admin_post';
 import AdUsers from './Admin_user';
 import axios from 'axios';
+//
 
 const Admin = () => {
   const [selectedMenu, setSelectedMenu] = useState('어떤관리');
