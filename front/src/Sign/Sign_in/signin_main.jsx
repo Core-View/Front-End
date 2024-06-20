@@ -1,15 +1,15 @@
-import React, { useCallback, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { Cookies } from 'react-cookie';
+import React, { useCallback, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { Cookies } from "react-cookie";
 
-import './Sign_in.css';
+import "./Sign_in.css";
 
 const Sign_in = () => {
   const cookies = new Cookies();
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const onchangeEmail = useCallback((e) => {
     setEmail(e.target.value);
   }, []);
@@ -19,26 +19,26 @@ const Sign_in = () => {
   const onsubmit = (e) => {
     e.preventDefault();
     if (email.length === 0 || password.length === 0) {
-      alert('아이디와 비밀번호를 모두 입력 해주세요');
+      alert("아이디와 비밀번호를 모두 입력 해주세요");
       return;
     }
     axios
-      .post('http://localhost:3000/login', {
+      .post("http://localhost:3000/login", {
         user_email: email,
         user_password: password,
       })
       .then((response) => {
         if (response.status === 200) {
           console.log(response);
-          cookies.set('user_id', response.data.user_id);
-          cookies.set('role', response.data.role);
-          alert('성공');
+          cookies.set("user_id", response.data.user_id);
+          cookies.set("role", response.data.role);
+          alert("성공");
         } else {
-          alert('비번틀림');
+          alert("비번틀림");
         }
       })
       .then(() => {
-        navigate('/'); // 상대 경로로 이동
+        navigate("/"); // 상대 경로로 이동
         window.location.reload();
       })
       .catch((error) => {
@@ -53,7 +53,7 @@ const Sign_in = () => {
     //     navigate('/'); // 상대 경로로 이동
     //   }
     // });
-    navigate('/auth/google');
+    navigate("/auth/google");
   };
   return (
     <div className="container_si">
@@ -100,7 +100,7 @@ const Sign_in = () => {
           </div>
 
           <div className="">
-            forgot your password?{' '}
+            forgot your password?{" "}
             <Link to="/users/find-pwd">Find Password </Link>
           </div>
         </div>

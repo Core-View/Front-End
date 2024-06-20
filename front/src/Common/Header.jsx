@@ -20,7 +20,6 @@ function Header() {
   };
 
   const navigate = useNavigate();
-  console.log("미안요");
   const clickedAdmin = () => {
     let inputPassword = prompt("비밀번호를 입력하세요.", "");
     if (inputPassword) {
@@ -28,7 +27,7 @@ function Header() {
         .post(`http://localhost:3000/admin/login/${userId}`, {
           user_id: userId,
           role: role,
-          password: inputPassword,
+          admin_password: inputPassword,
         })
         .then((response) => {
           if (response.data.success === true) {
@@ -58,18 +57,6 @@ function Header() {
       <nav className="header-nav">
         <div className="header-nav-left">
           <ul>
-            {role === 1 ? (
-              <div
-                className="gotoAdmin"
-                onClick={() => {
-                  clickedAdmin();
-                }}
-              >
-                관리자페이지
-              </div>
-            ) : (
-              ""
-            )}
             <li>
               <Link to="/post_main">전체 게시글</Link>
             </li>
@@ -85,6 +72,20 @@ function Header() {
                 <Link to="/users/sign-in">내 정보</Link>
               ) : (
                 <Link to="/my_main">내 정보</Link>
+              )}
+            </li>
+            <li>
+              {role === 1 ? (
+                <div
+                  className="gotoAdmin"
+                  onClick={() => {
+                    clickedAdmin();
+                  }}
+                >
+                  관리자페이지
+                </div>
+              ) : (
+                ""
               )}
             </li>
           </ul>

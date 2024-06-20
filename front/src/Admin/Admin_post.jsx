@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Contribution from "../Common/Contribution";
 
-import './admin_post.css';
-import axios from 'axios';
+import "./admin_post.css";
+import axios from "axios";
 
 const AdminPost = () => {
   const [postlist, setPostList] = useState([]);
@@ -11,10 +12,8 @@ const AdminPost = () => {
   const postsPerPage = 10;
 
   const getAdminPosts = () => {
-    axios.get('http://localhost:3000/post/latest').then((response) => {
+    axios.get("http://localhost:3000/post/latest").then((response) => {
       setPostList(response.data);
-      console.log(postlist);
-      console.log('ji');
     });
   };
 
@@ -22,14 +21,14 @@ const AdminPost = () => {
     getAdminPosts();
   }, []);
 
-  //게시글상세보기 페이지로 넘어가기 관련
+  // 게시글 상세보기 페이지로 넘어가기 관련
   const navigate = useNavigate();
 
   const handleNavigate = (post) => {
-    navigate(`/post_view/${post.post_id}`, { state: { post } });
+    navigate(`/post_view/${post.post_id}`);
   };
 
-  //페이지네이션 관련
+  // 페이지네이션 관련
   // 현재 페이지에 해당하는 게시글 목록을 계산
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
@@ -42,23 +41,20 @@ const AdminPost = () => {
   }
 
   const deletePoster = async (post_id) => {
-    console.log(post_id);
-    if (window.confirm('삭제하시겠습니까?')) {
+    if (window.confirm("삭제하시겠습니까?")) {
       try {
         const response = await axios.delete(
           `http://localhost:3000/api/delete/${post_id}`
         );
-        if (response.data.message === 'Post deleted successfully') {
-          alert('삭제되었습니다.');
-          navigate('/admin');
+        if (response.data.message === "Post deleted successfully") {
+          alert("삭제되었습니다.");
+          getAdminPosts(); // 삭제 후 최신 게시글 목록을 다시 불러옵니다.
         } else {
-          alert('게시글을 찾을 수 없습니다.');
+          alert("게시글을 찾을 수 없습니다.");
         }
       } catch (error) {
-        alert('삭제에 실패했습니다.');
+        alert("삭제에 실패했습니다.");
       }
-    } else {
-      alert('취소하였습니다.');
     }
   };
 
@@ -75,17 +71,22 @@ const AdminPost = () => {
           <li
             className="listpost"
             key={i}
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               handleNavigate(a);
             }}
           >
             <div className="line1">{a.post_id}</div>
             <div className="line2">{a.post_title}</div>
-            <div className="line3">{a.user_id}</div>
+            <div className="line3">
+              <Contribution contribute={a.user_contribute} />
+              <span>{a.user_nickname}</span>
+            </div>
             <div className="line4">{a.post_date}</div>
             <div
               className="delete_poster"
               onClick={(e) => {
+                e.stopPropagation(); // 이벤트 버블링을 막습니다.
                 e.preventDefault();
                 deletePoster(a.post_id);
               }}
@@ -100,7 +101,7 @@ const AdminPost = () => {
           <button
             key={number}
             onClick={() => setCurrentPage(number)}
-            className={`pagebtn ${currentPage === number ? 'active' : ''}`}
+            className={`pagebtn ${currentPage === number ? "active" : ""}`}
           >
             {number}
           </button>
