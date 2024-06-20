@@ -31,6 +31,7 @@
 .post-top-left {
   display: flex;
   align-items: center;
+  margin-right: 20px;
 }
 
 .new-hot div {

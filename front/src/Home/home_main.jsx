@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './home_main.css';
 import { SlArrowRight } from 'react-icons/sl';
+import { AiOutlineQuestionCircle } from 'react-icons/ai'; // 툴팁 아이콘 import
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { formatDistanceToNow, parseISO } from 'date-fns';
@@ -9,10 +10,42 @@ import { ko } from 'date-fns/locale'; // 한국어 로케일 import
 const Main = () => {
   const navigate = useNavigate();
 
-  const [recommendedPosts, setRecommendedPosts] = useState([]);
-  const [newestPosts, setNewestPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // 사용자 정보를 저장할 상태
+  const [userInfos, setUserInfos] = useState({});
+
+  const [recommendedPosts, setRecommendedPosts] = useState([]);
+  const [newestPosts, setNewestPosts] = useState([]);
+  const [ranking, setRanking] = useState([]);
+
+  const fetchUserInfos = async (userIds) => {
+    const userInfoPromises = userIds.map((id) =>
+      axios
+        .get(`http://localhost:3000/mypage/${id}`)
+        .then((response) => ({
+          userId: id,
+          data: response.data,
+        }))
+        .catch(() => ({
+          userId: id,
+          data: { nickname: '탈퇴한 회원' }, // 사용자 정보가 없는 경우 처리
+        }))
+    );
+
+    const userInfoResponses = await Promise.all(userInfoPromises);
+
+    const newUserInfos = {};
+    userInfoResponses.forEach((response) => {
+      newUserInfos[response.userId] = response.data;
+    });
+
+    setUserInfos((prevUserInfos) => ({
+      ...prevUserInfos,
+      ...newUserInfos,
+    }));
+  };
 
   // 날짜 형식 변환 함수
   const formatDate = (dateString) => {
@@ -33,23 +66,40 @@ const Main = () => {
   };
 
   useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchPostsAndRankings = async () => {
       try {
-        const [latestResponse, likesResponse] = await Promise.all([
-          axios.get('http://localhost:3000/post/latest'),
-          axios.get('http://localhost:3000/post/latest'),
-        ]);
+        const [latestResponse, likesResponse, rankingResponse] =
+          await Promise.all([
+            axios.get('http://localhost:3000/post/latest'),
+            axios.get('http://localhost:3000/post/mostlike'),
+            axios.get('http://localhost:3000/post/top-contributors'),
+          ]);
 
-        setNewestPosts(latestResponse.data.slice(0, 5));
-        setRecommendedPosts(likesResponse.data.slice(0, 5));
+        const newestPostsData = latestResponse.data.slice(0, 5);
+        const recommendedPostsData = likesResponse.data.slice(0, 5);
+        const rankingData = rankingResponse.data;
+
+        const userIds = [
+          ...new Set([
+            ...newestPostsData.map((post) => post.user_id),
+            ...recommendedPostsData.map((post) => post.user_id),
+            ...rankingData.map((rank) => rank.user_id),
+          ]),
+        ];
+
+        await fetchUserInfos(userIds);
+
+        setNewestPosts(newestPostsData);
+        setRecommendedPosts(recommendedPostsData);
+        setRanking(rankingData);
         setLoading(false);
       } catch (err) {
-        setError(`게시글을 가져오는 데 실패했습니다: ${err.message}`);
+        setError(`데이터를 가져오는 데 실패했습니다: ${err.message}`);
         setLoading(false);
       }
     };
 
-    fetchPosts();
+    fetchPostsAndRankings();
   }, []);
 
   if (loading) {
@@ -67,8 +117,39 @@ const Main = () => {
     python: '/images/language_icons/python_icon.png',
   };
 
+  const contribute_post_like = 1;
+  const contribute_feedback = 1;
+  const contribute_feedback_like = 1;
+
   return (
     <div className="home-container">
+      <section className="home_left">
+        <div className="ranking">
+          <h2>
+            기여도 랭킹
+            <AiOutlineQuestionCircle className="tooltip-icon" />
+            <div className="tooltip">
+              기여도는 (게시물 좋아요 x {contribute_post_like}) + (내가 달은
+              피드백 x {contribute_feedback}) + (내 피드백 좋아요 x{' '}
+              {contribute_feedback_like}) 의 연산입니다.
+            </div>
+          </h2>
+          <ul className="ranking-list">
+            {ranking.map((user, index) => (
+              <li key={index}>
+                <div className="ranking-meta">
+                  <div className="ranking-user-id">
+                    {userInfos[user.user_id]?.nickname || '탈퇴한 회원'}
+                  </div>
+                  <div className="ranking-contribution">
+                    {user.total_contribution}
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
       <section className="home_mid">
         <div className="post recommend">
           <h2>추천 게시글 (좋아요 순)</h2>
@@ -84,7 +165,9 @@ const Main = () => {
                     />{' '}
                     {post.post_title}
                   </div>
-                  <div className="post-main-user-name">{post.user_id}</div>
+                  <div className="post-main-user-name">
+                    {userInfos[post.user_id]?.nickname || '탈퇴한 회원'}
+                  </div>
                   <div className="post-main-date">
                     {formatDate(post.post_date)}
                   </div>
@@ -107,7 +190,9 @@ const Main = () => {
                     />{' '}
                     {post.post_title}
                   </div>
-                  <div className="post-main-user-name">{post.user_id}</div>
+                  <div className="post-main-user-name">
+                    {userInfos[post.user_id]?.nickname || '탈퇴한 회원'}
+                  </div>
                   <div className="post-main-date">
                     {formatDate(post.post_date)}
                   </div>

@@ -19,6 +19,8 @@ const Empty = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [postsPerPage, setPostsPerPage] = useState(15); // 페이지당 게시글 수 기본값
 
+  const [userInfos, setUserInfos] = useState({});
+
   const languageIcons = {
     c: '/images/language_icons/c_icon.png',
     cpp: '/images/language_icons/cpp_icon.png',
@@ -26,11 +28,38 @@ const Empty = () => {
     python: '/images/language_icons/python_icon.png',
   };
 
+  const fetchUserInfos = async (userIds) => {
+    const userInfoPromises = userIds.map((id) =>
+      axios
+        .get(`http://localhost:3000/mypage/${id}`)
+        .then((response) => ({
+          userId: id,
+          data: response.data,
+        }))
+        .catch(() => ({
+          userId: id,
+          data: { nickname: '탈퇴한 회원' }, // 사용자 정보가 없는 경우 처리
+        }))
+    );
+
+    const userInfoResponses = await Promise.all(userInfoPromises);
+
+    const newUserInfos = {};
+    userInfoResponses.forEach((response) => {
+      newUserInfos[response.userId] = response.data;
+    });
+
+    setUserInfos((prevUserInfos) => ({
+      ...prevUserInfos,
+      ...newUserInfos,
+    }));
+  };
+
   useEffect(() => {
     // 서버에서 공지 데이터를 가져옴
     const fetchNotices = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/post/latest');
+        const response = await axios.get('http://localhost:3000/notice/view');
         setNotices(response.data);
         setLoading(false);
       } catch (err) {
@@ -47,8 +76,13 @@ const Empty = () => {
     const fetchPosts = async () => {
       try {
         const response = await axios.get('http://localhost:3000/post/latest');
-        setPosts(response.data);
-        setFilteredPosts(response.data);
+        const postsData = response.data;
+
+        const userIds = [...new Set(postsData.map((post) => post.user_id))];
+        await fetchUserInfos(userIds);
+
+        setPosts(postsData);
+        setFilteredPosts(postsData);
         setLoading(false);
       } catch (err) {
         setError('게시글을 가져오는 데 실패했습니다.');
@@ -72,7 +106,7 @@ const Empty = () => {
 
   // 게시글 클릭 핸들러
   const handlePostClick = (post) => {
-    navigate(`/post_view/${post.post_id}`, { state: { post } });
+    navigate(`/post_view/${post.post_id}`);
   };
 
   // 페이지 변경 핸들러
@@ -125,8 +159,8 @@ const Empty = () => {
             <div className="post-main-date">작성날짜</div>
           </h4>
           {notices.length > 0 ? (
-            notices.slice(0, 3).map((post, index) => (
-              <li key={index} onClick={() => handlePostClick(post)}>
+            notices.slice(0, 3).map((notice, index) => (
+              <li key={index} onClick={() => handlePostClick(notice)}>
                 <div className="post-main-meta">
                   <div className="post-main-title">
                     <img
@@ -134,11 +168,11 @@ const Empty = () => {
                       alt=""
                       className="post-main-language-icon"
                     />{' '}
-                    {post.post_title}
+                    {notice.notice_title}
                   </div>
-                  <div className="post-main-user-name">{post.user_id}</div>
+                  <div className="post-main-user-name"></div>
                   <div className="post-main-date">
-                    {formatDate(post.post_date)}
+                    {formatDate(notice.notice_date)}
                   </div>
                 </div>
               </li>
@@ -201,7 +235,9 @@ const Empty = () => {
                     />{' '}
                     {post.post_id}. {post.post_title}
                   </div>
-                  <div className="post-main-user-name">{post.user_id}</div>
+                  <div className="post-main-user-name">
+                    {userInfos[post.user_id]?.nickname || '탈퇴한 회원'}
+                  </div>
                   <div className="post-main-date">
                     {formatDate(post.post_date)}
                   </div>

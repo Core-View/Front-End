@@ -1,6 +1,6 @@
 .header {
-  background-color: #282c34;
-  padding: 20px;
+  background-color: #333;
+  padding: 15px 20px;
   color: white;
   display: flex;
   justify-content: space-between;
@@ -8,26 +8,46 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* .header-padding {
+  padding: 0px 100px;
+} */
+
 .header-logo-container {
+  padding-left: 200px;
   display: flex;
   align-items: center;
 }
 
 .header-logo {
-  max-width: 100px;
-  /* 로고 크기 조정 */
+  max-width: 80px;
   transition: transform 0.3s ease;
 }
 
 .header-logo:hover {
-  transform: scale(1.1); /* 로고에 호버 효과 추가 */
+  transform: scale(1.1);
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-grow: 1;
+  margin-left: 20px;
+  padding-right: 200px;
+}
+
+.header-nav-left,
+.header-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 25px;
 }
 
 .header-nav ul {
   list-style: none;
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 25px;
   margin: 0;
   padding: 0;
 }
@@ -52,7 +72,11 @@
 }
 
 @media (max-width: 768px) {
-  .header-nav ul {
+  .header-nav {
+    flex-direction: column;
+  }
+  .header-nav-left,
+  .header-nav-right {
     flex-direction: column;
     gap: 10px;
   }

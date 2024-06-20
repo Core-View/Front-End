@@ -44,6 +44,7 @@ function Header() {
   };
   return (
     <header className="header">
+      {/* <div className="header-padding"> */}
       <div className="header-logo-container">
         <Link to="/">
           <img
@@ -55,42 +56,57 @@ function Header() {
       </div>
 
       <nav className="header-nav">
-        <ul>
-          {role === 1 ? (
-            <div
-              className="gotoAdmin"
-              onClick={() => {
-                clickedAdmin();
-              }}
-            >
-              관리자페이지
-            </div>
-          ) : (
-            ""
-          )}
-          <li>
-            <Link to="/post_main">전체 게시글</Link>
-          </li>
-          <li>
-            <Link to="/post_write">글 쓰기</Link>
-          </li>
-          <li>
-            <Link to="/my_main">내 정보</Link>
-          </li>
-          <li>
-            {userId === undefined ? (
-              <Link to="/users/sign-in">로그인</Link>
+        <div className="header-nav-left">
+          <ul>
+            {role === 1 ? (
+              <div
+                className="gotoAdmin"
+                onClick={() => {
+                  clickedAdmin();
+                }}
+              >
+                관리자페이지
+              </div>
             ) : (
-              <Link to="/" onClick={deleteCookies}>
-                로그아웃
-              </Link>
+              ""
             )}
-          </li>
-          <li>
-            <Alarm />
-          </li>
-        </ul>
+            <li>
+              <Link to="/post_main">전체 게시글</Link>
+            </li>
+            <li>
+              {userId === undefined ? (
+                <Link to="/users/sign-in">글 쓰기</Link>
+              ) : (
+                <Link to="/post_write">글 쓰기</Link>
+              )}
+            </li>
+            <li>
+              {userId === undefined ? (
+                <Link to="/users/sign-in">내 정보</Link>
+              ) : (
+                <Link to="/my_main">내 정보</Link>
+              )}
+            </li>
+          </ul>
+        </div>
+        <div className="header-nav-right">
+          <ul>
+            <li>
+              {userId === undefined ? (
+                <Link to="/users/sign-in">로그인</Link>
+              ) : (
+                <Link to="/" onClick={deleteCookies}>
+                  로그아웃
+                </Link>
+              )}
+            </li>
+            <li>
+              <Alarm />
+            </li>
+          </ul>
+        </div>
       </nav>
+      {/* </div> */}
     </header>
   );
 }
