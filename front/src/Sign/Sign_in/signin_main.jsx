@@ -100,7 +100,8 @@ const Sign_in = () => {
           </div>
 
           <div className="">
-            Are you an employer? <Link to="/">Sign up on Talent </Link>
+            forgot your password?{' '}
+            <Link to="/users/find-pwd">Find Password </Link>
           </div>
         </div>
       </div>

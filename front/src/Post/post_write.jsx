@@ -6,7 +6,6 @@ const PostWrite = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [code, setCode] = useState('');
-  const [hashtags, setHashtags] = useState('');
   const [language, setLanguage] = useState(''); // 언어 상태 추가
   const contentRef = useRef(null);
   const codeRef = useRef(null);
@@ -15,10 +14,11 @@ const PostWrite = () => {
     e.preventDefault();
 
     const postData = {
-      title,
-      language, // 언어 추가
-      content,
-      code,
+      // post_id, post_title, post_content, post_code, post_date, language, user_id, post_result
+      title: title,
+      language: language, // 언어 추가
+      code: code,
+      content: content,
       user_id: 18, // 임시 userId
     };
 
@@ -33,7 +33,6 @@ const PostWrite = () => {
         setTitle('');
         setContent('');
         setCode('');
-        setHashtags('');
         setLanguage('');
         contentRef.current.style.height = 'auto';
         codeRef.current.style.height = 'auto';

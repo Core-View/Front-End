@@ -1,26 +1,38 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './my_modify.css';
-import { IoIosWarning } from 'react-icons/io';
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import "./my_modify.css";
+import { IoIosWarning } from "react-icons/io";
+import { Cookies } from "react-cookie";
 
 const Mymodify = () => {
+  const cookies = new Cookies();
   const navigate = useNavigate();
-  const [imageSrc, setImageSrc] = useState('/images/original_profile.png');
+  const [imageSrc, setImageSrc] = useState("/images/original_profile.png");
   const [imageFile, setImageFile] = useState(null);
-  const [nickname, setNickname] = useState('');
-  const [nicknameError, setNicknameError] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  const [intro, setIntro] = useState('');
-  const [introError, setIntroError] = useState('');
+  const [nickname, setNickname] = useState("");
+  const [nicknameError, setNicknameError] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [intro, setIntro] = useState("");
+  const [introError, setIntroError] = useState("");
   const [passwordValid, setPasswordValid] = useState(false);
-  const [passwordValidityMessage, setPasswordValidityMessage] = useState('');
-  const [userId, setUserId] = useState('3');
+  const [passwordValidityMessage, setPasswordValidityMessage] = useState("");
+  const [userId, setUserId] = useState(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [user_password, setUserPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [user_password, setUserPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    const userIdFromCookie = cookies.get("user_id");
+    if (!userIdFromCookie) {
+      navigate("/users/sign-in");
+    } else {
+      setUserId(userIdFromCookie);
+    }
+  }, [cookies, navigate]);
+
   const regex = {
     password:
       /^(?=.*[a-zA-Z가-힣])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z가-힣\d@$!%*?&]{8,}$/,
@@ -54,9 +66,9 @@ const Mymodify = () => {
 
   const validatePasswords = (pw, confirmPw) => {
     if (pw && confirmPw && pw !== confirmPw) {
-      setPasswordError('비밀번호가 일치하지 않습니다.');
+      setPasswordError("비밀번호가 일치하지 않습니다.");
     } else {
-      setPasswordError('');
+      setPasswordError("");
     }
   };
 
@@ -64,11 +76,11 @@ const Mymodify = () => {
     if (!isValid(regex.password, password)) {
       setPasswordValid(false);
       setPasswordValidityMessage(
-        '비밀번호는 한글 또는 영어, 숫자, 특수문자를 포함해야 합니다.'
+        "비밀번호는 한글 또는 영어, 숫자, 특수문자를 포함해야 합니다."
       );
     } else {
       setPasswordValid(true);
-      setPasswordValidityMessage('');
+      setPasswordValidityMessage("");
     }
   };
 
@@ -76,9 +88,9 @@ const Mymodify = () => {
     const newNickname = e.target.value;
     setNickname(newNickname);
     if (newNickname.length > 10) {
-      setNicknameError('닉네임은 10자 이하로 입력해주세요.');
+      setNicknameError("닉네임은 10자 이하로 입력해주세요.");
     } else {
-      setNicknameError('');
+      setNicknameError("");
     }
   };
 
@@ -86,9 +98,9 @@ const Mymodify = () => {
     const value = e.target.value;
     setIntro(value);
     if (value.length > 30) {
-      setIntroError('자기소개는 30자를 초과할 수 없습니다.');
+      setIntroError("자기소개는 30자를 초과할 수 없습니다.");
     } else {
-      setIntroError('');
+      setIntroError("");
     }
   };
 
@@ -96,75 +108,78 @@ const Mymodify = () => {
     e.preventDefault();
 
     if (!passwordValid) {
-      alert('비밀번호가 유효하지 않습니다. 조건을 확인해 주세요.');
+      alert("비밀번호가 유효하지 않습니다. 조건을 확인해 주세요.");
       return;
     } else if (password !== confirmPassword) {
-      alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
+      alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
       return;
     } else if (intro.length > 30) {
-      alert('자기소개는 30자를 초과할 수 없습니다.');
+      alert("자기소개는 30자를 초과할 수 없습니다.");
       return;
     }
 
     if (imageFile) {
       const formData = new FormData();
-      formData.append('user_image', imageFile);
+      formData.append("user_image", imageFile);
 
       try {
         const imageResponse = await fetch(
-          `http://localhost:3000/mypage/17/modifyImage`,
+          `http://localhost:3000/mypage/${userId}/modifyImage`,
           {
-            method: 'POST',
+            method: "POST",
             body: formData,
           }
         );
 
         if (!imageResponse.ok) {
-          throw new Error('Image upload failed');
+          throw new Error("Image upload failed");
         }
 
         const imageData = await imageResponse.json();
         if (imageData.access) {
           alert(imageData.message);
         } else {
-          alert('프로필이 수정되지 않았습니다. 관리자에게 문의 부탁드립니다.');
+          alert("프로필이 수정되지 않았습니다. 관리자에게 문의 부탁드립니다.");
         }
       } catch (error) {
-        console.error('Error uploading image:', error);
-        alert('이미지 업로드 중 오류가 발생했습니다. 관리자에게 문의하세요.');
+        console.error("Error uploading image:", error);
+        alert("이미지 업로드 중 오류가 발생했습니다. 관리자에게 문의하세요.");
         return;
       }
     }
 
     const profileData = {
       user_nickname: nickname,
-      user_password: password || '',
+      user_password: password || "",
       user_password_confirm: confirmPassword,
       user_intro: intro,
     };
 
     try {
-      const response = await fetch(`http://localhost:3000/mypage/17/modify`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(profileData),
-      });
+      const response = await fetch(
+        `http://localhost:3000/mypage/${userId}/modify`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(profileData),
+        }
+      );
 
       if (!response.ok) {
-        throw new Error('Profile update failed');
+        throw new Error("Profile update failed");
       }
 
       const data = await response.json();
       if (data.access) {
         alert(data.message);
       } else {
-        alert('프로필이 수정되지 않았습니다. 관리자에게 문의부탁드립니다.');
+        alert("프로필이 수정되지 않았습니다. 관리자에게 문의부탁드립니다.");
       }
     } catch (error) {
-      console.error('Error updating profile:', error);
-      alert('프로필 업데이트 중 오류가 발생했습니다. 관리자에게 문의하세요.');
+      console.error("Error updating profile:", error);
+      alert("프로필 업데이트 중 오류가 발생했습니다. 관리자에게 문의하세요.");
     }
   };
 
@@ -173,34 +188,43 @@ const Mymodify = () => {
       const response = await fetch(
         `http://localhost:3000/mypage/${userId}/delete`,
         {
-          method: 'DELETE',
+          method: "DELETE",
         }
       );
 
       if (!response.ok) {
-        throw new Error('Account deletion failed');
+        throw new Error("Account deletion failed");
       }
 
-      alert('회원탈퇴가 완료되었습니다.');
-      navigate('/');
+      alert("회원탈퇴가 완료되었습니다.");
+      navigate("/");
     } catch (error) {
-      console.error('Error deleting account:', error);
-      alert('회원탈퇴 중 오류가 발생했습니다. 관리자에게 문의하세요.');
+      console.error("Error deleting account:", error);
+      alert("회원탈퇴 중 오류가 발생했습니다. 관리자에게 문의하세요.");
     }
   };
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/mypage/17`);
+        const response = await fetch(`http://localhost:3000/mypage/${userId}`);
         const data = await response.json();
-        setImageSrc(data.profile_picture || '/images/original_profile.png'); // 초기 프로필 사진 설정
+        if (data.profile_picture) {
+          data.profile_picture = `${process.env.PUBLIC_URL}/images/original_profile.png`;
+        }
+        setImageSrc(
+          data.profile_picture ||
+            `${process.env.PUBLIC_URL}/images/original_profile.png`
+        );
+        console.log("이미지", data.profile_picture);
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error("Error fetching user data:", error);
       }
     };
-    fetchUserData();
-  }, []); // 빈 배열로 설정하여 컴포넌트 마운트 시 한 번만 실행
+    if (userId) {
+      fetchUserData();
+    }
+  }, [userId]);
 
   useEffect(() => {
     setPasswordValid(isValid(regex.password, password));
@@ -213,23 +237,26 @@ const Mymodify = () => {
   const handlePasswordSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3000/password/verify/17', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ user_password }),
-      });
+      const response = await fetch(
+        `http://localhost:3000/password/verify/${userId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ user_password }),
+        }
+      );
 
       const data = await response.json();
       if (data.success) {
         handleDeleteAccount();
       } else {
-        setErrorMessage('비밀번호가 일치하지 않습니다.');
+        setErrorMessage("비밀번호가 일치하지 않습니다.");
       }
     } catch (error) {
-      console.error('Error verifying password:', error);
-      setErrorMessage('비밀번호 검증 중 오류가 발생했습니다.');
+      console.error("Error verifying password:", error);
+      setErrorMessage("비밀번호 검증 중 오류가 발생했습니다.");
     }
   };
 
@@ -239,7 +266,7 @@ const Mymodify = () => {
         <div className="modi_field">
           <h1>내 정보</h1>
           <br />
-          <hr style={{ backgroundColor: '#ccc', height: '2px' }} />
+          <hr style={{ backgroundColor: "#ccc", height: "2px" }} />
           <br />
           <div className="photo">
             <label className="profile_L">프로필 사진</label>
@@ -260,7 +287,7 @@ const Mymodify = () => {
                   encodeFileToBase64(e.target.files[0]);
                   setImageFile(e.target.files[0]); // 파일 객체 설정
                 }}
-                style={{ display: 'none' }}
+                style={{ display: "none" }}
               />
             </div>
           </div>
@@ -339,8 +366,8 @@ const Mymodify = () => {
           type="button"
           onClick={() => {
             setIsModalOpen(true);
-            setUserPassword('');
-            setErrorMessage('');
+            setUserPassword("");
+            setErrorMessage("");
           }}
         >
           회원탈퇴
