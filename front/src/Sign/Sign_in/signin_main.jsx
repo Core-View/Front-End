@@ -31,6 +31,7 @@ const Sign_in = () => {
         if (response.status === 200) {
           console.log(response);
           cookies.set('user_id', response.data.user_id);
+          cookies.set('role', response.data.role);
           alert('성공');
         } else {
           alert('비번틀림');
