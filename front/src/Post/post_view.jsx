@@ -1,31 +1,31 @@
 // PostView.jsx
-import React, { useState, useEffect } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
-import axios from 'axios';
-import { Cookies } from 'react-cookie';
-import FeedbackPopup from './post_feedback_popup';
-import { MdFavoriteBorder, MdFavorite } from 'react-icons/md';
+import React, { useState, useEffect } from "react";
+import { useLocation, useParams } from "react-router-dom";
+import axios from "axios";
+import { Cookies } from "react-cookie";
+import FeedbackPopup from "./post_feedback_popup";
+import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
 
-import './post_view.css';
-import './post_view_fb.css';
+import "./post_view.css";
+import "./post_view_fb.css";
 
 const PostView = () => {
   const cookies = new Cookies();
-  const loggedInUserId = cookies.get('user_id'); // 로그인된 사용자 ID 가져오기
+  const loggedInUserId = cookies.get("user_id"); // 로그인된 사용자 ID 가져오기
   const { post_id } = useParams();
   // const { post } = location.state;
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const location = useLocation();
-  const [loginError, setLoginError] = useState(''); // 로그인 에러 상태 추가
+  const [loginError, setLoginError] = useState(""); // 로그인 에러 상태 추가
   const maxLength = 50; // 최근 피드백 출력 길이
 
   const languageIcons = {
-    c: '/images/language_icons/c_icon.png',
-    cpp: '/images/language_icons/cpp_icon.png',
-    java: '/images/language_icons/java_icon.png',
-    python: '/images/language_icons/python_icon.png',
+    c: "/images/language_icons/c_icon.png",
+    cpp: "/images/language_icons/cpp_icon.png",
+    java: "/images/language_icons/java_icon.png",
+    python: "/images/language_icons/python_icon.png",
   };
 
   const [post, setPost] = useState({});
@@ -33,13 +33,13 @@ const PostView = () => {
   const [popup, setPopup] = useState({
     show: false,
     line: null,
-    text: '',
-    codeContent: '',
+    text: "",
+    codeContent: "",
     feedback: [],
   });
   const [liked, setLiked] = useState(false); // 좋아요 상태
   const [likesCount, setLikesCount] = useState(0); // 좋아요 숫자 상태
-  const [message, setMessage] = useState(''); // 메시지 상태
+  const [message, setMessage] = useState(""); // 메시지 상태
   const [showMessage, setShowMessage] = useState(false); // 메시지 표시 상태
 
   useEffect(() => {
@@ -77,8 +77,8 @@ const PostView = () => {
   const author = post.user_nickname;
   const language = post.language;
   const date = post.post_date;
-  const content = post.post_content ? post.post_content.trim().split('\n') : [];
-  const code = post.post_code ? post.post_code.trim() : '';
+  const content = post.post_content ? post.post_content.trim().split("\n") : [];
+  const code = post.post_code ? post.post_code.trim() : "";
   const result = post.post_result;
 
   // 피드백 버튼 클릭 핸들
@@ -86,7 +86,7 @@ const PostView = () => {
     setPopup({
       show: true,
       line: lineIndex,
-      text: '',
+      text: "",
       codeContent: lineCode,
       feedback: feedback[lineIndex] || [],
     });
@@ -94,7 +94,7 @@ const PostView = () => {
 
   // 피드백 전송 핸들
   const handleFeedbackSubmit = async () => {
-    if (popup.text.trim() === '') return;
+    if (popup.text.trim() === "") return;
 
     const newFeedback = feedback[popup.line]
       ? [
@@ -112,37 +112,37 @@ const PostView = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:3000/api/feedbacks', {
-        method: 'POST',
+      const response = await fetch("http://localhost:3000/api/feedbacks", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(feedbackHandleData),
       });
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error("Network response was not ok");
       }
 
       // 피드백 전송 후 팝업 상태 업데이트
       setPopup((prevPopup) => ({
         ...prevPopup,
         feedback: newFeedback,
-        text: '',
+        text: "",
       }));
     } catch (error) {
-      console.error('There was a problem with your fetch operation:', error);
+      console.error("There was a problem with your fetch operation:", error);
     }
   };
 
   const truncateText = (text, maxLength) => {
-    const newlineIndex = text.indexOf('\n');
+    const newlineIndex = text.indexOf("\n");
     if (newlineIndex !== -1 && newlineIndex <= maxLength) {
-      return text.slice(0, newlineIndex) + '...';
+      return text.slice(0, newlineIndex) + "...";
     }
     if (text.length <= maxLength) {
       return text;
     }
-    return text.slice(0, maxLength) + '...';
+    return text.slice(0, maxLength) + "...";
   };
 
   const handleLikeClick = async () => {
@@ -156,27 +156,27 @@ const PostView = () => {
 
     const options = newLiked
       ? {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             post_id: post_id,
             user_id: loggedInUserId,
           }),
         }
-      : { method: 'POST' };
+      : { method: "POST" };
 
     try {
       const response = await fetch(url, options);
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error("Network response was not ok");
       }
-      setMessage(newLiked ? '좋아요를 눌렀습니다.' : '좋아요를 취소했습니다.');
+      setMessage(newLiked ? "좋아요를 눌렀습니다." : "좋아요를 취소했습니다.");
       setShowMessage(true);
       setTimeout(() => setShowMessage(false), 2000); // 2초 후 메시지 사라짐
     } catch (error) {
-      console.error('There was a problem with your fetch operation:', error);
+      console.error("There was a problem with your fetch operation:", error);
     }
   };
 
@@ -191,13 +191,13 @@ const PostView = () => {
   return (
     <div className="post-view">
       {message && (
-        <div className={`like-message ${showMessage ? 'show' : ''}`}>
+        <div className={`like-message ${showMessage ? "show" : ""}`}>
           {message}
         </div>
       )}
       <div className="post-header">
         <h1 className="post-title">
-          <img src={languageIcons[language]} alt="" className="language-icon" />{' '}
+          <img src={languageIcons[language]} alt="" className="language-icon" />{" "}
           {title}
         </h1>
         <div className="post-meta">
@@ -207,7 +207,7 @@ const PostView = () => {
               <MdFavorite className="icon active" />
             ) : (
               <MdFavoriteBorder className="icon" />
-            )}{' '}
+            )}{" "}
             {likesCount}
           </span>
         </div>
@@ -221,22 +221,22 @@ const PostView = () => {
         ))}
       </div>
       <pre className="post-code">
-        {code.split('\n').map((line, index) => (
+        {code.split("\n").map((line, index) => (
           <div key={index} className="post-code-line">
             <span className="non-drag">
               <span className="line-number">{index + 1} | </span>
             </span>
             <span>{line}</span>
             <button
-              className={`feedback-button ${feedback[index] ? 'active' : ''}`}
+              className={`feedback-button ${feedback[index] ? "active" : ""}`}
               onClick={() => handleFeedbackClick(index, line)}
             >
-              피드백 {feedback[index] ? `(${feedback[index].length})` : ''}
+              피드백 {feedback[index] ? `(${feedback[index].length})` : ""}
             </button>
             {feedback[index] && feedback[index].length > 0 && (
               <div className="feedback-text">
                 <div className="non-drag">
-                  [최근 피드백]{' '}
+                  [최근 피드백]{" "}
                   {truncateText(
                     feedback[index][feedback[index].length - 1]
                       .feedback_comment,
