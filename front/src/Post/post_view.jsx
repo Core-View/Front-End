@@ -57,17 +57,18 @@ const PostView = () => {
         return acc;
       }, {});
 
-      console.log(postData);
+      // console.log(postData);
       setPost(postData);
       setFeedback(feedbackData);
       setLikesCount(postData.total_likes);
 
       // 두 번째 요청: liked 데이터 가져오기
       const likedResponse = await axios.get(
-        `http://localhost:3000/mypage/${postData.user_id}/likedPosts`
+        `http://localhost:3000/mypage/${loggedInUserId}/likedPosts`
       );
       const likedData = likedResponse.data;
       setLikedPosts(likedData);
+      // console.log(likedData);
 
       // liked 상태 업데이트
       isLiked(likedData);
@@ -80,7 +81,13 @@ const PostView = () => {
   };
 
   const isLiked = (likedData) => {
-    if (likedData.some((likedPost) => likedPost.post_id === post_id)) {
+    // console.log("Checking if post is liked");
+    // console.log("Liked Data:", likedData);
+    // console.log("Current Post ID:", post_id);
+    if (
+      likedData.some((likedPost) => likedPost.post_id === parseInt(post_id))
+    ) {
+      console.log("Post is liked");
       setLiked(true);
     }
   };
