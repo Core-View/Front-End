@@ -39,34 +39,34 @@ const PostView = () => {
   const [message, setMessage] = useState("");
   const [showMessage, setShowMessage] = useState(false);
 
+  const fetchPostAndFeedback = async () => {
+    try {
+      const [postResponse, feedbackResponse] = await Promise.all([
+        axios.get(`http://localhost:3000/post/details/${post_id}`),
+        axios.get(`http://localhost:3000/api/feedbacks/post/${post_id}`),
+      ]);
+
+      const postData = postResponse.data;
+      const feedbackData = feedbackResponse.data.reduce((acc, fb) => {
+        if (!acc[fb.feedback_codenumber]) {
+          acc[fb.feedback_codenumber] = [];
+        }
+        acc[fb.feedback_codenumber].push(fb);
+        return acc;
+      }, {});
+
+      console.log(postData);
+      setPost(postData);
+      setFeedback(feedbackData);
+      setLikesCount(postData.total_likes);
+      setLoading(false);
+    } catch (err) {
+      setError(`데이터를 가져오는 데 실패했습니다: ${err.message}`);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchPostAndFeedback = async () => {
-      try {
-        const [postResponse, feedbackResponse] = await Promise.all([
-          axios.get(`http://localhost:3000/post/details/${post_id}`),
-          axios.get(`http://localhost:3000/api/feedbacks/post/${post_id}`),
-        ]);
-
-        const postData = postResponse.data;
-        const feedbackData = feedbackResponse.data.reduce((acc, fb) => {
-          if (!acc[fb.feedback_codenumber]) {
-            acc[fb.feedback_codenumber] = [];
-          }
-          acc[fb.feedback_codenumber].push(fb);
-          return acc;
-        }, {});
-
-        console.log(postData);
-        setPost(postData);
-        setFeedback(feedbackData);
-        setLikesCount(postData.total_likes);
-        setLoading(false);
-      } catch (err) {
-        setError(`데이터를 가져오는 데 실패했습니다: ${err.message}`);
-        setLoading(false);
-      }
-    };
-
     fetchPostAndFeedback();
   }, [post_id]);
 
@@ -94,15 +94,8 @@ const PostView = () => {
   };
 
   const handleFeedbackSubmit = async () => {
+    // window.location.reload(); // 페이지 새로고침
     if (popup.text.trim() === "") return;
-
-    const newFeedback = feedback[popup.line]
-      ? [
-          ...feedback[popup.line],
-          { user_id: loggedInUserId, feedback_comment: popup.text },
-        ]
-      : [{ user_id: loggedInUserId, feedback_comment: popup.text }];
-    setFeedback({ ...feedback, [popup.line]: newFeedback });
 
     const feedbackHandleData = {
       post_id: post_id,
@@ -123,9 +116,12 @@ const PostView = () => {
         throw new Error("Network response was not ok");
       }
 
+      await fetchPostAndFeedback(); // 피드백 전송 후 피드백 목록 다시 가져오기
+
+      // popup 상태 업데이트
       setPopup((prevPopup) => ({
         ...prevPopup,
-        feedback: newFeedback,
+        feedback: feedback[popup.line] || [],
         text: "",
       }));
     } catch (error) {
