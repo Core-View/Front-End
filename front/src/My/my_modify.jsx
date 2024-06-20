@@ -2,8 +2,10 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './my_modify.css';
 import { IoIosWarning } from 'react-icons/io';
+import { Cookies } from 'react-cookie';
 
 const Mymodify = () => {
+  const cookies = new Cookies();
   const navigate = useNavigate();
   const [imageSrc, setImageSrc] = useState('/images/original_profile.png');
   const [imageFile, setImageFile] = useState(null);
@@ -16,14 +18,23 @@ const Mymodify = () => {
   const [introError, setIntroError] = useState('');
   const [passwordValid, setPasswordValid] = useState(false);
   const [passwordValidityMessage, setPasswordValidityMessage] = useState('');
-  const [userId, setUserId] = useState('3');
+  const [userId, setUserId] = useState(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [user_password, setUserPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+
+  useEffect(() => {
+    const userIdFromCookie = cookies.get('user_id');
+    if (!userIdFromCookie) {
+      navigate('/users/sign-in');
+    } else {
+      setUserId(userIdFromCookie);
+    }
+  }, [cookies, navigate]);
+
   const regex = {
-    password:
-      /^(?=.*[a-zA-Z가-힣])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z가-힣\d@$!%*?&]{8,}$/,
+    password: /^(?=.*[a-zA-Z가-힣])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z가-힣\d@$!%*?&]{8,}$/,
   };
 
   const isValid = useCallback((checkReg, string) => {
@@ -112,7 +123,7 @@ const Mymodify = () => {
 
       try {
         const imageResponse = await fetch(
-          `http://localhost:3000/mypage/17/modifyImage`,
+          `http://localhost:3000/mypage/${userId}/modifyImage`,
           {
             method: 'POST',
             body: formData,
@@ -144,7 +155,7 @@ const Mymodify = () => {
     };
 
     try {
-      const response = await fetch(`http://localhost:3000/mypage/17/modify`, {
+      const response = await fetch(`http://localhost:3000/mypage/${userId}/modify`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -192,15 +203,21 @@ const Mymodify = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/mypage/17`);
+        const response = await fetch(`http://localhost:3000/mypage/${userId}`);
         const data = await response.json();
-        setImageSrc(data.profile_picture || '/images/original_profile.png'); // 초기 프로필 사진 설정
+        if (data.profile_picture) {
+          data.profile_picture = `${process.env.PUBLIC_URL}/images/original_profile.png`;
+        }
+        setImageSrc(data.profile_picture || `${process.env.PUBLIC_URL}/images/original_profile.png`);
+        console.log('이미지',data.profile_picture);
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
     };
-    fetchUserData();
-  }, []); // 빈 배열로 설정하여 컴포넌트 마운트 시 한 번만 실행
+    if (userId) {
+      fetchUserData();
+    }
+  }, [userId]);
 
   useEffect(() => {
     setPasswordValid(isValid(regex.password, password));
@@ -213,7 +230,7 @@ const Mymodify = () => {
   const handlePasswordSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3000/password/verify/17', {
+      const response = await fetch(`http://localhost:3000/password/verify/${userId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
