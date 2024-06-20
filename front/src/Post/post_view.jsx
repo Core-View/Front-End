@@ -69,6 +69,8 @@ const PostView = () => {
         setLoading(false);
       }
     };
+
+    fetchPostAndFeedback();
   }, [post_id]);
 
   const title = post.post_title;

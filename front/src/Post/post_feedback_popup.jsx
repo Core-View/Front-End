@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
-import './post_feedback_popup.css';
-import { FaRegThumbsUp, FaThumbsUp } from 'react-icons/fa';
+import React, { useEffect, useRef, useState } from "react";
+import "./post_feedback_popup.css";
+import { FaRegThumbsUp, FaThumbsUp } from "react-icons/fa";
+import ReactPaginate from "react-paginate";
 
 const FeedbackPopup = ({
   popup,
@@ -37,8 +38,8 @@ const FeedbackPopup = ({
                 setPopup({
                   show: false,
                   line: null,
-                  text: '',
-                  codeContent: '',
+                  text: "",
+                  codeContent: "",
                 })
               }
             >
@@ -53,13 +54,13 @@ const FeedbackPopup = ({
                 <div key={fbIndex} className="feedback-text">
                   <div>
                     <span className="feedback-nickname">
-                      {fb.nickname || '탈퇴한 회원'}
+                      {fb.user_nickname}
                     </span>
                     : {fb.feedback_comment}
                   </div>
                   <span
                     className={`thumbs-up-icon ${
-                      likedFeedback[fbIndex] ? 'liked' : ''
+                      likedFeedback[fbIndex] ? "liked" : ""
                     }`}
                     onClick={() => handleThumbsUpClick(fbIndex)}
                   >
@@ -72,18 +73,18 @@ const FeedbackPopup = ({
                 </div>
               ))}
           </div>
-          <br></br>
+          <br />
           <div className="popup-inner">
             <textarea
               rows="4"
               placeholder={
                 loggedInUserId
-                  ? '피드백을 남겨주세요.'
-                  : '로그인 후 이용해주세요.'
+                  ? "피드백을 남겨주세요."
+                  : "로그인 후 이용해주세요."
               }
               value={popup.text}
               onChange={(e) => setPopup({ ...popup, text: e.target.value })}
-              style={{ resize: 'none' }}
+              style={{ resize: "none" }}
               disabled={!loggedInUserId} // 로그인이 안된 경우 비활성화
             />
             <div className="popup-buttons">
@@ -93,8 +94,8 @@ const FeedbackPopup = ({
                   setPopup({
                     show: false,
                     line: null,
-                    text: '',
-                    codeContent: '',
+                    text: "",
+                    codeContent: "",
                   })
                 }
               >
