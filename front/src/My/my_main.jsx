@@ -2,86 +2,81 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate, Navigate } from 'react-router-dom';
 import './my_main.css';
 import { FaCircleCheck } from 'react-icons/fa6';
+import { Cookies } from 'react-cookie';
 
 const Mypage = () => {
-  const { id } = useParams();
+  const cookies = new Cookies();
   const navigate = useNavigate();
-  const [isLoggenIn, setIsLoggedIn] = useState(false);
-  //JSON 데이터로부터 사용자 정보를 받아오기 위한 상태 추가
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userInfo, setUserInfo] = useState({
     user_id: '',
-    email: '',
     nickname: '',
+    email: '',
     profile_picture: '',
     introduction: '',
   });
   const [posts, setPosts] = useState([]);
-  const [comments, setComments] = useState([]); // 댓글 단 게시글 제목 저장
+  const [comments, setComments] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [user_password, setUserPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  // 기여도를 백분율로 계산
   const percentage = 22.6;
+
   const getColor = (percentage) => {
-    if (percentage >= 80) return '#4caf50'; // 녹색
-    if (percentage >= 60) return '#8bc34a'; // 연한 녹색
-    if (percentage >= 40) return '#cddc39'; // 노란색
-    if (percentage >= 20) return '#ffc107'; // 주황색
-    return '#f44336'; // 빨간색
+    if (percentage >= 80) return '#4caf50';
+    if (percentage >= 60) return '#8bc34a';
+    if (percentage >= 40) return '#cddc39';
+    if (percentage >= 20) return '#ffc107';
+    return '#f44336';
   };
-  /*useEffect(() => {
-  const checkLoginStatus = async () => {
-    try {
-      const response = await fetch('http://localhost:3000/check-login');
-      const data = await response.json();
-      if (data.loggedIn) {
-        setIsLoggedIn(true);
-      } else {
-        navigate('/users/sign-in');
-      }
-    } catch (error) {
-      console.error('Error checking login status:', error);
+
+  useEffect(() => {
+    const userId = cookies.get('user_id');
+    if (userId) {
+      setIsLoggedIn(true);
+      fetchUserData(userId);
+      fetchPostData(userId);
+      fetchCommentData(userId);
+    } else {
       navigate('/users/sign-in');
+    }
+    setIsLoading(false);
+  }, [navigate]);
+
+  const fetchUserData = async (userId) => {
+    try {
+      const response = await fetch(`http://localhost:3000/mypage/${userId}`);
+      const data = await response.json();
+      if (data.profile_picture) {
+        data.profile_picture = `${process.env.PUBLIC_URL}/images/original_profile.png`;
+      }
+      setUserInfo(data);
+      console.log('프로필이미지', data.profile_picture);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
     }
   };
 
-  checkLoginStatus();
-}, [navigate]);*/
+  const fetchPostData = async (userId) => {
+    try {
+      const response = await fetch(`http://localhost:3000/mypage/${userId}/posts`);
+      const data = await response.json();
+      setPosts(data || []);
+    } catch (error) {
+      console.error('Error fetching post data:', error);
+    }
+  };
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await fetch(`http://localhost:3000/mypage/17`);
-        const data = await response.json();
-        setUserInfo(data);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
-    const fetchPostData = async () => {
-      try {
-        const response = await fetch(`http://localhost:3000/mypage/17/posts`);
-        const data = await response.json();
-        setPosts(data || []); // API가 posts 배열을 반환하는지 확인하고 상태를 업데이트
-      } catch (error) {
-        console.error('Error fetching post data:', error);
-      }
-    };
-    const fetchCommentData = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:3000/mypage/17/feedback`
-        );
-        const data = await response.json();
-        setComments(data || []); // API가 posts 배열을 반환하는지 확인하고 상태를 업데이트
-      } catch (error) {
-        console.error('Error fetching feedback data:', error);
-      }
-    };
-    fetchUserData();
-    fetchPostData();
-    fetchCommentData();
-  }, [isLoggenIn, id]);
+  const fetchCommentData = async (userId) => {
+    try {
+      const response = await fetch(`http://localhost:3000/mypage/${userId}/feedback`);
+      const data = await response.json();
+      setComments(data || []);
+    } catch (error) {
+      console.error('Error fetching feedback data:', error);
+    }
+  };
 
   const handlePasswordChange = (e) => {
     setUserPassword(e.target.value);
@@ -90,14 +85,13 @@ const Mypage = () => {
   const handlePasswordSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3000/password/verify/17', {
+      const response = await fetch(`http://localhost:3000/password/verify/${userInfo.user_id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ user_password }),
       });
-      console.log('비밀번호: ', user_password);
       const data = await response.json();
       if (data.success) {
         navigate('/my_modify');
@@ -110,15 +104,19 @@ const Mypage = () => {
     }
   };
 
-  /*if (!isLoggenIn) {
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!isLoggedIn) {
     return <Navigate to='/users/sign-in' replace />;
-  }*/
-  //console.log('데이터: ',userInfo.profile_picture);
+  }
+
   const totalLikes = 10;
-  //const totalLikes = userInfo.post_likes.length + userInfo.feedback_likes.length;
   const handlePostClick = (post) => {
     navigate(`/post_view/${post.post_id}`, { state: { post } });
   };
+
   return (
     <div className="my_all">
       <div className="contribution-bar">
@@ -137,7 +135,7 @@ const Mypage = () => {
         <div className="space1">
           <div className="image_profile">
             <img
-              src={userInfo.profile_picture || '/images/original_profile.png'}
+              src={userInfo.profile_picture}
               alt="profile"
               className="my_profile"
             />
