@@ -27,6 +27,7 @@ const PostView = () => {
 
   const [post, setPost] = useState({});
   const [feedback, setFeedback] = useState({});
+  const [likedPosts, setLikedPosts] = useState({});
   const [popup, setPopup] = useState({
     show: false,
     line: null,
@@ -41,6 +42,7 @@ const PostView = () => {
 
   const fetchPostAndFeedback = async () => {
     try {
+      // 첫 번째 요청: post 및 feedback 데이터 가져오기
       const [postResponse, feedbackResponse] = await Promise.all([
         axios.get(`http://localhost:3000/post/details/${post_id}`),
         axios.get(`http://localhost:3000/api/feedbacks/post/${post_id}`),
@@ -59,10 +61,27 @@ const PostView = () => {
       setPost(postData);
       setFeedback(feedbackData);
       setLikesCount(postData.total_likes);
+
+      // 두 번째 요청: liked 데이터 가져오기
+      const likedResponse = await axios.get(
+        `http://localhost:3000/mypage/${postData.user_id}/likedPosts`
+      );
+      const likedData = likedResponse.data;
+      setLikedPosts(likedData);
+
+      // liked 상태 업데이트
+      isLiked(likedData);
+
       setLoading(false);
     } catch (err) {
       setError(`데이터를 가져오는 데 실패했습니다: ${err.message}`);
       setLoading(false);
+    }
+  };
+
+  const isLiked = (likedData) => {
+    if (likedData.some((likedPost) => likedPost.post_id === post_id)) {
+      setLiked(true);
     }
   };
 
@@ -178,7 +197,7 @@ const PostView = () => {
             user_id: loggedInUserId,
           }),
         }
-      : { method: "POST" };
+      : { method: "DELETE" };
 
     try {
       const response = await fetch(url, options);
