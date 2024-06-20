@@ -53,7 +53,7 @@ const PostView = () => {
         setFeedback(feedbackData);
         setLoading(false);
       } catch (err) {
-        setError('피드백을 가져오는 데 실패했습니다.');
+        setError(`피드백을 가져오는 데 실패했습니다: ${err.message}`);
         setLoading(false);
       }
     };
@@ -76,9 +76,9 @@ const PostView = () => {
     const newFeedback = feedback[popup.line]
       ? [
           ...feedback[popup.line],
-          { userId: loggedInUserId, feedback_comment: popup.text },
+          { user_id: loggedInUserId, feedback_comment: popup.text },
         ]
-      : [{ userId: loggedInUserId, feedback_comment: popup.text }];
+      : [{ user_id: loggedInUserId, feedback_comment: popup.text }];
     setFeedback({ ...feedback, [popup.line]: newFeedback });
 
     const feedbackData = {

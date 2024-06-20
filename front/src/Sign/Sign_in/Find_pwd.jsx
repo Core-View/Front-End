@@ -70,8 +70,8 @@ const Find_pwd = () => {
       return;
     }
     axios
-      .post('http://localhost:3000/sign/auth', {
-        email: email,
+      .post('http://localhost:3000/forgot-password', {
+        user_email: email,
       })
       .then((response) => {
         if (response.status === 200) {
@@ -88,7 +88,7 @@ const Find_pwd = () => {
       return;
     }
     axios
-      .post('http://localhost:3000/sign/authcheck', {
+      .post('http://localhost:3000/email-check', {
         authcode: checkEmail,
       })
       .then((response) => {
@@ -120,7 +120,7 @@ const Find_pwd = () => {
     axios
       .post('http://localhost:3000/reset-password', {
         user_email: email,
-        new_password: password,
+        user_password: password,
       })
       .then((response) => {
         if (response.status === 200) {

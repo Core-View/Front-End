@@ -45,8 +45,7 @@
 
 .post-line {
   position: relative;
-  padding-right: 100px;
-  /* 버튼 공간 확보 */
+  padding-right: 100px; /* 버튼 공간 확보 */
   margin-bottom: 10px;
   transition: background-color 0.3s;
 }
@@ -66,26 +65,20 @@
 
 .post-code-line {
   position: relative;
-  padding-right: 100px;
-  /* 버튼 공간 확보 */
+  padding-right: 100px; /* 버튼 공간 확보 */
   margin-bottom: 10px;
-  padding: 2px 0;
-  /* 줄 간 여백 */
+  padding: 2px 0; /* 줄 간 여백 */
   transition: background-color 0.3s;
 }
 
 .post-code-line:hover {
-  background-color: #3f3f3f;
-  /* 마우스를 올렸을 때 줄의 배경색 */
+  background-color: #3f3f3f; /* 마우스를 올렸을 때 줄의 배경색 */
 }
 
 .post-code-line .line-number {
-  color: #888;
-  /* 줄 번호 색상 */
-  margin-right: 10px;
-  /* 줄 번호와 코드 간 여백 */
-  user-select: none;
-  /* 드래그 방지 */
+  color: #888; /* 줄 번호 색상 */
+  margin-right: 10px; /* 줄 번호와 코드 간 여백 */
+  user-select: none; /* 드래그 방지 */
 }
 
 /* 드래그 X */
@@ -94,7 +87,6 @@
 }
 
 .language-icon {
-  max-width: 40px;
-  /* 최대 너비 설정 */
+  max-width: 40px; /* 최대 너비 설정 */
   margin-left: 10px;
 }
