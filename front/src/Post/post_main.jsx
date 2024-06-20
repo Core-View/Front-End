@@ -60,14 +60,14 @@ const Empty = () => {
     const fetchNotices = async () => {
       try {
         const response = await axios.get("http://localhost:3000/notice/view");
-        setNotices(response.data);
+        console.log(response);
+        setNotices(response.data.notice);
         setLoading(false);
       } catch (err) {
         setError("공지를 가져오는 데 실패했습니다.");
         setLoading(false);
       }
     };
-
     fetchNotices();
   }, []);
 
@@ -159,24 +159,27 @@ const Empty = () => {
             <div className="post-main-date">작성날짜</div>
           </h4>
           {notices.length > 0 ? (
-            notices.slice(0, 3).map((notice, index) => (
-              <li key={index} onClick={() => handlePostClick(notice)}>
-                <div className="post-main-meta">
-                  <div className="post-main-title">
-                    <img
-                      src="/icons/notice_icon.png"
-                      alt=""
-                      className="post-main-language-icon"
-                    />{" "}
-                    {notice.notice_title}
+            [...notices]
+              .reverse()
+              .slice(0, 3)
+              .map((notice, index) => (
+                <li key={index} onClick={() => handlePostClick(notice)}>
+                  <div className="post-main-meta">
+                    <div className="post-main-title">
+                      <img
+                        src="/icons/notice_icon.png"
+                        alt=""
+                        className="post-main-language-icon"
+                      />{" "}
+                      {notice.NOTICE_TITLE}
+                    </div>
+                    <div className="post-main-user-name"></div>
+                    <div className="post-main-date">
+                      {formatDate(notice.NOTICE_DATE)}
+                    </div>
                   </div>
-                  <div className="post-main-user-name"></div>
-                  <div className="post-main-date">
-                    {formatDate(notice.notice_date)}
-                  </div>
-                </div>
-              </li>
-            ))
+                </li>
+              ))
           ) : (
             <li>게시글이 없습니다.</li>
           )}
