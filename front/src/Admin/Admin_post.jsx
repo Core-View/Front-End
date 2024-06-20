@@ -41,12 +41,22 @@ const AdminPost = () => {
     pageNumbers.push(i);
   }
 
-  // 게시글 삭제 관련
-  const deletePoster = (post_id) => {
+  const deletePoster = async (post_id) => {
+    console.log(post_id);
     if (window.confirm('삭제하시겠습니까?')) {
-      axios.delete('http://localhost:3000/api/delete', {
-        postId: post_id,
-      });
+      try {
+        const response = await axios.delete(
+          `http://localhost:3000/api/delete/${post_id}`
+        );
+        if (response.data.message === 'Post deleted successfully') {
+          alert('삭제되었습니다.');
+          navigate('/admin');
+        } else {
+          alert('게시글을 찾을 수 없습니다.');
+        }
+      } catch (error) {
+        alert('삭제에 실패했습니다.');
+      }
     } else {
       alert('취소하였습니다.');
     }
@@ -75,7 +85,8 @@ const AdminPost = () => {
             <div className="line4">{a.post_date}</div>
             <div
               className="delete_poster"
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
                 deletePoster(a.post_id);
               }}
             >

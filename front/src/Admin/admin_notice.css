@@ -21,8 +21,8 @@ body {
 /* 버튼 스타일 */
 .create_notice {
   position: absolute;
-  top: 475px;
-  left: 750px;
+  top: 93%;
+  left: 80%;
   display: inline-block;
   width: 120px;
   height: 40px;
