@@ -149,14 +149,14 @@ const PostView = () => {
             {
               user_id: loggedInUserId,
               feedback_comment: popup.text,
-              user_nickname: post.user_nickname,
+              user_nickname: '나',
             },
           ]
         : [
             {
               user_id: loggedInUserId,
               feedback_comment: popup.text,
-              user_nickname: post.user_nickname,
+              user_nickname: '나',
             },
           ];
 

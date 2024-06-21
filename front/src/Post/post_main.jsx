@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import ReactPaginate from "react-paginate";
-import { formatDistanceToNow, parseISO } from "date-fns";
-import { ko } from "date-fns/locale"; // 한국어 로케일 import
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import ReactPaginate from 'react-paginate';
+import { formatDistanceToNow, parseISO } from 'date-fns';
+import { ko } from 'date-fns/locale'; // 한국어 로케일 import
 
-import "./post_main_pagination.css";
-import "./post_main.css";
+import './post_main_pagination.css';
+import './post_main.css';
 
 const Empty = () => {
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [posts, setPosts] = useState([]);
   const [notices, setNotices] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
@@ -18,14 +18,15 @@ const Empty = () => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [postsPerPage, setPostsPerPage] = useState(15); // 페이지당 게시글 수 기본값
+  const [selectedLanguages, setSelectedLanguages] = useState([]); // 선택된 언어들
 
   const [userInfos, setUserInfos] = useState({});
 
   const languageIcons = {
-    c: "/images/language_icons/c_icon.png",
-    cpp: "/images/language_icons/cpp_icon.png",
-    java: "/images/language_icons/java_icon.png",
-    python: "/images/language_icons/python_icon.png",
+    c: '/images/language_icons/c_icon.png',
+    cpp: '/images/language_icons/cpp_icon.png',
+    java: '/images/language_icons/java_icon.png',
+    python: '/images/language_icons/python_icon.png',
   };
 
   const fetchUserInfos = async (userIds) => {
@@ -38,7 +39,7 @@ const Empty = () => {
         }))
         .catch(() => ({
           userId: id,
-          data: { nickname: "탈퇴한 회원" }, // 사용자 정보가 없는 경우 처리
+          data: { nickname: '탈퇴한 회원' }, // 사용자 정보가 없는 경우 처리
         }))
     );
 
@@ -59,12 +60,12 @@ const Empty = () => {
     // 서버에서 공지 데이터를 가져옴
     const fetchNotices = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/notice/view");
+        const response = await axios.get('http://localhost:3000/notice/view');
         console.log(response);
         setNotices(response.data.notice);
         setLoading(false);
       } catch (err) {
-        setError("공지를 가져오는 데 실패했습니다.");
+        setError('공지를 가져오는 데 실패했습니다.');
         setLoading(false);
       }
     };
@@ -75,7 +76,7 @@ const Empty = () => {
     // 서버에서 게시글 데이터를 가져옴
     const fetchPosts = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/post/latest");
+        const response = await axios.get('http://localhost:3000/post/latest');
         const postsData = response.data;
 
         const userIds = [...new Set(postsData.map((post) => post.user_id))];
@@ -85,7 +86,7 @@ const Empty = () => {
         setFilteredPosts(postsData);
         setLoading(false);
       } catch (err) {
-        setError("게시글을 가져오는 데 실패했습니다.");
+        setError('게시글을 가져오는 데 실패했습니다.');
         setLoading(false);
       }
     };
@@ -93,15 +94,34 @@ const Empty = () => {
     fetchPosts();
   }, []);
 
-  // 검색 핸들러
+  // 검색 및 필터링 핸들러
   const handleSearch = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
-    const filtered = posts.filter((post) =>
-      post.post_title.toLowerCase().includes(query.toLowerCase())
-    );
-    setFilteredPosts(filtered);
+    filterPosts(query, selectedLanguages);
     setCurrentPage(0); // 검색 시 첫 페이지로 이동
+  };
+
+  const handleLanguageToggle = (language) => {
+    const newSelectedLanguages = selectedLanguages.includes(language)
+      ? selectedLanguages.filter((lang) => lang !== language)
+      : [...selectedLanguages, language];
+    setSelectedLanguages(newSelectedLanguages);
+    filterPosts(searchQuery, newSelectedLanguages);
+    setCurrentPage(0); // 필터 변경 시 첫 페이지로 이동
+  };
+
+  const filterPosts = (query, languages) => {
+    let filtered = posts;
+    if (query) {
+      filtered = filtered.filter((post) =>
+        post.post_title.toLowerCase().includes(query.toLowerCase())
+      );
+    }
+    if (languages.length > 0) {
+      filtered = filtered.filter((post) => languages.includes(post.language));
+    }
+    setFilteredPosts(filtered);
   };
 
   // 게시글 클릭 핸들러
@@ -132,7 +152,7 @@ const Empty = () => {
     if (differenceInDays < 1) {
       return formatDistanceToNow(date, { addSuffix: true, locale: ko });
     } else {
-      return date.toLocaleDateString("ko-KR");
+      return date.toLocaleDateString('ko-KR');
     }
   };
 
@@ -170,7 +190,7 @@ const Empty = () => {
                         src="/icons/notice_icon.png"
                         alt=""
                         className="post-main-language-icon"
-                      />{" "}
+                      />{' '}
                       {notice.NOTICE_TITLE}
                     </div>
                     <div className="post-main-user-name"></div>
@@ -212,14 +232,58 @@ const Empty = () => {
         </div>
       </section>
       <section className="post-mid">
-        <ul className="post-cate">
-          <div>
-            <h4>🔥Hot</h4>
-          </div>
-          <li>React</li>
-          <li>Hello</li>
-          <li>GitHub</li>
-        </ul>
+        <div className="language-buttons">
+          {/* <button
+            className={selectedLanguages.includes('') ? 'active' : ''}
+            onClick={() => handleLanguageToggle('')}
+          >
+            전체
+          </button> */}
+          <button
+            className={selectedLanguages.includes('c') ? 'active' : ''}
+            onClick={() => handleLanguageToggle('c')}
+          >
+            <img
+              src="/images/language_icons/c_icon.png"
+              alt=""
+              className="write-language-icon"
+            />{' '}
+            C
+          </button>
+          <button
+            className={selectedLanguages.includes('cpp') ? 'active' : ''}
+            onClick={() => handleLanguageToggle('cpp')}
+          >
+            <img
+              src="/images/language_icons/cpp_icon.png"
+              alt=""
+              className="write-language-icon"
+            />{' '}
+            C++
+          </button>
+          <button
+            className={selectedLanguages.includes('java') ? 'active' : ''}
+            onClick={() => handleLanguageToggle('java')}
+          >
+            <img
+              src="/images/language_icons/java_icon.png"
+              alt=""
+              className="write-language-icon"
+            />{' '}
+            Java
+          </button>
+          <button
+            className={selectedLanguages.includes('python') ? 'active' : ''}
+            onClick={() => handleLanguageToggle('python')}
+          >
+            <img
+              src="/images/language_icons/python_icon.png"
+              alt=""
+              className="write-language-icon"
+            />{' '}
+            Python
+          </button>
+        </div>
         <ul className="post-list">
           <h4 className="post-main-meta">
             <div className="post-main-title">제목</div>
@@ -235,11 +299,11 @@ const Empty = () => {
                       src={languageIcons[post.language]}
                       alt=""
                       className="post-main-language-icon"
-                    />{" "}
+                    />{' '}
                     {post.post_id}. {post.post_title}
                   </div>
                   <div className="post-main-user-name">
-                    {userInfos[post.user_id]?.nickname || "탈퇴한 회원"}
+                    {userInfos[post.user_id]?.nickname || '탈퇴한 회원'}
                   </div>
                   <div className="post-main-date">
                     {formatDate(post.post_date)}
@@ -254,16 +318,16 @@ const Empty = () => {
       </section>
       <section className="post-bot">
         <ReactPaginate
-          previousLabel={"이전"}
-          nextLabel={"다음"}
-          breakLabel={"..."}
-          breakClassName={"break-me"}
+          previousLabel={'이전'}
+          nextLabel={'다음'}
+          breakLabel={'...'}
+          breakClassName={'break-me'}
           pageCount={Math.ceil(filteredPosts.length / postsPerPage)}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={handlePageClick}
-          containerClassName={"pagination"}
-          activeClassName={"active"}
+          containerClassName={'pagination'}
+          activeClassName={'active'}
         />
       </section>
     </div>
