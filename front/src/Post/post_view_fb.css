@@ -1,19 +1,26 @@
 /* 피드백 */
 .feedback-button {
+  font-size: 1.4rem;
   width: 75px;
   position: absolute;
   border-radius: 3px;
   /* background: #007bff; */
   border: none;
   color: white;
-  padding: 5px 10px;
+  /* padding: 5px 10px; */
   cursor: pointer;
   right: 10px;
   display: none;
+  transition: transform 0.2s, color 0.2s; /* 애니메이션 추가 */
 }
 
 .feedback-button:hover {
-  background: #585858;
+  color: #ff4500;
+  /* background: #585858; */
+}
+
+.feedback-button span {
+  font-size: 0.8rem;
 }
 
 .feedback-button.active,

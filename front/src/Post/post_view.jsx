@@ -289,7 +289,9 @@ const PostView = () => {
               onClick={() => handleFeedbackClick(index, line)}
             >
               <BiCommentDetail />
-              {feedback[index] ? `(${feedback[index].length})` : ''}
+              <span>
+                {feedback[index] ? `(${feedback[index].length})` : ''}
+              </span>
             </span>
             {feedback[index] && feedback[index].length > 0 && (
               <div className="feedback-text">
