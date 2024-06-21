@@ -5,6 +5,7 @@
 }
 
 .modi_field {
+  background-color: white;
   margin: 20px;
   width: 50%;
   border: 2px solid #eee;
@@ -212,13 +213,13 @@
 }
 
 .submit_B {
-  background-color: #a5b4c4;
+  background-color: rgb(217, 217, 217);
   /* 밝은 파란색 배경 */
-  color: white;
+  color: black;
   padding: 12px 20px;
   border: none;
   border-radius: 5px;
-  box-shadow: 0 5px #666;
+  box-shadow: 0 5px #aaa;
   /* 그림자 효과 */
   cursor: pointer;
   outline: none;
@@ -228,9 +229,10 @@
 }
 
 .submit_B:hover {
-  background-color: #98a0a7;
+  background-color: #333;
+  color: white;
   /* 호버 시 색상 어둡게 */
-  box-shadow: 0 4px #444;
+  box-shadow: 0 4px #aaa;
   /* 호버 시 그림자 조정 */
   transform: translateY(-2px);
   /* 버튼을 약간 위로 이동 */
@@ -302,6 +304,21 @@
 .modi_warning_zone {
   font-size: 85px;
   text-align: center;
+}
+.my_modi_modal_btn{
+  width: 75px;
+  height: 35px;
+  cursor: pointer;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  background-color: #333;
+  color: white;
+}
+.my_modi_modal_btn:hover {
+  background-color: rgb(217, 217, 217);
+  color:black;
 }
 
 .modi_error {

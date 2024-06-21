@@ -216,6 +216,8 @@ const Mymodify = () => {
           data.profile_picture ||
             `${process.env.PUBLIC_URL}/images/original_profile.png`
         );
+        setNickname(data.nickname);
+        setIntro(data.introduction || '제 꿈은 개발자입니다.')
         console.log("이미지", data.profile_picture);
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -398,7 +400,7 @@ const Mymodify = () => {
                 required
               />
               {errorMessage && <p className="modi_error">{errorMessage}</p>}
-              <button type="submit">확인</button>
+              <button type="submit" className="my_modi_modal_btn">확인</button>
             </form>
           </div>
         </div>

@@ -1,232 +1,247 @@
 .my_all {
-  padding: 20px 70px;
-}
-
-.myinfo_all {
   background-color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border: 2px solid #eee;
-  margin: 30px;
   display: flex;
-  flex-direction: row;
-  border-radius: 15px;
-}
-
-.contribution-bar {
-  width: 100%;
-  background-color: #e0e0e0;
-  /* 백그라운드 색상 */
-  border-radius: 15px;
-  /* 모서리를 둥글게 */
-  overflow: hidden;
-  /* 내용이 넘칠 경우 숨김 */
-  margin: 20px 0;
-  /* 상하 여백 */
-  height: 45px;
-  /* 막대의 높이 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.filled-bar {
-  height: 100%;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  color: white;
-  /* 텍스트 색상 */
-  font-weight: bold;
-  transition: width 0.5s ease-in-out;
-  /* 부드러운 전환 효과 */
-}
-
-.percentage-text {
-  padding: 5px;
-  white-space: nowrap;
-  /* 텍스트 줄바꿈 방지 */
-}
-
-.space1 {
-  flex: 1;
-  padding: 20px;
-  display: flex;
   align-items: center;
-  justify-content: center;
-  text-align: center;
+}
+.info_space{
+  margin-top: 20px;
+  display: flex;
   flex-direction: column;
-  border-right: 1px solid #ccc;
+  justify-content: center;
+  width:50%;
+}
+.my_label{
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
 }
 
-.image_profile {
-  text-align: center;
+.my_info_zone{
+  flex:2;
+  display: flex;
 }
-
+.image_profile{
+  flex:1;
+  margin-left: 20px;
+}
 .my_profile {
-  width: 200px;
-  height: 200px;
+  width: 180px;
+  height: 180px;
   padding: 20px;
   border-radius: 70%;
   object-fit: cover;
 }
-
-.name_zone {
-  text-align: center;
-  font-size: 25px;
-}
-
-.intro_zone {
-  text-align: center;
-}
-
-.activity {
-  text-align: center;
-}
-
-.modify_zone {
-  text-align: right;
+.my_info_all_zone{
+  flex:3;
   display: flex;
+  flex-direction: row;
+}
+
+.my_rgood{
+  flex:1;
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: end;
-  text-align: end;
+}
+.my_contri{
+  flex:1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.my_contri_icon{
+  flex:1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items:flex-start;
+}
+.my_contri span,
+.my_contri_icon span{
+  font-size: 20px;
+}
+.my_contri_icon span{
+  margin-left: 9px;
 }
 
+.my_nickname{
+  margin-left: 66px;
+  margin-bottom: 7px;
+  font-size: 25px;
+  font-weight: bold;
+}
+.my_introduce{
+  margin-left: 66px;
+  margin-bottom: 10px;
+  font-size: 22px;
+}
+.my_modify{
+  text-align: end;
+  margin-right: 100px;
+  margin-bottom: 15px;
+}
 .modi_link {
   cursor: pointer;
   margin-left: auto;
+  width: 160px;
+  height: 38px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  object-fit: cover;
 }
 
 .modi_link:hover {
-  color: #0983d5;
+  background-color: #333;
+  color: white;
 }
 
-.space2 {
+.modi_link span{
+  font-size: 18px;
+}
+
+.my_post_zone{
+  background-color: aqua;
   flex: 3;
-  padding: 30px 20px 30px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.my_post_contailner{
+  background-color: gray;
+  width:100%;
+}
+.my_post_tabs{
+  display: flex;
+  flex-direction: row;
+  border-bottom: 2px solid #dee2e6;
+}
+.my_tab {
+  padding: 10px 20px;
+  cursor: pointer;
+  flex: 1;
+  text-align: center;
+  border: 1px solid transparent;
+  border-bottom: none;
+  transition: background-color 0.3s ease;
+}
+
+.my_tab:hover {
+  background-color: #e9ecef;
+}
+
+.my_tab.active {
+  font-weight: bold;
+  color: #007bff;
+  background-color: #ffffff;
+  border-color: #dee2e6;
+  border: none;
+  border-bottom: 2px solid #007bff;
+}
+.my_add_btn{
+  width: 95px;
+  height: 35px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+.my_add_btn:hover{
+  background-color: #333;
+  color: white;
+}
+.my_content {
+  padding: 20px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 0.4fr);
+  gap: 20px;
+}
+
+.grid-item {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 3px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.grid-item:hover {
+  transform: translateY(-5px);
+}
+
+.post-content {
   display: flex;
   flex-direction: column;
 }
 
-.post_zone {
-  flex: 1;
+.post-header {
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  margin-bottom: 10px;
 }
-
-.my_posts {
-  flex: 1;
-  text-align: center;
-}
-
-.post_code,
-.comment_code,
-.post_title p,
-.comment_title p {
-  width: 95%;
-  background-color: white;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  list-style: none;
-  margin: 0;
-}
-.no-underline:last-child {
-  border-bottom: none;
-}
-
-.mymylike-main-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #ddd;
-  padding: 10px;
-}
-.mymylike-main-language-icon {
-  max-width: 25px; /* 최대 너비 설정 */
-  margin-left: 10px;
-}
-
-.mymylike-main-title {
-  flex: 3; /* 제목은 더 많은 공간을 차지하도록 설정 */
-}
-
-.mymylike-main-user-name {
-  flex: 1; /* 사용자 이름은 상대적으로 적은 공간을 차지하도록 설정 */
-  text-align: center; /* 텍스트를 가운데 정렬 */
-}
-
-.mymylike-main-date {
-  flex: 1; /* 날짜는 상대적으로 적은 공간을 차지하도록 설정 */
-  text-align: right; /* 텍스트를 오른쪽 정렬 */
-}
-
-.mymylike-main-meta div {
-  padding: 0 10px; /* 좌우 여백 추가 */
-  overflow: hidden; /* 내용이 길어질 경우 숨김 */
-  white-space: nowrap; /* 텍스트가 한 줄로 표시되도록 설정 */
-  text-overflow: ellipsis; /* 넘치는 텍스트는 ...으로 표시 */
-}
-
-.post_code li:last-child,
-.comment_code li:last-child {
-  border-bottom: none;
-}
-
-.post_code li:hover,
-.comment_code li:hover {
-  background-color: #f1f1f1;
-  cursor: pointer;
-}
-
-.all_post_link {
-  text-decoration: none;
-  color: black;
-  cursor: pointer;
+.post-header span{
   font-size: 20px;
+  font-weight: bold;
+  height: 50px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 150px;
 }
 
-.all_post_link:hover {
-  color: #0983d5;
+.post-language-icon {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+.feedback-language-icon{
+  width: 25px;
+  height: 25px;
 }
 
-.post_title {
-  flex: 4;
-}
-
-.comment_zone {
-  flex: 1;
+.post-meta {
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  text-align: end;
+  margin-top: 5px;
+  font-size: 0.9em;
+  color: #555;
 }
-
-.my_comments {
+.post-user{
   flex: 1;
-  text-align: center;
+  margin-right: 5px;
+}
+.post-date{
+  flex: 1;
+  margin-left: 5px;
 }
 
-.all_comment_link {
-  text-decoration: none;
-  color: black;
-  cursor: pointer;
-  font-size: 20px;
+.empty-box {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #bbb;
+  border-radius: 10px;
 }
 
-.all_comment_link:hover {
-  color: #0983d5;
-}
-
-.comment_title {
-  flex: 4;
-}
-
-.comment_link_style {
-  text-decoration: none;
-  color: black;
-  cursor: pointer;
-}
-
-.comment_link_style:hover {
-  color: #0983d5;
+.feedback_picture{
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+  border-radius: 70%;
+  object-fit: cover;
 }
 
 .my_close_btn {
@@ -283,7 +298,21 @@
   flex-direction: column;
   align-items: center;
 }
-
+.my_modal_btn{
+  width: 75px;
+  height: 35px;
+  cursor: pointer;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  background-color: #333;
+  color: white;
+}
+.my_modal_btn:hover {
+  background-color: rgb(217, 217, 217);
+  color:black;
+}
 .my_error {
   color: red;
   margin-bottom: 10px;
