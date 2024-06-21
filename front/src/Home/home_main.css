@@ -1,13 +1,8 @@
 /* home_main.css */
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-}
-
 .home-container {
   display: flex;
-  padding: 0px 200px;
+  /* padding: 0px 200px; */
 }
 
 .home_left {
