@@ -1,13 +1,5 @@
 /* admin_post.css */
 
-/* 공통 스타일 */
-body {
-  font-family: "Arial", sans-serif;
-  background-color: #f4f7fa;
-  margin: 0;
-  padding: 0;
-}
-
 /* 컨테이너 스타일 */
 .admin_post_container {
   width: 100%;

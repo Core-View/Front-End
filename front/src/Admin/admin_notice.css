@@ -1,13 +1,3 @@
-/* admin_notice.css */
-
-/* 공통 스타일 */
-body {
-  font-family: 'Arial', sans-serif;
-  background-color: #f4f7fa;
-  margin: 0;
-  padding: 0;
-}
-
 /* 컨테이너 스타일 */
 .admin_notice_container {
   width: 100%;
@@ -95,21 +85,22 @@ body {
 }
 
 .ad_notice_id,
-.ad_notice_title,
 .ad_notice_date {
   flex-basis: 10%;
   text-align: center;
 }
 
 .ad_notice_title {
-  flex-basis: 70%;
+  padding-left: 40px;
+  text-align: left;
+  flex-basis: 60%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .ad_notice_date {
-  flex-basis: 20%;
+  flex-basis: 30%;
   text-align: right;
 }
 

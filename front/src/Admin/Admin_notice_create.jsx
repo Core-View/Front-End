@@ -50,10 +50,6 @@ const AdminNoticeCreate = () => {
         language: 'ko-KR',
         hideModeSwitch: true,
         hooks: {
-          // addImageBlobHook(blob, callback) {
-          //   console.log(blob);
-          //   console.log(callback);
-          // },
           async addImageBlobHook(blob, callback) {
             try {
               const formData = new FormData();

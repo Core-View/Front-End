@@ -1,46 +1,23 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 // npm install react-router-dom
-import { Link, redirect } from "react-router-dom";
-import "./header.css";
-import Alarm from "./Alarm";
-import { Cookies } from "react-cookie";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { Link, redirect } from 'react-router-dom';
+import './header.css';
+import Alarm from './Alarm';
+import { Cookies } from 'react-cookie';
 
 function Header() {
   const cookies = new Cookies();
-  const [userId, setUserId] = useState(cookies.get("user_id"));
-  const [role, setRole] = useState(cookies.get("role"));
+  const [userId, setUserId] = useState(cookies.get('user_id'));
+  const [role, setRole] = useState(cookies.get('role'));
+
   const deleteCookies = () => {
-    cookies.remove("user_id");
-    cookies.remove("role");
+    cookies.remove('user_id');
+    cookies.remove('role');
     setUserId(undefined);
     setRole(undefined);
     window.location.reload();
   };
 
-  const navigate = useNavigate();
-  const clickedAdmin = () => {
-    let inputPassword = prompt("비밀번호를 입력하세요.", "");
-    if (inputPassword) {
-      axios
-        .post(`http://localhost:3000/admin/login/${userId}`, {
-          user_id: userId,
-          role: role,
-          admin_password: inputPassword,
-        })
-        .then((response) => {
-          if (response.data.success === true) {
-            navigate("/admin");
-          } else {
-            alert("오류발생!");
-            navigate("/");
-          }
-        });
-    } else {
-      alert("오류발생!");
-    }
-  };
   return (
     <header className="header">
       {/* <div className="header-padding"> */}
@@ -74,20 +51,7 @@ function Header() {
                 <Link to="/my_main">내 정보</Link>
               )}
             </li>
-            <li>
-              {role === 1 ? (
-                <div
-                  className="gotoAdmin"
-                  onClick={() => {
-                    clickedAdmin();
-                  }}
-                >
-                  관리자페이지
-                </div>
-              ) : (
-                ""
-              )}
-            </li>
+            <li>{role === 1 ? <Link to="/admin">관리자페이지</Link> : ''}</li>
           </ul>
         </div>
         <div className="header-nav-right">
