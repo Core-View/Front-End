@@ -211,14 +211,14 @@
   box-shadow: 0 0 5px rgba(30, 144, 255, 0.5);
 }
 
-.language-buttons {
+.post-language-buttons {
   display: flex;
   flex-direction: column;
   gap: 15px;
   margin-bottom: 25px;
 }
 
-.language-buttons button {
+.post-language-buttons button {
   padding: 10px 20px;
   border: 1px solid #ccc;
   background-color: #fff;
@@ -232,13 +232,13 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.language-buttons button.active {
+.post-language-buttons button.active {
   background-color: #303030;
   color: white;
   border: 1px solid #303030;
 }
 
-.language-buttons button:hover {
+.post-language-buttons button:hover {
   background-color: #303030;
   color: white;
   transform: translateY(-2px);

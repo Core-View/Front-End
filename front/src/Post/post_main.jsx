@@ -232,7 +232,7 @@ const Empty = () => {
         </div>
       </section>
       <section className="post-mid">
-        <div className="language-buttons">
+        <div className="post-language-buttons">
           {/* <button
             className={selectedLanguages.includes('') ? 'active' : ''}
             onClick={() => handleLanguageToggle('')}
