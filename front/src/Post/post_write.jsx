@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import './post_write.css';
 import { Cookies } from 'react-cookie';
@@ -17,6 +17,21 @@ const PostWrite = () => {
   const TITLE_MAX_LENGTH = 30;
   const CONTENT_MAX_LENGTH = 3000;
   const CODE_MAX_LENGTH = 65535; // LONGTEXT
+
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      if (title || content || code) {
+        event.preventDefault();
+        event.returnValue = ''; // Chrome에서는 설정이 필요합니다.
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [title, content, code]);
 
   const handleSubmit = async (e) => {
     const cookies = new Cookies();
