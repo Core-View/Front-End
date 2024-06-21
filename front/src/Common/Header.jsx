@@ -1,28 +1,26 @@
-import React, { useState } from "react";
-// npm install react-router-dom
-import { Link, redirect } from "react-router-dom";
-import "./header.css";
-import Alarm from "./Alarm";
-import { Cookies } from "react-cookie";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import './header.css';
+import Alarm from './Alarm';
+import { Cookies } from 'react-cookie';
+import axios from 'axios';
 
 function Header() {
   const cookies = new Cookies();
-  const [userId, setUserId] = useState(cookies.get("user_id"));
-  const [role, setRole] = useState(cookies.get("role"));
+  const [userId, setUserId] = useState(cookies.get('user_id'));
+  const [role, setRole] = useState(cookies.get('role'));
+  const navigate = useNavigate();
+
   const deleteCookies = () => {
-    cookies.remove("user_id");
-    cookies.remove("role");
+    cookies.remove('user_id');
+    cookies.remove('role');
     setUserId(undefined);
     setRole(undefined);
     window.location.reload();
   };
 
-  const navigate = useNavigate();
-  console.log("미안요");
   const clickedAdmin = () => {
-    let inputPassword = prompt("비밀번호를 입력하세요.", "");
+    let inputPassword = prompt('비밀번호를 입력하세요.', '');
     if (inputPassword) {
       axios
         .post(`http://localhost:3000/admin/login/${userId}`, {
@@ -31,24 +29,24 @@ function Header() {
           password: inputPassword,
         })
         .then((response) => {
-          if (response.data.success === true) {
-            navigate("/admin");
+          if (response.data.success) {
+            navigate('/admin');
           } else {
-            alert("오류발생!");
-            navigate("/");
+            alert('오류발생!');
+            navigate('/');
           }
         });
     } else {
-      alert("오류발생!");
+      alert('오류발생!');
     }
   };
+
   return (
     <header className="header">
-      {/* <div className="header-padding"> */}
       <div className="header-logo-container">
         <Link to="/">
           <img
-            src="/images/CoreView_logo_white.png"
+            src="/images/logo_CV_black.png"
             alt="Logo"
             className="header-logo"
           />
@@ -59,17 +57,10 @@ function Header() {
         <div className="header-nav-left">
           <ul>
             {role === 1 ? (
-              <div
-                className="gotoAdmin"
-                onClick={() => {
-                  clickedAdmin();
-                }}
-              >
+              <div className="gotoAdmin" onClick={clickedAdmin}>
                 관리자페이지
               </div>
-            ) : (
-              ""
-            )}
+            ) : null}
             <li>
               <Link to="/post_main">전체 게시글</Link>
             </li>
@@ -106,7 +97,6 @@ function Header() {
           </ul>
         </div>
       </nav>
-      {/* </div> */}
     </header>
   );
 }

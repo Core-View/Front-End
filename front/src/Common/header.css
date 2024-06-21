@@ -1,25 +1,22 @@
 .header {
-  background-color: #333;
-  padding: 15px 20px;
-  color: white;
+  background-color: white;
+  padding: 10px 20px;
+  color: #333;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 60px;
 }
 
-/* .header-padding {
-  padding: 0px 100px;
-} */
-
 .header-logo-container {
-  padding-left: 200px;
+  padding-left: 20px;
   display: flex;
   align-items: center;
 }
 
 .header-logo {
-  max-width: 80px;
+  max-width: 60px;
   transition: transform 0.3s ease;
 }
 
@@ -33,7 +30,7 @@
   justify-content: space-between;
   flex-grow: 1;
   margin-left: 20px;
-  padding-right: 200px;
+  padding-right: 20px;
 }
 
 .header-nav-left,
@@ -54,21 +51,47 @@
 
 .gotoAdmin {
   width: 130px;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.3s ease, color 0.3s ease, font-weight 0.3s ease;
 }
 
 .header-nav a,
 .gotoAdmin {
-  color: white;
+  color: #333;
   text-decoration: none;
   padding: 10px 15px;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease, font-weight 0.3s ease;
   border-radius: 5px;
+  font-size: 0.9rem;
+  position: relative;
+}
+
+.header-nav a::after,
+.gotoAdmin::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background-color: #333;
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.header-nav a:hover::after,
+.gotoAdmin:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
 }
 
 .header-nav a:hover,
 .gotoAdmin:hover {
-  background-color: #ffffff;
-  color: #282c34;
+  /* background-color: #f1f1f1; */
+  color: #333;
+  font-weight: bold;
 }
 
 @media (max-width: 768px) {
@@ -83,5 +106,12 @@
   .header {
     flex-direction: column;
     align-items: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-nav a,
+  .gotoAdmin {
+    font-size: 1rem;
   }
 }
