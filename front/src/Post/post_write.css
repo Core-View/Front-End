@@ -15,8 +15,7 @@
 
 .post-write-form {
   display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  flex-direction: column;
 }
 
 .form-group {
@@ -24,10 +23,8 @@
 }
 
 .form-group label {
-  width: 100%;
   font-size: 1.2rem;
   margin-bottom: 10px;
-  display: block;
   font-weight: bold;
   color: #333;
 }
@@ -36,36 +33,83 @@
 .form-group textarea {
   width: 100%;
   padding: 15px 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
+  border: none;
+  border-bottom: 2px solid #ccc;
   transition: border-color 0.3s, box-shadow 0.3s;
-  background-color: #fafafa;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-  overflow: hidden; /* 스크롤바 숨기기 */
+  outline: none;
+  resize: none;
 }
-
-.form-group textarea {
-  resize: none; /* 텍스트 영역 크기 조정 불가능하게 설정 */
-  min-height: 150px;
+.form-group-title input[type='text'],
+.form-group-title textarea {
+  font-size: 1.5rem;
+  background-color: #ffffff;
+}
+.form-group-content input[type='text'],
+.form-group-content textarea {
+  font-size: 1rem;
+  background-color: #ffffff;
+}
+.form-group-code input[type='text'],
+.form-group-code textarea {
+  font-size: 1rem;
+  background-color: #303030;
+  color: #fdfdfd;
 }
 
 .form-group input[type='text']:focus,
 .form-group textarea:focus {
-  border-color: #303030;
-  box-shadow: 0 0 8px rgba(0, 86, 179, 0.2);
+  border-color: #000;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  outline: none;
+}
+
+.form-group textarea {
+  resize: none; /* 텍스트 영역 크기 조정 불가능하게 설정 */
+  min-height: 200px;
+}
+
+/* .language-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.language-selector label {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.language-selector select {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.language-selector select:focus {
+  border-color: #000;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
   outline: none;
   background-color: #fff;
-}
+} */
 
 .language-buttons {
   display: flex;
   gap: 15px;
   margin-bottom: 25px;
   justify-content: flex-start;
+  flex-direction: row; /* 가로 배치 */
 }
 
 .language-buttons button {
+  width: 100px;
+  justify-content: center;
   padding: 10px 20px;
   border: 1px solid #ccc;
   background-color: #fff;
@@ -74,9 +118,6 @@
   transition: background-color 0.3s, color 0.3s, transform 0.3s;
   border-radius: 8px;
   font-size: 1rem;
-  display: flex;
-  align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .language-buttons button.active {
@@ -97,11 +138,7 @@
   margin-right: 10px;
 }
 
-.write-box {
-  width: 48%;
-}
-
-.write-button[type='submit'] {
+.write-button {
   width: 220px;
   background-color: #303030;
   color: white;
@@ -111,13 +148,11 @@
   cursor: pointer;
   font-size: 1.1rem;
   transition: background-color 0.3s, transform 0.3s;
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  align-self: flex-end;
+  margin-top: 20px;
 }
 
-.write-button[type='submit']:hover {
+.write-button:hover {
   background-color: #191919;
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
@@ -133,19 +168,5 @@
   font-size: 0.9rem;
   color: #666;
   text-align: right;
-}
-
-textarea {
-  overflow: hidden; /* 스크롤바 숨기기 */
-}
-
-.language-selector {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 10px;
-}
-
-.language-selector label {
-  font-weight: bold;
+  margin-top: 5px;
 }

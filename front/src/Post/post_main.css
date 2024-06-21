@@ -1,7 +1,8 @@
 /* 기타 CSS는 생략 */
 .poster-container {
-  width: 80%;
-  margin: 0 auto;
+  width: 100%;
+  margin-top: 10px;
+  /* margin: 0 auto; */
   padding: 20px;
   font-family: 'Arial', sans-serif;
   color: #333;
