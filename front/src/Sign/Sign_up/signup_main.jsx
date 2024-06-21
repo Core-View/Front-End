@@ -103,6 +103,8 @@ const Sign_in = () => {
       return;
     }
     if (email !== email_show) {
+      console.log(email);
+      console.log(email_show);
       alert('인증한 이메일과 다릅니다');
       return;
     }

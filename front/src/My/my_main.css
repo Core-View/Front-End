@@ -1,12 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
-
 .my_all {
   padding: 20px 70px;
-  /* 위아래, 좌우 순서 */
 }
 
 .myinfo_all {
-  background-color: #f8f8f8;
+  background-color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border: 2px solid #eee;
   margin: 30px;
@@ -51,7 +48,10 @@
 .space1 {
   flex: 1;
   padding: 20px;
-  ;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   flex-direction: column;
   border-right: 1px solid #ccc;
 }
@@ -129,11 +129,41 @@
   list-style: none;
   margin: 0;
 }
+.no-underline:last-child {
+  border-bottom: none;
+}
 
-.post_code li,
-.comment_code li {
-  padding: 10px;
+.mymylike-main-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   border-bottom: 1px solid #ddd;
+  padding: 10px;
+}
+.mymylike-main-language-icon {
+  max-width: 25px; /* 최대 너비 설정 */
+  margin-left: 10px;
+}
+
+.mymylike-main-title {
+  flex: 3; /* 제목은 더 많은 공간을 차지하도록 설정 */
+}
+
+.mymylike-main-user-name {
+  flex: 1; /* 사용자 이름은 상대적으로 적은 공간을 차지하도록 설정 */
+  text-align: center; /* 텍스트를 가운데 정렬 */
+}
+
+.mymylike-main-date {
+  flex: 1; /* 날짜는 상대적으로 적은 공간을 차지하도록 설정 */
+  text-align: right; /* 텍스트를 오른쪽 정렬 */
+}
+
+.mymylike-main-meta div {
+  padding: 0 10px; /* 좌우 여백 추가 */
+  overflow: hidden; /* 내용이 길어질 경우 숨김 */
+  white-space: nowrap; /* 텍스트가 한 줄로 표시되도록 설정 */
+  text-overflow: ellipsis; /* 넘치는 텍스트는 ...으로 표시 */
 }
 
 .post_code li:last-child,

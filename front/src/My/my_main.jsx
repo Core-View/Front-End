@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate, Navigate } from 'react-router-dom';
+import { Link, useNavigate, Navigate } from 'react-router-dom';
 import './my_main.css';
+import { parseISO } from 'date-fns';
+import { ko } from 'date-fns/locale'; // 한국어 로케일 import
 import { FaCircleCheck } from 'react-icons/fa6';
+import { format } from 'date-fns';
 import { Cookies } from 'react-cookie';
+import Contribution from "../Common/Contribution";
 
 const Mypage = () => {
   const cookies = new Cookies();
@@ -15,9 +19,12 @@ const Mypage = () => {
     email: '',
     profile_picture: '',
     introduction: '',
+    contribute: '',
+    likes_received: '',
   });
   const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState([]);
+  const [likes, setLikes] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [user_password, setUserPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -30,6 +37,12 @@ const Mypage = () => {
     if (percentage >= 20) return '#ffc107';
     return '#f44336';
   };
+  const languageIcons = {
+    c: '/images/language_icons/c_icon.png',
+    cpp: '/images/language_icons/cpp_icon.png',
+    java: '/images/language_icons/java_icon.png',
+    python: '/images/language_icons/python_icon.png',
+  };
 
   useEffect(() => {
     const userId = cookies.get('user_id');
@@ -38,6 +51,7 @@ const Mypage = () => {
       fetchUserData(userId);
       fetchPostData(userId);
       fetchCommentData(userId);
+      fetchLikeData(userId);
     } else {
       navigate('/users/sign-in');
     }
@@ -48,7 +62,8 @@ const Mypage = () => {
     try {
       const response = await fetch(`http://localhost:3000/mypage/${userId}`);
       const data = await response.json();
-      if (data.profile_picture) {
+      console.log('프로필이미지', data.profile_picture);
+      if (!data.profile_picture) {
         data.profile_picture = `${process.env.PUBLIC_URL}/images/original_profile.png`;
       }
       setUserInfo(data);
@@ -78,6 +93,16 @@ const Mypage = () => {
     }
   };
 
+  const fetchLikeData = async (userId) => {
+    try {
+      const response = await fetch(`http://localhost:3000/mypage/${userId}/likedPosts`);
+      const data = await response.json();
+      setLikes(data || []);
+    } catch (error) {
+      console.error('Error fetching like data:', error);
+    }
+  };
+
   const handlePasswordChange = (e) => {
     setUserPassword(e.target.value);
   };
@@ -104,6 +129,11 @@ const Mypage = () => {
     }
   };
 
+  const formatDate = (dateString) => {
+    const date = parseISO(dateString);
+    return format(date, 'yyyy-MM-dd', { locale: ko });
+  };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -112,9 +142,8 @@ const Mypage = () => {
     return <Navigate to='/users/sign-in' replace />;
   }
 
-  const totalLikes = 10;
   const handlePostClick = (post) => {
-    navigate(`/post_view/${post.post_id}`, { state: { post } });
+    navigate(`/post_view/${post.post_id}`);
   };
 
   return (
@@ -153,12 +182,12 @@ const Mypage = () => {
           <div className="activity">
             <div className="good">
               <span role="img" aria-label="heart" style={{ fontSize: '20px' }}>
-                ❤️{totalLikes}
+                ❤️{userInfo.likes_received}
               </span>
             </div>
             <br />
             <div className="contribution">
-              <span>기여도</span>
+              <Contribution contribute={userInfo.contribute} />
             </div>
             <br />
           </div>
@@ -185,13 +214,25 @@ const Mypage = () => {
             <div className="post_title">
               {posts.length > 0 ? (
                 <ul className="post_code">
-                  {posts.slice(0, 5).map((post) => (
-                    <li
-                      key={post.post_id}
-                      onClick={() => handlePostClick(post.post_id)}
-                    >
-                      {post.post_title}
-                    </li>
+                  {posts.slice(0, 3).map((post,index) => (
+                    <li key={post.post_id} onClick={() => handlePostClick(post)}>
+                    <div className={`mymylike-main-meta ${index === posts.slice(0, 3).length - 1 ? 'no-underline' : ''}`}>
+                      <div className="mymylike-main-title">
+                        <img
+                          src={languageIcons[post.language]}
+                          alt=""
+                          className="mymylike-main-language-icon"
+                        />{' '}
+                        {post.post_id}. {post.post_title}
+                      </div>
+                      <div className="mymylike-main-user-name">
+                        {post.user_nickname || '탈퇴한 회원'}
+                      </div>
+                      <div className="mymylike-main-date">
+                        {formatDate(post.post_date)}
+                      </div>
+                    </div>
+                  </li>
                   ))}
                 </ul>
               ) : (
@@ -207,7 +248,7 @@ const Mypage = () => {
           <div className="comment_zone">
             <div className="my_comments">
               <Link to="/my_comment" className="all_comment_link">
-                내가 댓글 단 글
+                피드백 단 글
               </Link>
             </div>
             <hr
@@ -220,17 +261,72 @@ const Mypage = () => {
             <div className="comment_title">
               {comments.length > 0 ? (
                 <ul className="comment_code">
-                  {comments.slice(0, 5).map((comment) => (
-                    <li
-                      key={comment.post_id}
-                      onClick={() => handlePostClick(comment.post_id)}
-                    >
-                      {comment.post_title}
-                    </li>
+                  {comments.slice(0, 3).map((comment,index1) => (
+                    <div className={`mymylike-main-meta ${index1 === comments.slice(0, 3).length - 1 ? 'no-underline' : ''}`}>
+                      <div className="mymylike-main-title">
+                        <img
+                          src={languageIcons[comment.language]}
+                          alt=""
+                          className="mymylike-main-language-icon"
+                        />{' '}
+                        {comment.post_id}. {comment.post_title}
+                      </div>
+                      <div className="mymylike-main-user-name">
+                        {comment.user_nickname || '탈퇴한 회원'}
+                      </div>
+                      <div className="mymylike-main-date">
+                        {formatDate(comment.post_date)}
+                      </div>
+                    </div>
                   ))}
                 </ul>
               ) : (
                 <p>댓글 단 게시글이 없습니다.</p>
+              )}
+            </div>
+          </div>
+          <br />
+          <br />
+          <hr style={{ border: '1px solid #ddd' }} />
+          <br />
+          <br />
+          <div className="comment_zone">
+            <div className="my_comments">
+              <Link to="/my_like" className="all_comment_link">
+                내가 좋아요 한 글
+              </Link>
+            </div>
+            <hr
+              style={{
+                color: 'black',
+                backgroundColor: 'black',
+                height: '1px',
+              }}
+            />
+            <div className="comment_title">
+              {likes.length > 0 ? (
+                <ul className="comment_code">
+                  {likes.slice(0, 3).map((like,index2) => (
+                    <div className={`mymylike-main-meta ${index2 === likes.slice(0, 3).length - 1 ? 'no-underline' : ''}`}>
+                    <div className="mymylike-main-title">
+                      <img
+                        src={languageIcons[like.language]}
+                        alt=""
+                        className="mymylike-main-language-icon"
+                      />{' '}
+                      {like.post_id}. {like.post_title}
+                    </div>
+                    <div className="mymylike-main-user-name">
+                      {like.user_nickname || '탈퇴한 회원'}
+                    </div>
+                    <div className="mymylike-main-date">
+                      {formatDate(like.post_date)}
+                    </div>
+                  </div>
+                  ))}
+                </ul>
+              ) : (
+                <p>좋아요 한 게시글이 없습니다.</p>
               )}
             </div>
           </div>
