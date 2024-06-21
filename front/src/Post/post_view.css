@@ -1,12 +1,12 @@
 /* 포스트 전체 */
 .post-view {
-  max-width: 80%;
+  max-width: 60%;
   margin: 20px auto;
   padding: 20px;
   background: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
 /* 제목과 메타데이터 섹션 */
@@ -89,7 +89,7 @@
   border-radius: 5px;
   overflow-x: auto;
   background-color: #303030;
-  font-family: "Courier New", Courier, monospace;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 .post-code-line {

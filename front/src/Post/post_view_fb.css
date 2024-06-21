@@ -1,8 +1,9 @@
 /* 피드백 */
 .feedback-button {
+  width: 75px;
   position: absolute;
   border-radius: 3px;
-  background: #007bff;
+  /* background: #007bff; */
   border: none;
   color: white;
   padding: 5px 10px;
@@ -12,7 +13,7 @@
 }
 
 .feedback-button:hover {
-  background: #0056b3;
+  background: #585858;
 }
 
 .feedback-button.active,

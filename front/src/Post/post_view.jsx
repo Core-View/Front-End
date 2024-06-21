@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Cookies } from 'react-cookie';
 import FeedbackPopup from './post_feedback_popup';
 import { MdFavoriteBorder, MdFavorite } from 'react-icons/md';
+import { BiCommentDetail } from 'react-icons/bi';
 
 import './post_view.css';
 import './post_view_fb.css';
@@ -149,14 +150,14 @@ const PostView = () => {
             {
               user_id: loggedInUserId,
               feedback_comment: popup.text,
-              user_nickname: '나',
+              user_nickname: '방금 작성한 피드백',
             },
           ]
         : [
             {
               user_id: loggedInUserId,
               feedback_comment: popup.text,
-              user_nickname: '나',
+              user_nickname: '방금 작성한 피드백',
             },
           ];
 
@@ -283,12 +284,13 @@ const PostView = () => {
               <span className="line-number">{index + 1} | </span>
             </span>
             <span>{line}</span>
-            <button
+            <span
               className={`feedback-button ${feedback[index] ? 'active' : ''}`}
               onClick={() => handleFeedbackClick(index, line)}
             >
-              피드백 {feedback[index] ? `(${feedback[index].length})` : ''}
-            </button>
+              <BiCommentDetail />
+              {feedback[index] ? `(${feedback[index].length})` : ''}
+            </span>
             {feedback[index] && feedback[index].length > 0 && (
               <div className="feedback-text">
                 <div className="non-drag">
