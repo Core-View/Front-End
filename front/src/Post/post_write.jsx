@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import './post_write.css';
 import { Cookies } from 'react-cookie';
+import { useNavigate } from 'react-router-dom';
 
 const PostWrite = () => {
   const [title, setTitle] = useState('');
@@ -32,6 +33,8 @@ const PostWrite = () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, [title, content, code]);
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     const cookies = new Cookies();
@@ -75,6 +78,7 @@ const PostWrite = () => {
         setLanguage('');
         contentRef.current.style.height = 'auto';
         codeRef.current.style.height = 'auto';
+        navigate(`/post_view/${response.data.postId}`);
       }
     } catch (error) {
       console.error('게시글 등록 중 오류 발생:', error);
