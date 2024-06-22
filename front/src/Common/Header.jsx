@@ -72,19 +72,19 @@ function Header() {
               )}
             </li>
             <li>
-              {userId === undefined ? (
-                <Link to="/users/sign-in">내 정보</Link>
-              ) : (
-                <Link to="/my_main">내 정보</Link>
-              )}
-            </li>
-            <li>
               <Link to="/contribution_ranking">랭킹</Link>
             </li>
           </ul>
         </div>
         <div className="header-nav-right">
           <ul>
+            <li>
+              {userId === undefined ? (
+                <Link to="/users/sign-in">내 정보</Link>
+              ) : (
+                <Link to="/my_main">내 정보</Link>
+              )}
+            </li>
             <li>
               {userId === undefined ? (
                 <Link to="/users/sign-in">로그인</Link>
