@@ -30,13 +30,13 @@
 .al {
   margin-top: 10px;
   font-size: 40px;
-  color: white;
+  color: #aaa;
 }
 
 .al:active {
   margin-top: 10px;
   font-size: 40px;
-  color: rgb(3, 202, 3);
+  color: #303030;
 }
 
 .dropdown {

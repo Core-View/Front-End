@@ -1,7 +1,7 @@
 /* 포스트 전체 */
 .post-view {
   max-width: 60%;
-  margin: 20px auto;
+  margin: 10px auto;
   padding: 20px;
   background: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
