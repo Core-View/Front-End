@@ -88,12 +88,12 @@ class Ranking extends Component {
 
     return (
       <div className="ranking-container">
-        <h1>기여도 랭킹</h1>
+        <h1>기여도 순위</h1>
         <table className="ranking-table">
           <thead>
             <tr>
               <th>프로필</th>
-              <th>기여도 총합</th>
+              <th>기여도</th>
             </tr>
           </thead>
           <tbody>
@@ -111,15 +111,15 @@ class Ranking extends Component {
                   </div>
                 </td>
                 <td className="contribution-score">
-                  {contributor.user_contribute}
+                  {contributor.user_contribute} 점
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
         <ReactPaginate
-          previousLabel={'이전'}
-          nextLabel={'다음'}
+          previousLabel={'Previous'}
+          nextLabel={'Next'}
           breakLabel={'...'}
           breakClassName={'break-me'}
           pageCount={pageCount}

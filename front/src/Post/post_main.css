@@ -34,6 +34,12 @@
   align-items: center;
   margin-right: 20px;
 }
+.post-top-left h2 {
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
 
 .new-hot div {
   background-color: #ff4757;
@@ -317,7 +323,7 @@
 }
 
 .view-all-button {
-  border: 1px solid #ccc;
+  border: 1px solid #ddd;
   border-radius: 8px;
   background-color: #fff;
   color: black;
@@ -328,7 +334,7 @@
 }
 
 .view-all-button:hover {
-  background-color: #303030;
-  color: white;
+  background-color: #ddd;
+  color: black;
   transform: translateY(-2px);
 }
