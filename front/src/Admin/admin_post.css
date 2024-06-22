@@ -3,10 +3,14 @@
 /* 컨테이너 스타일 */
 .admin_post_container {
   width: 100%;
+  height: 556px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 2px 0px 13px 5px rgba(160, 160, 160, 0.5);
 }
 
 /* 게시글 상세 헤더 스타일 */
@@ -46,7 +50,7 @@
   list-style-type: none;
   padding: 0;
   margin: 0;
-  height: 400px;
+  height: 399px;
   overflow-y: auto;
   border-radius: 0 0 10px 10px;
   background-color: #fff;
@@ -102,6 +106,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  text-align: left;
+  padding-left: 25px;
 }
 
 .line3 {

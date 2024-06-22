@@ -73,7 +73,7 @@ const Admin = () => {
       case '게시판관리':
         return <AdPost />;
       default:
-        return <div className="nothing">메뉴를 선택하세요.</div>;
+        return <div className="nothing"></div>;
     }
   };
 
@@ -128,7 +128,7 @@ const Admin = () => {
         </ul>
       </div>
       <div className="admin-menu-section">
-        <h3 className="admin_title, coreview_title">CoReview 관리자 메뉴</h3>
+        <h3 className="admin_title, coreview_title">CoreView 관리자 메뉴</h3>
         <ul className="admin_menu_list">
           <li
             className={`menu1 menuer ${clicked[0] ? 'nowshow' : ''}`}
