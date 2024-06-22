@@ -4,9 +4,11 @@
   margin: 0;
 }
 
-label {
-  width: 130px;
+.label {
+  width: 100px;
+  font-size: 15px;
   font-weight: 700;
+  line-height: 30px;
 }
 
 .container {
@@ -15,22 +17,23 @@ label {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  margin-top: 10px;
 }
 
 .loginForm {
-  width: 1100px;
-  height: 550px;
-  margin-top: 20px;
-  background-color: gainsboro;
+  width: 500px;
+  height: 590px;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: space-around;
   align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .logo {
   width: 80px;
-  height: 50px;
+  height: 80px;
 }
 
 .logo img {
@@ -38,28 +41,12 @@ label {
 }
 
 .form {
-  width: 1000px;
-  height: 450px;
+  width: 500px;
+  height: 480px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
-}
-
-.form_left {
-  width: 450px;
-  height: 450px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-}
-
-.form_right {
-  width: 520px;
-  height: 450px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
 }
 
 .passRegex {
@@ -70,18 +57,29 @@ label {
 .nonPassRegex {
   color: rgb(255, 104, 104);
   font-weight: 700;
+  width: 450px;
+
+  text-indent: 150px;
+  text-align: left;
 }
 
 .input_component {
   display: flex;
   flex-direction: column;
-  height: 80px;
-  justify-content: space-around;
+  width: 90%;
+  height: 40px;
   align-items: center;
 }
-
+.input_component_small {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  height: 30px;
+  justify-content: space-between;
+  align-items: center;
+}
 .input_component P {
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .input_space {
@@ -93,15 +91,26 @@ label {
 }
 
 .nick_input {
-  height: 40px;
+  height: 30px;
   font-size: 20px;
   line-height: 50px;
 }
 
 .input_area {
   width: 300px;
-  height: 40px;
-  font-size: 20px;
+  height: 30px;
+  font-size: 15px;
+  line-height: 50px;
+
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+  border-bottom: 1px solid black;
+}
+
+.input_area_email {
+  width: 200px;
+  height: 30px;
+  font-size: 15px;
   line-height: 50px;
 
   border: none;
@@ -117,18 +126,29 @@ label {
 }
 
 .email_auth {
-  width: 120px;
+  width: 100px;
+  height: 30px;
   font-weight: 700;
   font-size: 15px;
+  background-color: rgba(37, 37, 37, 0.808);
+  border-radius: 5px;
+  color: white;
 }
-
 .pernal_message {
+  font-size: 15px;
   font-weight: 700;
 }
+.pernal_button {
+  font-size: 15px;
+  font-weight: 700;
 
+  background-color: rgb(37, 37, 37);
+  border-radius: 5px;
+  color: white;
+}
 .submit button {
   width: 150px;
-  height: 40px;
+  height: 30px;
   border: none;
   font-size: 20px;
   border-radius: 5px;
@@ -136,7 +156,7 @@ label {
 
 .submit button:hover {
   width: 150px;
-  height: 40px;
+  height: 30px;
   border: none;
   font-size: 20px;
   box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.9);
@@ -145,6 +165,9 @@ label {
 
 .custom-modal {
   position: fixed;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
   top: 10%;
   left: 50%;
   transform: translate(-50%, 0);
@@ -154,7 +177,8 @@ label {
   /* 모달 배경을 흰색으로 설정 */
   border-radius: 8px;
   /* 모달의 모서리를 둥글게 설정 */
-  width: 50%;
+  height: 60%;
+  width: 37%;
   /* 모달의 너비 설정 */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   /* 모달에 그림자 추가 */
@@ -181,8 +205,12 @@ label {
 
 .modal-body {
   padding: 10px;
+  font-size: 13px;
+  overflow: scroll;
 }
-
+.modal-body li {
+  margin-top: 10px;
+}
 /* 배경을 어둡게 처리하는 스타일 */
 .modal-backdrop {
   position: fixed;
