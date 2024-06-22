@@ -17,7 +17,6 @@ const PostView = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [loginError, setLoginError] = useState('');
-  const maxLength = 50;
 
   const languageIcons = useMemo(
     () => ({
