@@ -127,8 +127,9 @@ const Mymodify = () => {
 
         const imageData = await imageResponse.json();
         if (imageData.access) {
-          alert(imageData.message);
           setmyprofile(true);
+          alert(imageData.message);
+          console.log("먼데!",myprofile);
         } else {
           alert("프로필이 수정되지 않았습니다. 관리자에게 문의 부탁드립니다.");
         }
@@ -138,7 +139,6 @@ const Mymodify = () => {
         return;
       }
     }
-
     const profileData = {
       user_nickname: nickname,
       user_password: password || "",
@@ -290,24 +290,39 @@ const Mymodify = () => {
           <div className="photo">
             <label className="profile_L">프로필 사진</label>
             <div className="profile_D">
-              {imageSrc && (
-                <img src={imageSrc} alt="preview-img" className="prefile" />
-              )}
-              <hr></hr>
-              <label htmlFor="file-upload" className="file-upload-btn">
-                사진 변경
-              </label>
+                {imageSrc && (
+                  <img src={imageSrc} alt="preview-img" className="prefile" />
+                )}
+                <div className="modi_second_div">
+                  <label htmlFor="file-upload" className="file-upload-btn">
+                    사진 변경
+                  </label>
+                  <input
+                    id="file-upload"
+                    type="file"
+                    name="user_image"
+                    accept="image/*"
+                    onChange={(e) => {
+                      encodeFileToBase64(e.target.files[0]);
+                      setImageFile(e.target.files[0]); // 파일 객체 설정
+                    }}
+                    style={{ display: "none" }}
+                  />
+                </div>
+            </div>
+          </div>
+          <div className="introduce_zone">
+            <label className="intro_L">자기소개</label>
+            <div className="intro_D">
               <input
-                id="file-upload"
-                type="file"
-                name="user_image"
-                accept="image/*"
-                onChange={(e) => {
-                  encodeFileToBase64(e.target.files[0]);
-                  setImageFile(e.target.files[0]); // 파일 객체 설정
-                }}
-                style={{ display: "none" }}
-              />
+                type="text"
+                name="my_introduce"
+                maxLength="30"
+                value={intro}
+                onChange={handleIntroChange}
+                className="intro_I"
+              ></input>
+              {introError && <div className="intro_error">{introError}</div>}
             </div>
           </div>
           <div className="nick_zone">
@@ -355,20 +370,6 @@ const Mymodify = () => {
               )}
             </div>
           </div>
-          <div className="introduce_zone">
-            <label className="intro_L">자기소개</label>
-            <div className="intro_D">
-              <input
-                type="text"
-                name="my_introduce"
-                maxLength="30"
-                value={intro}
-                onChange={handleIntroChange}
-                className="intro_I"
-              ></input>
-              {introError && <div className="intro_error">{introError}</div>}
-            </div>
-          </div>
           <div className="button_zone">
             <div className="submit_D">
               <input
@@ -394,7 +395,7 @@ const Mymodify = () => {
       </div>
       {isModalOpen && (
         <div className="modi_modal">
-          <div className="modi_modal-content">
+          <form onSubmit={handlePasswordSubmit} className="modi_check_P modi_modal-content">
             <div className="modi_close_btn">
               <span
                 className="modi_close"
@@ -408,18 +409,19 @@ const Mymodify = () => {
             </div>
             <h2>회원 탈퇴를 하시겠습니까?</h2>
             <h4>회원 탈퇴 시 영구히 삭제되어 복구할 수 없습니다.</h4>
-            <form onSubmit={handlePasswordSubmit} className="modi_check_P">
+            <div className="modi_last_div">
               <input
-                type="password"
-                value={user_password}
-                onChange={handlePassword}
-                placeholder="비밀번호 입력"
-                required
-              />
-              {errorMessage && <p className="modi_error">{errorMessage}</p>}
+                  type="password"
+                  value={user_password}
+                  onChange={handlePassword}
+                  placeholder="비밀번호 입력"
+                  className="mymodi_input"
+                  required
+                />
+                {errorMessage && <p className="modi_error">{errorMessage}</p>}
+            </div>
               <button type="submit" className="my_modi_modal_btn">확인</button>
             </form>
-          </div>
         </div>
       )}
     </div>

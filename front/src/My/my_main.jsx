@@ -263,7 +263,7 @@ const Mypage = () => {
       </div>
       {isModalOpen && (
         <div className="my_modal">
-          <div className="my_modal-content">
+          <form onSubmit={handlePasswordSubmit} className="my_check_P my_modal-content">
             <div className="my_close_btn">
               <span className="my_close" onClick={() => setIsModalOpen(false)}>
                 &times;
@@ -273,18 +273,22 @@ const Mypage = () => {
               <FaCircleCheck className="my_check_icon" />
               <h2>비밀번호 확인</h2>
             </div>
-            <form onSubmit={handlePasswordSubmit} className="my_check_P">
-              <input
-                type="password"
-                value={user_password}
-                onChange={handlePasswordChange}
-                placeholder="비밀번호 입력"
-                required
-              />
-              {errorMessage && <p className="my_error">{errorMessage}</p>}
-              <button type="submit" className='my_modal_btn'>확인</button>
-            </form>
-          </div>
+              <div className='last_div'>
+                <input
+                  type="password"
+                  value={user_password}
+                  onChange={handlePasswordChange}
+                  placeholder="비밀번호 입력"
+                  className='my_check_input'
+                  required
+                />
+                {errorMessage ? <p className="my_error">{errorMessage}</p>:<p></p>}
+              </div>
+              <div>
+                <button type="submit" className='my_modal_btn'>확인</button>
+              </div>
+              
+          </form>
         </div>
       )}
     </div>
