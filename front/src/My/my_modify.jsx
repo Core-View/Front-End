@@ -19,6 +19,7 @@ const Mymodify = () => {
   const [passwordValid, setPasswordValid] = useState(false);
   const [passwordValidityMessage, setPasswordValidityMessage] = useState("");
   const [userId, setUserId] = useState(null);
+  const [myprofile,setmyprofile]=useState(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [user_password, setUserPassword] = useState("");
@@ -107,17 +108,6 @@ const Mymodify = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!passwordValid) {
-      alert("비밀번호가 유효하지 않습니다. 조건을 확인해 주세요.");
-      return;
-    } else if (password !== confirmPassword) {
-      alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-      return;
-    } else if (intro.length > 30) {
-      alert("자기소개는 30자를 초과할 수 없습니다.");
-      return;
-    }
-
     if (imageFile) {
       const formData = new FormData();
       formData.append("user_image", imageFile);
@@ -137,7 +127,9 @@ const Mymodify = () => {
 
         const imageData = await imageResponse.json();
         if (imageData.access) {
+          setmyprofile(true);
           alert(imageData.message);
+          console.log("먼데!",myprofile);
         } else {
           alert("프로필이 수정되지 않았습니다. 관리자에게 문의 부탁드립니다.");
         }
@@ -147,39 +139,64 @@ const Mymodify = () => {
         return;
       }
     }
-
     const profileData = {
       user_nickname: nickname,
       user_password: password || "",
       user_password_confirm: confirmPassword,
       user_intro: intro,
     };
-
-    try {
-      const response = await fetch(
-        `http://localhost:3000/mypage/${userId}/modify`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(profileData),
+    if (!passwordValid) {
+      console.log("머야",myprofile);
+      if(!myprofile){
+        alert("비밀번호가 유효하지 않습니다. 조건을 확인해 주세요.");
+        return;
+      }else{
+        navigate("/my_main");
+      }
+    } else if (password !== confirmPassword) {
+      console.log("머야",myprofile);
+      if(!myprofile){
+        alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+        return;
+      }else{
+        navigate("/my_main");
+      }
+    } else if (intro.length > 30) {
+      console.log("머야",myprofile);
+      if(!myprofile){
+        alert("자기소개는 30자를 초과할 수 없습니다.");
+        return;
+      }else{
+        navigate("/my_main");
+      }
+    }else{
+      try {
+        const response = await fetch(
+          `http://localhost:3000/mypage/${userId}/modify`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(profileData),
+          }
+        );
+  
+        if (!response.ok) {
+          throw new Error("Profile update failed");
         }
-      );
-
-      if (!response.ok) {
-        throw new Error("Profile update failed");
+  
+        const data = await response.json();
+        if (data.access) {
+          alert(data.message);
+          navigate("/my_main");
+        } else {
+          alert("프로필이 수정되지 않았습니다. 관리자에게 문의부탁드립니다.");
+        }
+      } catch (error) {
+        console.error("Error updating profile:", error);
+        alert("프로필 업데이트 중 오류가 발생했습니다. 관리자에게 문의하세요.");
       }
-
-      const data = await response.json();
-      if (data.access) {
-        alert(data.message);
-      } else {
-        alert("프로필이 수정되지 않았습니다. 관리자에게 문의부탁드립니다.");
-      }
-    } catch (error) {
-      console.error("Error updating profile:", error);
-      alert("프로필 업데이트 중 오류가 발생했습니다. 관리자에게 문의하세요.");
     }
   };
 
@@ -209,13 +226,15 @@ const Mymodify = () => {
       try {
         const response = await fetch(`http://localhost:3000/mypage/${userId}`);
         const data = await response.json();
-        if (data.profile_picture) {
+        if (!data.profile_picture || data.profile_picture === "null") {
           data.profile_picture = `${process.env.PUBLIC_URL}/images/original_profile.png`;
         }
         setImageSrc(
           data.profile_picture ||
             `${process.env.PUBLIC_URL}/images/original_profile.png`
         );
+        setNickname(data.nickname);
+        setIntro(data.introduction || '제 꿈은 개발자입니다.')
         console.log("이미지", data.profile_picture);
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -271,24 +290,39 @@ const Mymodify = () => {
           <div className="photo">
             <label className="profile_L">프로필 사진</label>
             <div className="profile_D">
-              {imageSrc && (
-                <img src={imageSrc} alt="preview-img" className="prefile" />
-              )}
-              <hr></hr>
-              <label htmlFor="file-upload" className="file-upload-btn">
-                사진 변경
-              </label>
+                {imageSrc && (
+                  <img src={imageSrc} alt="preview-img" className="prefile" />
+                )}
+                <div className="modi_second_div">
+                  <label htmlFor="file-upload" className="file-upload-btn">
+                    사진 변경
+                  </label>
+                  <input
+                    id="file-upload"
+                    type="file"
+                    name="user_image"
+                    accept="image/*"
+                    onChange={(e) => {
+                      encodeFileToBase64(e.target.files[0]);
+                      setImageFile(e.target.files[0]); // 파일 객체 설정
+                    }}
+                    style={{ display: "none" }}
+                  />
+                </div>
+            </div>
+          </div>
+          <div className="introduce_zone">
+            <label className="intro_L">자기소개</label>
+            <div className="intro_D">
               <input
-                id="file-upload"
-                type="file"
-                name="user_image"
-                accept="image/*"
-                onChange={(e) => {
-                  encodeFileToBase64(e.target.files[0]);
-                  setImageFile(e.target.files[0]); // 파일 객체 설정
-                }}
-                style={{ display: "none" }}
-              />
+                type="text"
+                name="my_introduce"
+                maxLength="30"
+                value={intro}
+                onChange={handleIntroChange}
+                className="intro_I"
+              ></input>
+              {introError && <div className="intro_error">{introError}</div>}
             </div>
           </div>
           <div className="nick_zone">
@@ -336,20 +370,6 @@ const Mymodify = () => {
               )}
             </div>
           </div>
-          <div className="introduce_zone">
-            <label className="intro_L">자기소개</label>
-            <div className="intro_D">
-              <input
-                type="text"
-                name="my_introduce"
-                maxLength="30"
-                value={intro}
-                onChange={handleIntroChange}
-                className="intro_I"
-              ></input>
-              {introError && <div className="intro_error">{introError}</div>}
-            </div>
-          </div>
           <div className="button_zone">
             <div className="submit_D">
               <input
@@ -375,7 +395,7 @@ const Mymodify = () => {
       </div>
       {isModalOpen && (
         <div className="modi_modal">
-          <div className="modi_modal-content">
+          <form onSubmit={handlePasswordSubmit} className="modi_check_P modi_modal-content">
             <div className="modi_close_btn">
               <span
                 className="modi_close"
@@ -389,18 +409,19 @@ const Mymodify = () => {
             </div>
             <h2>회원 탈퇴를 하시겠습니까?</h2>
             <h4>회원 탈퇴 시 영구히 삭제되어 복구할 수 없습니다.</h4>
-            <form onSubmit={handlePasswordSubmit} className="modi_check_P">
+            <div className="modi_last_div">
               <input
-                type="password"
-                value={user_password}
-                onChange={handlePassword}
-                placeholder="비밀번호 입력"
-                required
-              />
-              {errorMessage && <p className="modi_error">{errorMessage}</p>}
-              <button type="submit">확인</button>
+                  type="password"
+                  value={user_password}
+                  onChange={handlePassword}
+                  placeholder="비밀번호 입력"
+                  className="mymodi_input"
+                  required
+                />
+                {errorMessage && <p className="modi_error">{errorMessage}</p>}
+            </div>
+              <button type="submit" className="my_modi_modal_btn">확인</button>
             </form>
-          </div>
         </div>
       )}
     </div>

@@ -1,36 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import './admin_main.css';
-import { LuCrown } from 'react-icons/lu';
 import AdNotice from './Admin_notice';
 import AdPost from './Admin_post';
 import AdUsers from './Admin_user';
 import axios from 'axios';
-//
+import Contribution from '../Common/Contribution';
+import { Cookies } from 'react-cookie';
+import { useNavigate } from 'react-router-dom';
 
 const Admin = () => {
+  const cookies = new Cookies();
+  const navigate = useNavigate();
   const [selectedMenu, setSelectedMenu] = useState('어떤관리');
   const [member, setMember] = useState([]);
+
   const [clicked, setClicked] = useState([false, false, false]);
 
   const getMember = () => {
-    axios.get('http://localhost:3000/notice/viewuser').then((response) => {
-      if (response.data.success === true) {
-        setMember(response.data.user);
-      }
-    });
-  };
-
-  const handleDelete = (userId) => {
-    if (window.confirm('삭제하시겠습니까?')) {
-      axios
-        .delete(`http://localhost:3000/mypage/${userId}/delete`)
-        .then((response) => {
-          if (response.data.success) {
-            getMember(); // 회원 삭제 후 목록을 새로 불러옴
-          }
-        });
+    if (cookies.get('adminpw') === 'passed') {
+      axios.get('http://localhost:3000/notice/viewuser').then((response) => {
+        if (response.data.success === true) {
+          setMember(response.data.user);
+        }
+      });
     } else {
-      alert('취소하였습니다.');
+      alert('잘못된 접근!');
+      cookies.remove('adminpw');
+      navigate('/');
     }
   };
 
@@ -43,7 +39,7 @@ const Admin = () => {
       case '게시판관리':
         return <AdPost />;
       default:
-        return <div>메뉴를 선택해 주세요.</div>;
+        return <div className="nothing"></div>;
     }
   };
 
@@ -52,6 +48,21 @@ const Admin = () => {
   useEffect(() => {
     getMember();
   }, []);
+
+  const handleDelete = (userId) => {
+    if (window.confirm('삭제하시겠습니까?')) {
+      axios
+        .delete(`http://localhost:3000/mypage/${userId}/delete`)
+        .then((response) => {
+          console.log(response);
+          if (response.status === 204) {
+            getMember(); // 회원 삭제 후 목록을 새로 불러옴
+          }
+        });
+    } else {
+      alert('취소하였습니다.');
+    }
+  };
 
   return (
     <div className="admin-container">
@@ -65,16 +76,23 @@ const Admin = () => {
         <ul className="memberList">
           {member.map((a, i) => (
             <li className="listMember" key={i}>
-              <span className="nickname">{a.USER_NICKNAME}</span>
-              <LuCrown
-                className="tier"
-                style={{
-                  marginTop: '5px',
-                  width: '40px',
-                }}
-              />
-              <div className="contribute-container">
-                <span className="contribute-value">{a.USER_CONTRIBUTE}</span>
+              <span className="nickname" style={{ marginRight: '30px' }}>
+                {a.USER_NICKNAME}
+              </span>
+              <Contribution contribute={a.USER_CONTRIBUTE} />
+              <div
+                style={{ marginLeft: '30px' }}
+                className="contribute-container"
+              >
+                <span
+                  className={
+                    a.USER_CONTRIBUTE === 0
+                      ? 'zero_contribute'
+                      : 'contribute-value'
+                  }
+                >
+                  {a.USER_CONTRIBUTE}
+                </span>
                 <div
                   className="gauge"
                   style={{
@@ -87,7 +105,7 @@ const Admin = () => {
         </ul>
       </div>
       <div className="admin-menu-section">
-        <h3 className="admin_title">CoReview 관리자 메뉴</h3>
+        <h3 className="admin_title, coreview_title">CoreView 관리자 메뉴</h3>
         <ul className="admin_menu_list">
           <li
             className={`menu1 menuer ${clicked[0] ? 'nowshow' : ''}`}

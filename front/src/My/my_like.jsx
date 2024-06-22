@@ -10,7 +10,7 @@ import { Cookies } from 'react-cookie';
 import './my_like.css';
 
 const Empty = () => {
-    const cookies = new Cookies();
+  const cookies = new Cookies();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [posts, setPosts] = useState([]);
@@ -42,13 +42,13 @@ const Empty = () => {
 
   const fetchPosts = async (userId) => {
     try {
-        const response = await fetch(`http://localhost:3000/mypage/${userId}/feedback`);
+        const response = await fetch(`http://localhost:3000/mypage/${userId}/likedPosts`);
         const postsData = await response.json();
-        const processedData = postsData.map(comment => ({
-          ...comment,
-          profile_picture: (comment.profile_picture === "null" || !comment.profile_picture)
+        const processedData = postsData.map(like => ({
+          ...like,
+          profile_picture: (like.profile_picture === "null" || !like.profile_picture)
             ? `${process.env.PUBLIC_URL}/images/original_profile.png`
-            : comment.profile_picture,
+            : like.profile_picture,
         }));
         setPosts(processedData || []);
         setFilteredPosts(processedData || []);

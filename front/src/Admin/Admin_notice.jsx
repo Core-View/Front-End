@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './admin_notice.css';
 import { useNavigate } from 'react-router-dom';
+import { Cookies } from 'react-cookie';
 
 const AdminNotice = () => {
+  const cookies = new Cookies();
   const [noticeLists, setNoticeLists] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const noticesPerPage = 10;
@@ -43,12 +45,22 @@ const AdminNotice = () => {
 
   //공지작성관련
   const createNotice = () => {
-    navigate('/notice/post');
+    if (cookies.get('adminpw') === 'passed') {
+      navigate('/notice/post');
+    } else {
+      alert('접근권한이 없습니다.');
+      navigate('/');
+    }
   };
 
   return (
     <div className="admin_notice_container">
-      <button className="create_notice" onClick={createNotice}>
+      <button
+        className="create_notice"
+        onClick={() => {
+          createNotice();
+        }}
+      >
         공지작성
       </button>
       <div className="notice_detail">
