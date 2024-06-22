@@ -7,7 +7,7 @@
 .modi_field {
   background-color: white;
   margin: 20px;
-  width: 50%;
+  width: 40%;
   border: 2px solid #eee;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -39,14 +39,17 @@
 
 .profile_L {
   flex: 1;
-  text-align: center;
   margin: auto;
 }
 
 .profile_D {
   flex: 4;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+}
+.modi_second_div{
+  display: flex;
+  align-items: center;
 }
 
 .nick_zone {
@@ -57,7 +60,6 @@
 
 .nick_L {
   flex: 1;
-  text-align: center;
   margin-top: 8px;
 }
 
@@ -69,20 +71,13 @@
 .nick_I {
   width: 200px;
   height: 30px;
-  border: 1px solid #ccc;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-  /* 기본 그림자 */
+  border-bottom: 1px solid black;
   padding: 5px;
-  outline: none;
-  /* 기본 아웃라인 제거 */
-  transition: box-shadow 0.3s ease;
-  /* 그림자 변화 애니메이션 효과 */
 }
 
 .nick_I:focus {
-  box-shadow: 0 0 8px rgba(33, 3, 117, 0.8);
+  outline: none;
 }
-
 .nickname_error {
   color: red;
   font-size: 0.8rem;
@@ -97,7 +92,6 @@
 
 .password_L {
   flex: 1;
-  text-align: center;
   margin-top: 8px;
 }
 
@@ -109,18 +103,12 @@
 .password_I {
   width: 200px;
   height: 30px;
-  border: 1px solid #ccc;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-  /* 기본 그림자 */
+  border-bottom: 1px solid black;
   padding: 5px;
-  outline: none;
-  /* 기본 아웃라인 제거 */
-  transition: box-shadow 0.3s ease;
-  /* 그림자 변화 애니메이션 효과 */
 }
 
 .password_I:focus {
-  box-shadow: 0 0 8px rgba(33, 3, 117, 0.8);
+  outline: none;
 }
 
 .password_error {
@@ -137,7 +125,6 @@
 
 .pcheck_L {
   flex: 1;
-  text-align: center;
   margin-top: 8px;
 }
 
@@ -149,18 +136,12 @@
 .pcheck_I {
   width: 200px;
   height: 30px;
-  border: 1px solid #ccc;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-  /* 기본 그림자 */
+  border-bottom: 1px solid black;
   padding: 5px;
-  outline: none;
-  /* 기본 아웃라인 제거 */
-  transition: box-shadow 0.3s ease;
-  /* 그림자 변화 애니메이션 효과 */
 }
 
 .pcheck_I:focus {
-  box-shadow: 0 0 8px rgba(33, 3, 117, 0.8);
+  outline: none;
 }
 
 .introduce_zone {
@@ -171,7 +152,6 @@
 
 .intro_L {
   flex: 1;
-  text-align: center;
   margin-top: 8px;
 }
 
@@ -181,20 +161,14 @@
 }
 
 .intro_I {
-  width: 370px;
+  width: 420px;
   height: 30px;
-  border: 1px solid #ccc;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-  /* 기본 그림자 */
+  border-bottom: 1px solid black;
   padding: 5px;
-  outline: none;
-  /* 기본 아웃라인 제거 */
-  transition: box-shadow 0.3s ease;
-  /* 그림자 변화 애니메이션 효과 */
 }
 
 .intro_I:focus {
-  box-shadow: 0 0 8px rgba(33, 3, 117, 0.8);
+  outline: none;
 }
 
 .intro_error {
@@ -209,7 +183,7 @@
 
 .submit_D {
   flex: 1;
-  text-align: right;
+  text-align: center;
 }
 
 .submit_B {
@@ -246,6 +220,7 @@
 }
 
 .delete_D {
+  margin-left: 35%;
   text-align: center;
 }
 
@@ -255,6 +230,10 @@
 }
 
 .modi_close {
+  position: absolute;
+  top: 10px;
+  right:10px;
+  text-align: right;
   font-size: 28px;
   font-weight: bold;
   cursor: pointer;
@@ -275,9 +254,13 @@
 .modi_modal-content {
   background-color: #ffffff;
   border-radius: 10px;
-  width: 450px;
-  height: 380px;
+  width: 500px;
+  height: 450px;
   padding: 15px;
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+  position: relative;
 }
 
 .modi_modal-content h2,
@@ -287,11 +270,9 @@
 }
 
 .modi_modal-content input {
-  width: 60%;
+  width: 90%;
   height: 40px;
   font-size: 20px;
-  margin: 10px;
-  margin-bottom: 20px;
   padding: 5px;
 }
 
@@ -299,6 +280,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+.mymodi_input{
+  border-bottom: 1px solid black;
+}
+.mymodi_input:focus{
+  outline: none;
 }
 
 .modi_warning_zone {
@@ -323,5 +310,10 @@
 
 .modi_error {
   color: red;
-  margin-bottom: 10px;
+}
+.modi_last_div{
+    height: 63px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
