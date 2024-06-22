@@ -7,7 +7,7 @@ const HomeMain = () => {
   const slides = [
     {
       src: process.env.PUBLIC_URL + '/images/home_image/home-card-1.png',
-      link: '/contribute_ranking',
+      link: '/contribution_ranking',
       message: '기여도 랭킹 확인하기',
     },
     {

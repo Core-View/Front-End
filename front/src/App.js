@@ -11,6 +11,8 @@ import Mycomment from './My/my_comment';
 // Sign
 import SignIn from './Sign/Sign_in/signin_main';
 import SignUp from './Sign/Sign_up/signup_main';
+// Ranking
+import Ranking from './Ranking/contribution_ranking';
 // Post
 import Post from './Post/post_main';
 import PostView from './Post/post_view';
@@ -48,6 +50,8 @@ function App() {
               <Route path="my_modify" element={<Mymodify />} />
               <Route path="my_posting" element={<Myposting />} />
               <Route path="my_comment" element={<Mycomment />} />
+              {/* ranking  */}
+              <Route path="/contribution_ranking" element={<Ranking />} />
               {/* post  */}
               <Route path="/post_main" element={<Post />} />
               <Route path="/post_view/:post_id" element={<PostView />} />

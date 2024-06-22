@@ -78,6 +78,9 @@ function Header() {
                 <Link to="/my_main">내 정보</Link>
               )}
             </li>
+            <li>
+              <Link to="/contribution_ranking">랭킹</Link>
+            </li>
           </ul>
         </div>
         <div className="header-nav-right">
