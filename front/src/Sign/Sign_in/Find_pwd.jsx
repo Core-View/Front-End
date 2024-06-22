@@ -146,7 +146,7 @@ const Find_pwd = () => {
               placeholder="Email"
               value={email}
               onChange={onchangeEmail}
-              className="input_area"
+              className="input_areaF"
             />
             {emailValid !== null &&
               (emailValid ? (
@@ -167,7 +167,7 @@ const Find_pwd = () => {
               placeholder="인증번호"
               value={checkEmail}
               onChange={onchangeCheckEmail}
-              className="input_area"
+              className="input_areaF"
             />
             {checkEmailValid !== null &&
               (checkEmailValid ? (
@@ -192,7 +192,7 @@ const Find_pwd = () => {
               placeholder="Password"
               value={password}
               onChange={onchangePassword}
-              className="input_area"
+              className="input_areaF"
             />
             {passwordValid !== null &&
               (passwordValid ? (
@@ -211,7 +211,7 @@ const Find_pwd = () => {
               placeholder="Re-enter Password"
               value={rePassword}
               onChange={onchangeRePassword}
-              className="input_area"
+              className="input_areaF"
             />
             {rePasswordValid !== null &&
               (rePasswordValid ? (

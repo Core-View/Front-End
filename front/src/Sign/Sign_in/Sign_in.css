@@ -15,7 +15,6 @@
   width: 500px;
   height: 500px;
   margin-top: 50px;
-  background-color: gainsboro;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -33,67 +32,117 @@
 
 .form_si {
   width: 400px;
-  height: 290px;
+  height: 330px;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
 }
 
 .nickname_si {
-  width: 300px;
+  width: 280px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   font-size: 20px;
+  border-bottom: 1px solid black;
+  line-height: 40px;
 }
 
 .nick_input_si {
+  width: 250px;
   height: 40px;
-  font-size: 20px;
+  font-size: 17px;
   line-height: 50px;
+  background-color: rgba(0, 0, 0, 0);
 }
-
+.nick_input_si:focus {
+  outline: none;
+}
+.nick_label_si {
+  margin-right: 10px;
+}
 .password_si {
-  width: 300px;
+  width: 280px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   font-size: 20px;
+  border-bottom: 1px solid black;
+  line-height: 40px;
 }
 
 .pass_input_si {
   height: 40px;
   font-size: 20px;
-
+  width: 250px;
   line-height: 50px;
+  background-color: rgba(0, 0, 0, 0);
 }
-
+.pass_input_si:focus {
+  outline: none;
+}
+.pass_label_si {
+  margin-right: 10px;
+}
 .submit_si button {
+  cursor: pointer;
+  margin-top: 10px;
   width: 200px;
   height: 40px;
   border: none;
-  font-size: 20px;
+  font-size: 17px;
+  font-weight: 600;
+  color: rgb(61, 61, 61);
   border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0);
+  border: 1px solid rgba(189, 189, 189, 0.3);
 }
-
+.line {
+  border-bottom: 0.5px double rgba(189, 189, 189, 0.8);
+  width: 75px;
+}
 .submit_si button:hover {
+  color: white;
   width: 200px;
   height: 40px;
   border: none;
-  font-size: 20px;
+  font-size: 17px;
   box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.9);
-  background-color: rgb(199, 199, 199);
+  background-color: rgba(151, 151, 151, 0.377);
 }
-
-.google {
+.goNabi {
   width: 200px;
-  height: 50px;
-  background-image: url(../../../public/images/googleSignU.png);
-  background-size: cover;
+  height: 30px;
+  line-height: 30px;
+  display: flex;
+  justify-content: space-around;
 }
-
-.google:hover {
-  width: 200px;
-  height: 50px;
-  background-image: url(../../../public/images/googleSignD.png);
-  background-size: cover;
+.goNabiC {
+  text-decoration: none;
+  color: rgb(117, 117, 117);
+  font-weight: 600;
+  font-size: 14px;
+}
+.socialLogin {
+  margin-top: 10px;
+  height: 30px;
+  display: flex;
+  width: 280px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+.socialLogin > span {
+  font-size: 13px;
+}
+.loginicons {
+  cursor: pointer;
+  width: 150px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 30px;
+}
+.naverIcon {
+  height: 30px;
+  width: 30px;
 }
