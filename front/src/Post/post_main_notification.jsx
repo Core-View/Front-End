@@ -30,6 +30,12 @@ const PostMainNotification = () => {
     fetchNotices();
   }, []);
 
+  // 공지 클릭 핸들러
+  const handleNoticeClick = (id) => {
+    console.log(id);
+    navigate(`/post_view/notice/${id}`);
+  };
+
   const formatDate = (dateString) => {
     const date = parseISO(dateString);
     const now = new Date();
@@ -71,7 +77,7 @@ const PostMainNotification = () => {
         </h4>
         {currentPageData.length > 0 ? (
           currentPageData.map((notice, index) => (
-            <li key={index} onClick={() => handlePostClick(notice)}>
+            <li key={index} onClick={() => handleNoticeClick(notice.NOTICE_ID)}>
               <div className="post-main-meta">
                 <div className="post-main-title">
                   <img

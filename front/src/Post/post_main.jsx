@@ -129,6 +129,12 @@ const Empty = () => {
     navigate(`/post_view/${post.post_id}`);
   };
 
+  // 공지 클릭 핸들러
+  const handleNoticeClick = (id) => {
+    console.log(id);
+    navigate(`/post_view/notice/${id}`);
+  };
+
   // 페이지 변경 핸들러
   const handlePageClick = (data) => {
     setCurrentPage(data.selected);
@@ -183,7 +189,10 @@ const Empty = () => {
               .reverse()
               .slice(0, 3)
               .map((notice, index) => (
-                <li key={index} onClick={() => handlePostClick(notice)}>
+                <li
+                  key={index}
+                  onClick={() => handleNoticeClick(notice.NOTICE_ID)}
+                >
                   <div className="post-main-meta">
                     <div className="post-main-title">
                       <img
