@@ -8,6 +8,7 @@ import Mypage from './My/my_main';
 import Mymodify from './My/my_modify';
 import Myposting from './My/my_posting';
 import Mycomment from './My/my_comment';
+import Mylike from './My/my_like';
 // Sign
 import SignIn from './Sign/Sign_in/signin_main';
 import SignUp from './Sign/Sign_up/signup_main';
@@ -48,6 +49,7 @@ function App() {
               <Route path="my_modify" element={<Mymodify />} />
               <Route path="my_posting" element={<Myposting />} />
               <Route path="my_comment" element={<Mycomment />} />
+              <Route path="my_like" element={<Mylike />} />
               {/* post  */}
               <Route path="/post_main" element={<Post />} />
               <Route path="/post_view/:post_id" element={<PostView />} />
