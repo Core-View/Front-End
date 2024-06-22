@@ -1,123 +1,197 @@
 import React, { useState, useEffect } from 'react';
-import './my_posting.css';
-import { useNavigate } from 'react-router-dom';
-import { PiPencilLineFill } from 'react-icons/pi';
-import { TbListSearch } from 'react-icons/tb';
+import { useNavigate, Navigate } from 'react-router-dom';
+import ReactPaginate from 'react-paginate';
+import { parseISO } from 'date-fns';
+import { ko } from 'date-fns/locale'; // 한국어 로케일 import
+
+import { format } from 'date-fns';
+import { Cookies } from 'react-cookie';
+
+import './my_like.css';
 
 const Empty = () => {
+    const cookies = new Cookies();
   const navigate = useNavigate();
-  const [posts, setPosts] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 12;
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [postsPerPage, setPostsPerPage] = useState(15); // 페이지당 게시글 수 기본값
+  
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  const languageIcons = {
+    c: '/images/language_icons/c_icon.png',
+    cpp: '/images/language_icons/cpp_icon.png',
+    java: '/images/language_icons/java_icon.png',
+    python: '/images/language_icons/python_icon.png',
+  };
+  useEffect(() => {
+    const userId = cookies.get('user_id');
+    if (userId) {
+      setIsLoggedIn(true);
+      fetchPosts(userId);
+    } else {
+      navigate('/users/sign-in');
+    }
+    setIsLoading(false);
+  }, [navigate]);
+
+  const fetchPosts = async (userId) => {
+    try {
+        const response = await fetch(`http://localhost:3000/mypage/${userId}/posts`);
+        const postsData = await response.json();
+        const processedData = postsData.map(post => ({
+          ...post,
+          profile_picture: (post.profile_picture === "null" || !post.profile_picture)
+            ? `${process.env.PUBLIC_URL}/images/original_profile.png`
+            : post.profile_picture,
+        }));
+        setPosts(processedData || []);
+        setFilteredPosts(processedData || []);
+        setLoading(false);
+      } catch (error) {
+        setError('게시글을 가져오는 데 실패했습니다.');
+        console.error('Error fetching like data:', error);
+        setLoading(false);
+      }
+  };
+
+  // 검색 핸들러
   const handleSearch = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
-    setFilteredPosts(
-      posts.filter((post) =>
-        post.post_title.toLowerCase().includes(query.toLowerCase())
-      )
+    const filtered = posts.filter((post) =>
+      post.post_title.toLowerCase().includes(query.toLowerCase())
     );
-    setCurrentPage(1); // 검색 시 페이지를 1로 초기화
+    setFilteredPosts(filtered);
+    setCurrentPage(0); // 검색 시 첫 페이지로 이동
   };
 
-  const handlePostClick = (post_id) => {
-    navigate(`/post_view/${post_id}`);
+  // 게시글 클릭 핸들러
+  const handlePostClick = (post) => {
+    navigate(`/post_view/${post.post_id}`);
   };
 
-  useEffect(() => {
-    const fetchPostData = async () => {
-      try {
-        const response = await fetch(`http://localhost:3000/mypage/123/posts`);
-        const data = await response.json();
-        setPosts(data || []);
-        setFilteredPosts(data || []); // 초기 상태를 전체 게시글로 설정
-      } catch (error) {
-        console.error('Error fetching post data:', error);
-      }
-    };
-    fetchPostData();
-  }, []);
+  // 페이지 변경 핸들러
+  const handlePageClick = (data) => {
+    setCurrentPage(data.selected);
+  };
 
-  // filteredPosts가 배열인지 확인하고 배열이 아니면 빈 배열로 설정
-  useEffect(() => {
-    if (!Array.isArray(filteredPosts)) {
-      setFilteredPosts([]);
-    }
-  }, [filteredPosts]);
+  // 페이지당 게시글 수 변경 핸들러
+  const handlePostsPerPageChange = (e) => {
+    setPostsPerPage(Number(e.target.value));
+    setCurrentPage(0); // 페이지 수 변경 시 첫 페이지로 이동
+  };
 
-  // 현재 페이지에 따라 표시할 게시글 계산
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = Array.isArray(filteredPosts)
-    ? filteredPosts.slice(indexOfFirstPost, indexOfLastPost)
-    : [];
+  const offset = currentPage * postsPerPage;
+  const currentPageData = filteredPosts.slice(offset, offset + postsPerPage);
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  // 날짜 형식 변환 함수
+  const formatDate = (dateString) => {
+    const date = parseISO(dateString);
+    return format(date, 'yyyy-MM-dd', { locale: ko });
+  };
+
+  if (loading) {
+    return <div>로딩 중...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!isLoggedIn) {
+    return <Navigate to='/users/sign-in' replace />;
+  }
 
   return (
-    <div className="my_Poster-container">
-      <section className="my_post-top">
-        <div className="my_post-top-right">
-          <div className="my_pencil">
-            <PiPencilLineFill
-              className="my_post_search"
-              onClick={() => {
-                navigate('/post_write');
-              }}
-            />
-          </div>
-          <TbListSearch className="my_post_search" />
+    <div className="mylike-container">
+      <section className="mylike-top">
+        <div className="mylike-top-left">
+          <h2>전체 게시글</h2>
+        </div>
+        <div className="mylike-top-right">
           <input
             type="text"
             value={searchQuery}
             onChange={handleSearch}
-            placeholder="검색"
+            placeholder="검색어를 입력하세요."
           />
         </div>
+        <div className="mylike-per-page">
+          <label htmlFor="mylikePerPage">게시글 보기: </label>
+          <select
+            id="postsPerPage"
+            value={postsPerPage}
+            onChange={handlePostsPerPageChange}
+          >
+            <option value={10}>10개 씩</option>
+            <option value={15}>15개 씩</option>
+            <option value={30}>30개 씩</option>
+            <option value={50}>50개 씩</option>
+          </select>
+        </div>
       </section>
-      <section className="my_post-mid">
-        <ul className="my_post-list">
-          <div>
-            <h4>전체 게시글</h4>
-          </div>
-          {currentPosts.length > 0 ? (
-            currentPosts.map((post) => (
-              <li
-                key={post.post_id}
-                onClick={() => handlePostClick(post.post_id)}
-              >
-                {post.post_title}
+      <section className="mylike-mid">
+        <ul className="mylike-list">
+          <h4 className="mylike-main-meta">
+            <div className="mylike-main-title">제목</div>
+            <div className="mylike-main-user-name">작성자</div>
+            <div className="mylike-main-date">작성날짜</div>
+          </h4>
+          {currentPageData.length > 0 ? (
+            currentPageData.map((post, index) => (
+              <li key={index} onClick={() => handlePostClick(post)}>
+                <div className="mylike-main-meta">
+                  <div className="mylike-main-title">
+                    <img
+                      src={languageIcons[post.language]}
+                      alt=""
+                      className="mylike-main-language-icon"
+                    />{' '}
+                    {post.post_id}. {post.post_title}
+                  </div>
+                  <div className='my-like-main-profile'>
+                    <img
+                      src={post.profile_picture}
+                      alt="profile"
+                      className="my-like-main-picture"/>
+                  </div>
+                  <div className="mylike-main-user-name">
+                    {post.user_nickname || '탈퇴한 회원'}
+                  </div>
+                  <div className="mylike-main-date">
+                    {formatDate(post.post_date)}
+                  </div>
+                </div>
               </li>
             ))
           ) : (
-            <li>검색 결과가 없습니다.</li>
+            <li>게시글이 없습니다.</li>
           )}
         </ul>
       </section>
-      <section className="my_post-bot">
-        <ul className="my_post_pagination">
-          {Array.from(
-            { length: Math.ceil(filteredPosts.length / postsPerPage) },
-            (_, i) => (
-              <li
-                key={i + 1}
-                className={`my_post_page-item ${
-                  currentPage === i + 1 ? 'active' : ''
-                }`}
-              >
-                <button
-                  onClick={() => paginate(i + 1)}
-                  className="my_post_page-link"
-                >
-                  {i + 1}
-                </button>
-              </li>
-            )
-          )}
-        </ul>
+      <section className="mylike-bot">
+        <ReactPaginate
+          previousLabel={'이전'}
+          nextLabel={'다음'}
+          breakLabel={'...'}
+          breakClassName={'break-me'}
+          pageCount={Math.ceil(filteredPosts.length / postsPerPage)}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={handlePageClick}
+          containerClassName={'pagination'}
+          activeClassName={'active'}
+        />
       </section>
     </div>
   );

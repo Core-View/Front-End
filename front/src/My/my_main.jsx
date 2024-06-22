@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate, Navigate, Link } from 'react-router-dom';
 import './my_main.css';
+import { parseISO } from 'date-fns';
+import { ko } from 'date-fns/locale'; // 한국어 로케일 import
 import { FaCircleCheck } from 'react-icons/fa6';
+import { format } from 'date-fns';
 import { Cookies } from 'react-cookie';
+import Contribution from "../Common/Contribution";
+import { IoSettings } from "react-icons/io5";
 
 const Mypage = () => {
   const cookies = new Cookies();
@@ -15,20 +20,22 @@ const Mypage = () => {
     email: '',
     profile_picture: '',
     introduction: '',
+    contribute: '',
+    likes_received: '',
   });
   const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState([]);
+  const [likes, setLikes] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [user_password, setUserPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const percentage = 22.6;
+  const [activeTab, setActiveTab] = useState('Mypost');
 
-  const getColor = (percentage) => {
-    if (percentage >= 80) return '#4caf50';
-    if (percentage >= 60) return '#8bc34a';
-    if (percentage >= 40) return '#cddc39';
-    if (percentage >= 20) return '#ffc107';
-    return '#f44336';
+  const languageIcons = {
+    c: '/images/language_icons/c_icon.png',
+    cpp: '/images/language_icons/cpp_icon.png',
+    java: '/images/language_icons/java_icon.png',
+    python: '/images/language_icons/python_icon.png',
   };
 
   useEffect(() => {
@@ -38,6 +45,7 @@ const Mypage = () => {
       fetchUserData(userId);
       fetchPostData(userId);
       fetchCommentData(userId);
+      fetchLikeData(userId);
     } else {
       navigate('/users/sign-in');
     }
@@ -48,11 +56,12 @@ const Mypage = () => {
     try {
       const response = await fetch(`http://localhost:3000/mypage/${userId}`);
       const data = await response.json();
-      if (data.profile_picture) {
+      console.log("이미지!!",data.profile_picture);
+      if (!data.profile_picture || data.profile_picture === "null") {
         data.profile_picture = `${process.env.PUBLIC_URL}/images/original_profile.png`;
       }
+      console.log("이미지!!1s",data.profile_picture);
       setUserInfo(data);
-      console.log('프로필이미지', data.profile_picture);
     } catch (error) {
       console.error('Error fetching user data:', error);
     }
@@ -62,6 +71,9 @@ const Mypage = () => {
     try {
       const response = await fetch(`http://localhost:3000/mypage/${userId}/posts`);
       const data = await response.json();
+      if (!data.profile_picture) {
+        data.profile_picture = `${process.env.PUBLIC_URL}/images/original_profile.png`;
+      }
       setPosts(data || []);
     } catch (error) {
       console.error('Error fetching post data:', error);
@@ -72,9 +84,30 @@ const Mypage = () => {
     try {
       const response = await fetch(`http://localhost:3000/mypage/${userId}/feedback`);
       const data = await response.json();
-      setComments(data || []);
+      const processedData = data.map(comment => ({
+        ...comment,
+        profile_picture: (comment.profile_picture === "null" || !comment.profile_picture)
+          ? `${process.env.PUBLIC_URL}/images/original_profile.png`
+          : comment.profile_picture,
+      }));
+      setComments(processedData || []);
     } catch (error) {
       console.error('Error fetching feedback data:', error);
+    }
+  };
+  const fetchLikeData = async (userId) => {
+    try {
+      const response = await fetch(`http://localhost:3000/mypage/${userId}/likedPosts`);
+      const data = await response.json();
+      const processedData = data.map(like => ({
+        ...like,
+        profile_picture: (like.profile_picture === "null" || !like.profile_picture)
+          ? `${process.env.PUBLIC_URL}/images/original_profile.png`
+          : like.profile_picture,
+      }));
+      setLikes(processedData || []);
+    } catch (error) {
+      console.error('Error fetching like data:', error);
     }
   };
 
@@ -104,6 +137,11 @@ const Mypage = () => {
     }
   };
 
+  const formatDate = (dateString) => {
+    const date = parseISO(dateString);
+    return format(date, 'yyyy-MM-dd', { locale: ko });
+  };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -112,126 +150,113 @@ const Mypage = () => {
     return <Navigate to='/users/sign-in' replace />;
   }
 
-  const totalLikes = 10;
   const handlePostClick = (post) => {
-    navigate(`/post_view/${post.post_id}`, { state: { post } });
+    navigate(`/post_view/${post.post_id}`);
+  };
+
+  const getMoreLink = () => {
+    switch (activeTab) {
+      case 'Mypost':
+        return "/my_posting";
+      case 'Myfeedback':
+        return "/my_comment";
+      case 'Mylike':
+        return "/my_like";
+      default:
+        return "/";
+    }
+  };
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'Mypost':
+        return <Mypost posts={posts} handlePostClick={handlePostClick} languageIcons={languageIcons} formatDate={formatDate} />;
+      case 'Myfeedback':
+        return <Myfeedback comments={comments} handlePostClick={handlePostClick} languageIcons={languageIcons} formatDate={formatDate} />;
+      case 'Mylike':
+        return <Mylike likes={likes} handlePostClick={handlePostClick} languageIcons={languageIcons} formatDate={formatDate} />;
+      default:
+        return null;
+    }
   };
 
   return (
-    <div className="my_all">
-      <div className="contribution-bar">
-        <div
-          className="filled-bar"
-          style={{
-            width: `${percentage}%`,
-            backgroundColor: getColor(percentage),
-            boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-          }}
-        >
-          <span className="percentage-text">{`${percentage.toFixed(1)}%`}</span>
-        </div>
-      </div>
-      <div className="myinfo_all">
-        <div className="space1">
-          <div className="image_profile">
-            <img
-              src={userInfo.profile_picture}
-              alt="profile"
-              className="my_profile"
-            />
+    <div className='allofthem'>
+      <div className="my_all">
+        <div className='info_space'>
+          <div className='my_label'>
+            <h2>마이페이지</h2>
           </div>
-          <div className="info_zone">
-            <div className="name_zone">
-              <span>{userInfo.nickname || '닉네임'}</span>
+          <div className='my_info_zone'>
+            <div className='my_profile_all_zone_one'>
+              <div className="image_profile">
+                <img
+                  src={userInfo.profile_picture}
+                  alt="profile"
+                  className="my_profile"
+                />
+              </div>
+              <div className='my_modify'>
+                <button
+                  onClick={() => {
+                    setIsModalOpen(true);
+                    setUserPassword('');
+                    setErrorMessage('');
+                  }}
+                  className="modi_link"
+                >
+                  <span><IoSettings /></span>
+                </button>
+              </div>
             </div>
-            <br />
-            <div className="intro_zone">
-              <span>{userInfo.introduction || '자기 소개입니다'}</span>
-            </div>
-            <br />
-          </div>
-          <div className="activity">
-            <div className="good">
-              <span role="img" aria-label="heart" style={{ fontSize: '20px' }}>
-                ❤️{totalLikes}
-              </span>
-            </div>
-            <br />
-            <div className="contribution">
-              <span>기여도</span>
-            </div>
-            <br />
-          </div>
-          <div className="modify_zone">
-            <button
-              onClick={() => {
-                setIsModalOpen(true);
-                setUserPassword('');
-                setErrorMessage('');
-              }}
-              className="modi_link"
-            >
-              정보수정
-            </button>
-          </div>
-        </div>
-        <div className="space2">
-          <div className="post_zone">
-            <div className="my_posts">
-              <Link to="/my_posting" className="all_post_link">
-                나의 게시글
-              </Link>
-            </div>
-            <div className="post_title">
-              {posts.length > 0 ? (
-                <ul className="post_code">
-                  {posts.slice(0, 5).map((post) => (
-                    <li
-                      key={post.post_id}
-                      onClick={() => handlePostClick(post.post_id)}
-                    >
-                      {post.post_title}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="my_post_font">게시글이 없습니다.</p>
-              )}
+            <div className='my_info_all_zone'>
+              <div className='my_rgood'>
+                <h3>좋아요</h3>
+                <span role="img" aria-label="heart" style={{ fontSize: '20px', marginRight: '10px' }}>
+                  ❤️{userInfo.likes_received}
+                </span>
+              </div>
+              <div className='my_contri'>
+                <h3>기여도</h3>
+                <span>{userInfo.contribute}</span>
+              </div>
+              <div className='my_contri_icon'>
+                <h3>등급</h3>
+                <span>
+                    <Contribution contribute={userInfo.contribute} />
+                </span>
+              </div>
             </div>
           </div>
-          <br />
-          <br />
-          <hr style={{ border: '1px solid #ddd' }} />
-          <br />
-          <br />
-          <div className="comment_zone">
-            <div className="my_comments">
-              <Link to="/my_comment" className="all_comment_link">
-                내가 댓글 단 글
-              </Link>
+          <div className='my_introduce_zone'>
+            <div className='my_nickname'>
+              <span>{userInfo.nickname}</span>
             </div>
-            <hr
-              style={{
-                color: 'black',
-                backgroundColor: 'black',
-                height: '1px',
-              }}
-            />
-            <div className="comment_title">
-              {comments.length > 0 ? (
-                <ul className="comment_code">
-                  {comments.slice(0, 5).map((comment) => (
-                    <li
-                      key={comment.post_id}
-                      onClick={() => handlePostClick(comment.post_id)}
-                    >
-                      {comment.post_title}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>댓글 단 게시글이 없습니다.</p>
-              )}
+            <div className='my_introduce'>
+              <span>{userInfo.introduction || "제 꿈은 개발자입니다."}</span>
+            </div>
+          </div>
+          <div className="my_post_container">
+            <div className="my_post_tabs">
+              <div className={`my_tab ${activeTab === 'Mypost' ? 'active' : ''}`} onClick={() => setActiveTab('Mypost')}>
+                Mypost
+              </div>
+              <div className={`my_tab ${activeTab === 'Myfeedback' ? 'active' : ''}`} onClick={() => setActiveTab('Myfeedback')}>
+                Myfeedback
+              </div>
+              <div className={`my_tab ${activeTab === 'Mylike' ? 'active' : ''}`} onClick={() => setActiveTab('Mylike')}>
+                Mylike
+              </div>
+              <div>
+                <Link to={getMoreLink()}>
+                  <button className="my_add_btn">
+                    Add
+                  </button>
+                </Link>
+              </div>
+            </div>
+            <div className="my_content">
+              {renderContent()}
             </div>
           </div>
         </div>
@@ -257,7 +282,7 @@ const Mypage = () => {
                 required
               />
               {errorMessage && <p className="my_error">{errorMessage}</p>}
-              <button type="submit">확인</button>
+              <button type="submit" className='my_modal_btn'>확인</button>
             </form>
           </div>
         </div>
@@ -265,5 +290,120 @@ const Mypage = () => {
     </div>
   );
 };
+
+const Mypost = ({ posts = [], handlePostClick, languageIcons, formatDate }) => {
+  const displayedPosts = posts.length < 6 ? [...posts, ...Array(6 - posts.length).fill({})] : posts.slice(0, 6);
+
+  return (
+    <div className="grid-container">
+      {displayedPosts.map((post, index) => (
+        <div className="grid-item" key={index} onClick={() => post.post_id && handlePostClick(post)}>
+          <div className="post-content">
+            {post.post_id ? (
+              <>
+                <div className="post-header">
+                  <img
+                    src={post.profile_picture}
+                    alt="profile"
+                    className="feedback_picture"/>
+                  <img src={languageIcons[post.language]} alt="" className="feedback-language-icon" />
+                  <span>{post.post_title}</span>
+                </div>
+                <hr style={{ border: '1px solid #ccc' }} />
+                <div className="post-meta">
+                  <div className='post_user_div'>
+                    <span className="post-user">{post.user_nickname || '탈퇴한 회원'}</span>
+                  </div>
+                  <div className='post_date_div'>
+                    <span className="post-date">{formatDate(post.post_date)}</span>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="empty-box">Empty</div>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const Myfeedback = ({ comments = [], handlePostClick, languageIcons, formatDate }) => {
+  const displayedComments = comments.length < 6 ? [...comments, ...Array(6 - comments.length).fill({})] : comments.slice(0, 6);
+
+  return (
+    <div className="grid-container">
+      {displayedComments.map((comment, index) => (
+        <div className="grid-item" key={index} onClick={() => comment.post_id && handlePostClick(comment)}>
+          <div className="post-content">
+            {comment.post_id ? (
+              <>
+                <div className="post-header">
+                  <img
+                    src={comment.profile_picture}
+                    alt="profile"
+                    className="feedback_picture"/>
+                  <img src={languageIcons[comment.language]} alt="" className="feedback-language-icon" />
+                  <span>{comment.post_title}</span>
+                </div>
+                <hr style={{ border: '1px solid #ddd' }} />
+                <div className="post-meta">
+                  <div className='post_user_div'>
+                    <span className="post-user">{comment.nickname || '탈퇴한 회원'}</span>
+                  </div>
+                  <div className='post_date_div'>
+                    <span className="post-date">{formatDate(comment.post_date)}</span>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="empty-box">Empty</div>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const Mylike = ({ likes = [], handlePostClick, languageIcons, formatDate }) => {
+  const displayedLikes = likes.length < 6 ? [...likes, ...Array(6 - likes.length).fill({})] : likes.slice(0, 6);
+
+  return (
+    <div className="grid-container">
+      {displayedLikes.map((like, index) => (
+        <div className="grid-item" key={index} onClick={() => like.post_id && handlePostClick(like)}>
+          <div className="post-content">
+            {like.post_id ? (
+              <>
+                <div className="post-header">
+                  <img
+                    src={like.profile_picture}
+                    alt="profile"
+                    className="feedback_picture"/>
+                  <img src={languageIcons[like.language]} alt="" className="feedback-language-icon" />
+                  <span>{like.post_title}</span>
+                </div>
+                <hr style={{ border: '1px solid #ddd' }} />
+                <div className="post-meta">
+                  <div className="post_user_div">
+                    <span className="post-user">{like.user_nickname || '탈퇴한 회원'}</span>
+                  </div>
+                  <div className='post_date_div'>
+                    <span className="post-date">{formatDate(like.post_date)}</span>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="empty-box">Empty</div>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
 
 export default Mypage;

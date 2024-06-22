@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import './post_write.css';
 import { Cookies } from 'react-cookie';
+import { useNavigate } from 'react-router-dom';
 
 const PostWrite = () => {
   const [title, setTitle] = useState('');
@@ -15,8 +16,25 @@ const PostWrite = () => {
   const codeRef = useRef(null);
 
   const TITLE_MAX_LENGTH = 30;
-  const CONTENT_MAX_LENGTH = 1000;
+  const CONTENT_MAX_LENGTH = 3000;
   const CODE_MAX_LENGTH = 65535; // LONGTEXT
+
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      if (title || content || code) {
+        event.preventDefault();
+        event.returnValue = ''; // Chrome에서는 설정이 필요합니다.
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [title, content, code]);
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     const cookies = new Cookies();
@@ -60,6 +78,7 @@ const PostWrite = () => {
         setLanguage('');
         contentRef.current.style.height = 'auto';
         codeRef.current.style.height = 'auto';
+        navigate(`/post_view/${response.data.postId}`);
       }
     } catch (error) {
       console.error('게시글 등록 중 오류 발생:', error);
@@ -106,16 +125,15 @@ const PostWrite = () => {
 
   return (
     <div className="post-write-container">
-      <h2>게시글 작성</h2>
       <form onSubmit={handleSubmit} className="post-write-form">
-        <div className="write-box">
-          <div className="form-group">
-            <label htmlFor="title">제목 (최대 {TITLE_MAX_LENGTH}자)</label>
+        <div className="form-group">
+          <div className="form-group-title">
             <input
               type="text"
               id="title"
               value={title}
               onChange={handleTitleChange}
+              placeholder="제목을 입력하세요."
               required
             />
             {titleError && <p className="error-message">{titleError}</p>}
@@ -123,13 +141,15 @@ const PostWrite = () => {
               {title.length} / {TITLE_MAX_LENGTH}
             </p>
           </div>
-          <div className="form-group">
-            <label htmlFor="content">내용 (최대 {CONTENT_MAX_LENGTH}자)</label>
+        </div>
+        <div className="form-group">
+          <div className="form-group-content">
             <textarea
               id="content"
               value={content}
               onChange={handleContentChange}
               ref={contentRef}
+              placeholder="내용을 입력하세요."
               required
             ></textarea>
             {contentError && <p className="error-message">{contentError}</p>}
@@ -138,74 +158,71 @@ const PostWrite = () => {
             </p>
           </div>
         </div>
-        <div className="write-box">
-          <div className="form-group">
-            <label>언어 선택</label>
-            <div className="language-buttons">
-              <button
-                type="button"
-                className={language === '' ? 'active' : ''}
-                onClick={() => handleLanguageChange('')}
-              >
-                기타
-              </button>
-              <button
-                type="button"
-                className={language === 'c' ? 'active' : ''}
-                onClick={() => handleLanguageChange('c')}
-              >
-                <img
-                  src="/images/language_icons/c_icon.png"
-                  alt=""
-                  className="write-language-icon"
-                />{' '}
-                C
-              </button>
-              <button
-                type="button"
-                className={language === 'cpp' ? 'active' : ''}
-                onClick={() => handleLanguageChange('cpp')}
-              >
-                <img
-                  src="/images/language_icons/cpp_icon.png"
-                  alt=""
-                  className="write-language-icon"
-                />{' '}
-                C++
-              </button>
-              <button
-                type="button"
-                className={language === 'java' ? 'active' : ''}
-                onClick={() => handleLanguageChange('java')}
-              >
-                <img
-                  src="/images/language_icons/java_icon.png"
-                  alt=""
-                  className="write-language-icon"
-                />{' '}
-                Java
-              </button>
-              <button
-                type="button"
-                className={language === 'python' ? 'active' : ''}
-                onClick={() => handleLanguageChange('python')}
-              >
-                <img
-                  src="/images/language_icons/python_icon.png"
-                  alt=""
-                  className="write-language-icon"
-                />{' '}
-                Python
-              </button>
-            </div>
-          </div>
-          <div className="form-group">
-            <label htmlFor="code">코드 (최대 {CODE_MAX_LENGTH}자)</label>
+        <div className="language-buttons">
+          <button
+            type="button"
+            className={language === '' ? 'active' : ''}
+            onClick={() => handleLanguageChange('')}
+          >
+            기타
+          </button>
+          <button
+            type="button"
+            className={language === 'c' ? 'active' : ''}
+            onClick={() => handleLanguageChange('c')}
+          >
+            <img
+              src="/images/language_icons/c_icon.png"
+              alt=""
+              className="write-language-icon"
+            />{' '}
+            C
+          </button>
+          <button
+            type="button"
+            className={language === 'cpp' ? 'active' : ''}
+            onClick={() => handleLanguageChange('cpp')}
+          >
+            <img
+              src="/images/language_icons/cpp_icon.png"
+              alt=""
+              className="write-language-icon"
+            />{' '}
+            C++
+          </button>
+          <button
+            type="button"
+            className={language === 'java' ? 'active' : ''}
+            onClick={() => handleLanguageChange('java')}
+          >
+            <img
+              src="/images/language_icons/java_icon.png"
+              alt=""
+              className="write-language-icon"
+            />{' '}
+            Java
+          </button>
+          <button
+            type="button"
+            className={language === 'python' ? 'active' : ''}
+            onClick={() => handleLanguageChange('python')}
+          >
+            <img
+              src="/images/language_icons/python_icon.png"
+              alt=""
+              className="write-language-icon"
+            />{' '}
+            Python
+          </button>
+        </div>
+        <div className="form-group">
+          <div className="form-group-code">
             <textarea
               id="code"
               value={code}
               onChange={handleCodeChange}
               ref={codeRef}
+              placeholder="코드를 입력하세요."
             ></textarea>
             {codeError && <p className="error-message">{codeError}</p>}
             <p className="char-counter">
