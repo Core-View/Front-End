@@ -113,7 +113,7 @@ class Ranking extends Component {
                   </div>
                 </td>
                 <td className="contribution-score">
-                  {contributor.user_contribute} 점
+                  {contributor.user_contribute}
                 </td>
               </tr>
             ))}

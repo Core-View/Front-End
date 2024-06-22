@@ -270,12 +270,6 @@
   min-width: 1280px;
 }
 
-.notice-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
 .notice-list li {
   padding: 10px;
   border-bottom: 1px solid #eee;
@@ -318,8 +312,8 @@
 /* 공지 전체보기 버튼 스타일 */
 .view-all-button-container {
   width: 100%;
-  text-align: center;
-  margin-top: 10px;
+  text-align: end;
+  margin-bottom: 10px;
 }
 
 .view-all-button {
