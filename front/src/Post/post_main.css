@@ -57,7 +57,7 @@
 }
 
 .keyword li {
-  background-color: #1e90ff;
+  background-color: #191919;
   color: white;
   padding: 8px 12px;
   border-radius: 4px;
@@ -65,7 +65,7 @@
 }
 
 .keyword li:hover {
-  background-color: #187bcd;
+  background-color: #191919;
 }
 
 .post-top-right {
@@ -83,7 +83,7 @@
 }
 
 .post-top-right .post_search:hover {
-  color: #1e90ff;
+  color: #191919;
 }
 
 .post-top-right input {
@@ -91,18 +91,18 @@
   /* 남은 공간을 차지하도록 설정 */
   padding: 12px 20px;
   /* 패딩을 늘려서 더 크고 편안하게 */
-  border-radius: 25px;
+  border-radius: 10px;
   /* 둥근 모서리 */
   border: 1px solid #ccc;
   transition: border-color 0.3s, box-shadow 0.3s;
   font-size: 1rem;
-  background-color: #f9f9f9;
+  background-color: #ffffff;
   /* 약간의 배경색 추가 */
 }
 
 .post-top-right input:focus {
-  border-color: #1e90ff;
-  box-shadow: 0 0 5px rgba(30, 144, 255, 0.5);
+  border-color: #191919;
+  /* box-shadow: 0 0 5px #fff; */
   outline: none;
   background-color: #fff; /* 포커스 시 배경색 변경 */
 }
@@ -165,6 +165,7 @@
 }
 
 .post-main-title {
+  /* font-weight: bold; */
   flex: 3; /* 제목은 더 많은 공간을 차지하도록 설정 */
 }
 
@@ -281,6 +282,7 @@
 }
 
 .post-main-meta {
+  height: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
