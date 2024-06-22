@@ -104,10 +104,6 @@ function Header() {
                 <Link to="/my_main">내 정보</Link>
               )}
             </li>
-          </ul>
-        </div>
-        <div className="header-nav-right">
-          <ul>
             <li
               onClick={() => {
                 cookies.remove('adminpw');
