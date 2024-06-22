@@ -1,0 +1,60 @@
+.admin_notice_view_container {
+  padding: 20px;
+  margin: auto;
+  max-width: 800px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.admin_notice_view_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.admin_notice_view_title {
+  font-size: 2em;
+}
+
+.admin_notice_view_buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.edit_button,
+.delete_button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.edit_button {
+  background-color: #4caf50;
+  color: white;
+}
+
+.delete_button {
+  background-color: #f44336;
+  color: white;
+}
+
+.admin_notice_view_date {
+  font-size: 0.9em;
+  color: #888;
+  margin-bottom: 20px;
+}
+
+.admin_notice_view_content {
+  font-size: 1.2em;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.admin_notice_view_img img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
