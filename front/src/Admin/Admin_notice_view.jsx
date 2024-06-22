@@ -51,7 +51,7 @@ const AdminNoticeView = () => {
   const handleDelete = () => {
     if (cookies.get('adminpw') === 'passed') {
       axios
-        .delete(`http://localhost:3000/notice/delete/:${id}`)
+        .delete(`http://localhost:3000/notice/delete/${id}`)
         .then((response) => {
           if (response.data.success === true) {
             alert('삭제 성공!');
