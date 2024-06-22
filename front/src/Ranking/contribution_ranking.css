@@ -102,6 +102,7 @@ h1 {
 }
 
 .profile-bio {
+  font-size: 0.9rem;
   max-width: 300px;
   white-space: nowrap;
   overflow: hidden;
