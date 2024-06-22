@@ -128,10 +128,18 @@
   }
   
   .mylike-main-user-name {
-    flex: 1; /* 사용자 이름은 상대적으로 적은 공간을 차지하도록 설정 */
-    text-align: center; /* 텍스트를 가운데 정렬 */
+    flex: 1;
   }
-  
+  .my-like-main-profile{
+    display: flex;
+    align-items: end;
+  }
+  .my-like-main-picture{
+    width: 40px;
+    height: 40px;
+    border-radius: 70%;
+    object-fit: cover;
+  }
   .mylike-main-date {
     flex: 1; /* 날짜는 상대적으로 적은 공간을 차지하도록 설정 */
     text-align: right; /* 텍스트를 오른쪽 정렬 */

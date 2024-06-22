@@ -56,9 +56,11 @@ const Mypage = () => {
     try {
       const response = await fetch(`http://localhost:3000/mypage/${userId}`);
       const data = await response.json();
-      if (data.profile_picture) {
+      console.log("이미지!!",data.profile_picture);
+      if (!data.profile_picture || data.profile_picture === "null") {
         data.profile_picture = `${process.env.PUBLIC_URL}/images/original_profile.png`;
       }
+      console.log("이미지!!1s",data.profile_picture);
       setUserInfo(data);
     } catch (error) {
       console.error('Error fetching user data:', error);
@@ -179,19 +181,33 @@ const Mypage = () => {
   };
 
   return (
-    <div>
+    <div className='allofthem'>
       <div className="my_all">
         <div className='info_space'>
           <div className='my_label'>
             <h2>마이페이지</h2>
           </div>
           <div className='my_info_zone'>
-            <div className="image_profile">
-              <img
-                src={userInfo.profile_picture}
-                alt="profile"
-                className="my_profile"
-              />
+            <div className='my_profile_all_zone_one'>
+              <div className="image_profile">
+                <img
+                  src={userInfo.profile_picture}
+                  alt="profile"
+                  className="my_profile"
+                />
+              </div>
+              <div className='my_modify'>
+                <button
+                  onClick={() => {
+                    setIsModalOpen(true);
+                    setUserPassword('');
+                    setErrorMessage('');
+                  }}
+                  className="modi_link"
+                >
+                  <span><IoSettings /></span>
+                </button>
+              </div>
             </div>
             <div className='my_info_all_zone'>
               <div className='my_rgood'>
@@ -218,19 +234,6 @@ const Mypage = () => {
             </div>
             <div className='my_introduce'>
               <span>{userInfo.introduction || "제 꿈은 개발자입니다."}</span>
-            </div>
-            <div className='my_modify'>
-              <button
-                onClick={() => {
-                  setIsModalOpen(true);
-                  setUserPassword('');
-                  setErrorMessage('');
-                }}
-                className="modi_link"
-              >
-                <span><IoSettings /></span>
-                <span>  회원정보 변경</span>
-              </button>
             </div>
           </div>
           <div className="my_post_container">
@@ -299,13 +302,21 @@ const Mypost = ({ posts = [], handlePostClick, languageIcons, formatDate }) => {
             {post.post_id ? (
               <>
                 <div className="post-header">
-                  <img src={languageIcons[post.language]} alt="" className="post-language-icon" />
+                  <img
+                    src={post.profile_picture}
+                    alt="profile"
+                    className="feedback_picture"/>
+                  <img src={languageIcons[post.language]} alt="" className="feedback-language-icon" />
                   <span>{post.post_title}</span>
                 </div>
-                <hr style={{ border: '1px solid #ddd' }} />
+                <hr style={{ border: '1px solid #ccc' }} />
                 <div className="post-meta">
-                  <span className="post-user">{post.user_nickname || '탈퇴한 회원'}</span>
-                  <span className="post-date">{formatDate(post.post_date)}</span>
+                  <div className='post_user_div'>
+                    <span className="post-user">{post.user_nickname || '탈퇴한 회원'}</span>
+                  </div>
+                  <div className='post_date_div'>
+                    <span className="post-date">{formatDate(post.post_date)}</span>
+                  </div>
                 </div>
               </>
             ) : (
@@ -338,8 +349,12 @@ const Myfeedback = ({ comments = [], handlePostClick, languageIcons, formatDate 
                 </div>
                 <hr style={{ border: '1px solid #ddd' }} />
                 <div className="post-meta">
-                  <span className="post-user">{comment.user_nickname || '탈퇴한 회원'}</span>
-                  <span className="post-date">{formatDate(comment.post_date)}</span>
+                  <div className='post_user_div'>
+                    <span className="post-user">{comment.nickname || '탈퇴한 회원'}</span>
+                  </div>
+                  <div className='post_date_div'>
+                    <span className="post-date">{formatDate(comment.post_date)}</span>
+                  </div>
                 </div>
               </>
             ) : (
@@ -372,8 +387,12 @@ const Mylike = ({ likes = [], handlePostClick, languageIcons, formatDate }) => {
                 </div>
                 <hr style={{ border: '1px solid #ddd' }} />
                 <div className="post-meta">
-                  <span className="post-user">{like.user_nickname || '탈퇴한 회원'}</span>
-                  <span className="post-date">{formatDate(like.post_date)}</span>
+                  <div className="post_user_div">
+                    <span className="post-user">{like.user_nickname || '탈퇴한 회원'}</span>
+                  </div>
+                  <div className='post_date_div'>
+                    <span className="post-date">{formatDate(like.post_date)}</span>
+                  </div>
                 </div>
               </>
             ) : (

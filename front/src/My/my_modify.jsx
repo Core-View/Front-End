@@ -19,6 +19,7 @@ const Mymodify = () => {
   const [passwordValid, setPasswordValid] = useState(false);
   const [passwordValidityMessage, setPasswordValidityMessage] = useState("");
   const [userId, setUserId] = useState(null);
+  const [myprofile,setmyprofile]=useState(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [user_password, setUserPassword] = useState("");
@@ -107,17 +108,6 @@ const Mymodify = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!passwordValid) {
-      alert("비밀번호가 유효하지 않습니다. 조건을 확인해 주세요.");
-      return;
-    } else if (password !== confirmPassword) {
-      alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-      return;
-    } else if (intro.length > 30) {
-      alert("자기소개는 30자를 초과할 수 없습니다.");
-      return;
-    }
-
     if (imageFile) {
       const formData = new FormData();
       formData.append("user_image", imageFile);
@@ -138,6 +128,7 @@ const Mymodify = () => {
         const imageData = await imageResponse.json();
         if (imageData.access) {
           alert(imageData.message);
+          setmyprofile(true);
         } else {
           alert("프로필이 수정되지 않았습니다. 관리자에게 문의 부탁드립니다.");
         }
@@ -154,32 +145,58 @@ const Mymodify = () => {
       user_password_confirm: confirmPassword,
       user_intro: intro,
     };
-
-    try {
-      const response = await fetch(
-        `http://localhost:3000/mypage/${userId}/modify`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(profileData),
+    if (!passwordValid) {
+      console.log("머야",myprofile);
+      if(!myprofile){
+        alert("비밀번호가 유효하지 않습니다. 조건을 확인해 주세요.");
+        return;
+      }else{
+        navigate("/my_main");
+      }
+    } else if (password !== confirmPassword) {
+      console.log("머야",myprofile);
+      if(!myprofile){
+        alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+        return;
+      }else{
+        navigate("/my_main");
+      }
+    } else if (intro.length > 30) {
+      console.log("머야",myprofile);
+      if(!myprofile){
+        alert("자기소개는 30자를 초과할 수 없습니다.");
+        return;
+      }else{
+        navigate("/my_main");
+      }
+    }else{
+      try {
+        const response = await fetch(
+          `http://localhost:3000/mypage/${userId}/modify`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(profileData),
+          }
+        );
+  
+        if (!response.ok) {
+          throw new Error("Profile update failed");
         }
-      );
-
-      if (!response.ok) {
-        throw new Error("Profile update failed");
+  
+        const data = await response.json();
+        if (data.access) {
+          alert(data.message);
+          navigate("/my_main");
+        } else {
+          alert("프로필이 수정되지 않았습니다. 관리자에게 문의부탁드립니다.");
+        }
+      } catch (error) {
+        console.error("Error updating profile:", error);
+        alert("프로필 업데이트 중 오류가 발생했습니다. 관리자에게 문의하세요.");
       }
-
-      const data = await response.json();
-      if (data.access) {
-        alert(data.message);
-      } else {
-        alert("프로필이 수정되지 않았습니다. 관리자에게 문의부탁드립니다.");
-      }
-    } catch (error) {
-      console.error("Error updating profile:", error);
-      alert("프로필 업데이트 중 오류가 발생했습니다. 관리자에게 문의하세요.");
     }
   };
 
@@ -209,7 +226,7 @@ const Mymodify = () => {
       try {
         const response = await fetch(`http://localhost:3000/mypage/${userId}`);
         const data = await response.json();
-        if (data.profile_picture) {
+        if (!data.profile_picture || data.profile_picture === "null") {
           data.profile_picture = `${process.env.PUBLIC_URL}/images/original_profile.png`;
         }
         setImageSrc(

@@ -44,8 +44,14 @@ const Empty = () => {
     try {
         const response = await fetch(`http://localhost:3000/mypage/${userId}/feedback`);
         const postsData = await response.json();
-        setPosts(postsData);
-        setFilteredPosts(postsData);
+        const processedData = postsData.map(comment => ({
+          ...comment,
+          profile_picture: (comment.profile_picture === "null" || !comment.profile_picture)
+            ? `${process.env.PUBLIC_URL}/images/original_profile.png`
+            : comment.profile_picture,
+        }));
+        setPosts(processedData || []);
+        setFilteredPosts(processedData || []);
         setLoading(false);
       } catch (error) {
         setError('게시글을 가져오는 데 실패했습니다.');
@@ -152,6 +158,12 @@ const Empty = () => {
                       className="mylike-main-language-icon"
                     />{' '}
                     {post.post_id}. {post.post_title}
+                  </div>
+                  <div className='my-like-main-profile'>
+                    <img
+                      src={post.profile_picture}
+                      alt="profile"
+                      className="my-like-main-picture"/>
                   </div>
                   <div className="mylike-main-user-name">
                     {post.user_nickname || '탈퇴한 회원'}

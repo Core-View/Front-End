@@ -1,3 +1,7 @@
+.allofthem{
+  background-color: white;
+  height: 855px;
+}
 .my_all {
   background-color: white;
   display: flex;
@@ -25,12 +29,12 @@
 }
 .image_profile{
   flex:1;
-  margin-left: 20px;
+  position: relative;
+  margin-left: 38px;
 }
 .my_profile {
   width: 180px;
   height: 180px;
-  padding: 20px;
   border-radius: 70%;
   object-fit: cover;
 }
@@ -71,44 +75,50 @@
 }
 
 .my_nickname{
-  margin-left: 66px;
   margin-bottom: 7px;
   font-size: 25px;
   font-weight: bold;
 }
 .my_introduce{
-  margin-left: 66px;
   margin-bottom: 10px;
   font-size: 22px;
 }
+.my_profile_all_zone_one{
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
+}
 .my_modify{
   text-align: end;
-  margin-right: 100px;
-  margin-bottom: 15px;
 }
 .modi_link {
   cursor: pointer;
   margin-left: auto;
-  width: 160px;
-  height: 38px;
+  background-color: white;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
   object-fit: cover;
+  position: absolute; /* 또는 fixed; */
+  top: 162px; /* 부모 요소의 위쪽에서 50px 아래 */
+  left: 178px; /* 부모 요소의 왼쪽에서 100px 오른쪽 */
 }
 
 .modi_link:hover {
-  background-color: #333;
-  color: white;
+  color: rgba(33, 3, 117, 0.8);
 }
 
 .modi_link span{
-  font-size: 18px;
+  font-size: 30px;
+}
+.my_introduce_zone{
+  margin-top: 10px;
+  margin-left: 66px;
 }
 
 .my_post_zone{
-  background-color: aqua;
   flex: 3;
   display: flex;
   justify-content: center;
@@ -166,13 +176,18 @@
 
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(3, 0.4fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 
 .grid-item {
   background: #fff;
-  border: 1px solid #ddd;
+  border: 2px solid #ddd;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  box-shadow: 0 3px #ccc;
   padding: 3px;
   cursor: pointer;
   transition: transform 0.3s ease;
@@ -213,17 +228,23 @@
 
 .post-meta {
   display: flex;
-  text-align: end;
   margin-top: 5px;
-  font-size: 0.9em;
   color: #555;
+  justify-content: space-between;
 }
-.post-user{
+
+.post_user_div{
   flex: 1;
-  margin-right: 5px;
+  margin-left: 5px;
+  font-size: 0.9em;
+  text-align: start;
 }
-.post-date{
+.post_date_div{
   flex: 1;
+  display: flex;
+  justify-content: end;
+  align-items: end;
+  font-size: 0.8em;
   margin-left: 5px;
 }
 
@@ -233,7 +254,6 @@
   align-items: center;
   justify-content: center;
   color: #bbb;
-  border-radius: 10px;
 }
 
 .feedback_picture{
