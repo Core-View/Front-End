@@ -14,6 +14,10 @@ const FeedbackPopup = ({
   const feedbackListRef = useRef(null);
   const [likedFeedback, setLikedFeedback] = useState({});
   const [opacity, setOpacity] = useState(1);
+  const [scrollPosition, setScrollPosition] = useState({
+    top: window.scrollY,
+    left: window.scrollX,
+  });
 
   useEffect(() => {
     if (feedbackListRef.current) {
@@ -42,6 +46,21 @@ const FeedbackPopup = ({
     };
   }, [popup.show, setPopup]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollPosition({
+        top: window.scrollY,
+        left: window.scrollX,
+      });
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   const handleThumbsUpClick = (feedbackIndex) => {
     setLikedFeedback((prevLikedFeedback) => ({
       ...prevLikedFeedback,
@@ -67,8 +86,8 @@ const FeedbackPopup = ({
             style={{
               opacity: opacity,
               position: 'absolute',
-              top: '25%',
-              left: '40%',
+              top: `calc(50% + ${scrollPosition.top}px)`,
+              left: `calc(50% + ${scrollPosition.left}px)`,
               transform: 'translate(-50%, -50%)',
             }}
           >
