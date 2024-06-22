@@ -71,10 +71,10 @@ const PostMainNotification = () => {
     <div className="notification-container">
       <h2>전체 공지사항</h2>
       <ul className="notice-list">
-        <h4 className="post-main-meta">
+        {/* <h4 className="post-main-meta">
           <div className="post-main-title">제목</div>
           <div className="post-main-date">작성날짜</div>
-        </h4>
+        </h4> */}
         {currentPageData.length > 0 ? (
           currentPageData.map((notice, index) => (
             <li key={index} onClick={() => handleNoticeClick(notice.NOTICE_ID)}>
