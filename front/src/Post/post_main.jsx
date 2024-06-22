@@ -206,6 +206,16 @@ const Empty = () => {
         </ul>
       </section>
       <section className="post-top">
+        <div className="view-all-button-container">
+          <button
+            className="view-all-button"
+            onClick={() => navigate('/post_notification')}
+          >
+            공지 전체보기
+          </button>
+        </div>
+      </section>
+      <section className="post-top">
         <div className="post-top-left">
           <h2>전체 게시글</h2>
         </div>

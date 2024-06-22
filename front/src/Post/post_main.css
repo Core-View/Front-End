@@ -1,6 +1,6 @@
 /* 기타 CSS는 생략 */
 .poster-container {
-  width: 100%;
+  width: 80%;
   margin-top: 10px;
   /* margin: 0 auto; */
   padding: 20px;
@@ -249,4 +249,85 @@
 .write-language-icon {
   max-width: 20px;
   margin-right: 10px;
+}
+
+/* 공지사항 스타일 */
+.notification-container {
+  width: 80%;
+  margin: 20px auto;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-width: 1280px;
+}
+
+.notice-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.notice-list li {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.3s;
+}
+
+.notice-list li:hover {
+  background-color: #f1f1f1;
+  cursor: pointer;
+}
+
+.post-main-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.post-main-title {
+  flex: 3;
+}
+
+.post-main-date {
+  flex: 1;
+  text-align: right;
+}
+
+.post-main-meta div {
+  padding: 0 10px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.post-main-language-icon {
+  max-width: 25px;
+  margin-right: 10px;
+}
+
+/* 공지 전체보기 버튼 스타일 */
+.view-all-button-container {
+  width: 100%;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.view-all-button {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  color: black;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+  font-size: 1rem;
+}
+
+.view-all-button:hover {
+  background-color: #303030;
+  color: white;
+  transform: translateY(-2px);
 }
