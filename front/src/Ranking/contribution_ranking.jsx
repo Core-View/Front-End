@@ -9,7 +9,7 @@ class Ranking extends Component {
     this.state = {
       contributors: [],
       currentPage: 0,
-      contributorsPerPage: 20,
+      contributorsPerPage: 10,
       loading: true,
       error: null,
     };
@@ -24,7 +24,39 @@ class Ranking extends Component {
       const response = await axios.get(
         `http://localhost:3000/post/top-contributors`
       );
-      this.setState({ contributors: response.data, loading: false });
+      const contributors = await Promise.all(
+        response.data.map(async (contributor) => {
+          try {
+            const userProfile = await axios.get(
+              `http://localhost:3000/mypage/${contributor.user_id}`
+            );
+            const profile_picture = userProfile.data.profile_picture;
+            if (
+              !userProfile.profile_picture ||
+              userProfile.profile_picture === 'null'
+            ) {
+              userProfile.profile_picture = `${process.env.PUBLIC_URL}/images/original_profile.png`;
+            }
+            return {
+              ...contributor,
+              ...userProfile.data,
+              profile_picture,
+            };
+          } catch (error) {
+            console.error(
+              `Failed to fetch user profile for user ID ${contributor.user_id}:`,
+              error
+            );
+            return {
+              ...contributor,
+              profile_picture: `${process.env.PUBLIC_URL}/images/original_profile.png`,
+              user_nickname: 'Unknown',
+              introduction: '',
+            };
+          }
+        })
+      );
+      this.setState({ contributors, loading: false });
     } catch (error) {
       this.setState({ error: error.message, loading: false });
     }
@@ -40,11 +72,11 @@ class Ranking extends Component {
       this.state;
 
     if (loading) {
-      return <div className="ranking-container">Loading...</div>;
+      return <div className="ranking-container loading">Loading...</div>;
     }
 
     if (error) {
-      return <div className="ranking-container">Error: {error}</div>;
+      return <div className="ranking-container error">Error: {error}</div>;
     }
 
     const offset = currentPage * contributorsPerPage;
@@ -60,15 +92,27 @@ class Ranking extends Component {
         <table className="ranking-table">
           <thead>
             <tr>
-              <th>User ID</th>
+              <th>프로필</th>
               <th>기여도 총합</th>
             </tr>
           </thead>
           <tbody>
             {currentContributors.map((contributor, index) => (
               <tr key={index}>
-                <td>{contributor.user_nickname}</td>
-                <td>{contributor.user_contribute}</td>
+                <td>
+                  <div className="profile-info">
+                    <img src={contributor.profile_picture} alt="profile" />
+                    <div>
+                      <strong>{contributor.user_nickname}</strong>
+                      <span className="profile-bio">
+                        {contributor.introduction}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+                <td className="contribution-score">
+                  {contributor.user_contribute}
+                </td>
               </tr>
             ))}
           </tbody>

@@ -132,7 +132,7 @@ const Empty = () => {
   // 공지 클릭 핸들러
   const handleNoticeClick = (id) => {
     console.log(id);
-    navigate(`/post_view/notice/${id}`);
+    navigate(`/notice/view/${id}`);
   };
 
   // 페이지 변경 핸들러

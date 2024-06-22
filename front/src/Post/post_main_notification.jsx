@@ -33,7 +33,7 @@ const PostMainNotification = () => {
   // 공지 클릭 핸들러
   const handleNoticeClick = (id) => {
     console.log(id);
-    navigate(`/post_view/notice/${id}`);
+    navigate(`/notice/view/${id}`);
   };
 
   const formatDate = (dateString) => {
