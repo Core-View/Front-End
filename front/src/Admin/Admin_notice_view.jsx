@@ -78,7 +78,7 @@ const AdminNoticeView = () => {
         </div>
 
         <div className="admin_notice_view_buttons">
-          <Link to="/notice" className="delete_button">
+          <Link to="/admin" className="delete_button">
             <FaList />
           </Link>
           <button
