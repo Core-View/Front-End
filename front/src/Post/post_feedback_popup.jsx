@@ -21,6 +21,27 @@ const FeedbackPopup = ({
     }
   }, [popup.feedback]);
 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setPopup({
+          show: false,
+          line: null,
+          text: '',
+          codeContent: '',
+        });
+      }
+    };
+
+    if (popup.show) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [popup.show, setPopup]);
+
   const handleThumbsUpClick = (feedbackIndex) => {
     setLikedFeedback((prevLikedFeedback) => ({
       ...prevLikedFeedback,
