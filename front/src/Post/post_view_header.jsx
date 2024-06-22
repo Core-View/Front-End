@@ -15,25 +15,25 @@ const PostHeader = ({
 }) => {
   return (
     <div className="post-header">
-      <h1 className="post-title">
-        <img src={languageIcons[language]} alt="" className="language-icon" />{' '}
-        {title}
-      </h1>
-      <div className="post-meta">
-        <div className="meta-left">
+      <div className="header-content">
+        <h1 className="post-title">
+          <img src={languageIcons[language]} alt="" className="language-icon" />{' '}
+          {title}
+        </h1>
+        <div className="meta-container">
           <div className="post-author-container">
             <img src={user_image} alt="profile" className="profile-image" />
             <span className="post-author">{author}</span>
             <span className="post-date">{date}</span>
           </div>
-        </div>
-        <div className="post-likes" onClick={handleLikeClick}>
-          {liked ? (
-            <MdFavorite className="icon active" />
-          ) : (
-            <MdFavoriteBorder className="icon" />
-          )}
-          {likesCount}
+          <div className="post-likes" onClick={handleLikeClick}>
+            {liked ? (
+              <MdFavorite className="icon active" />
+            ) : (
+              <MdFavoriteBorder className="icon" />
+            )}
+            {likesCount}
+          </div>
         </div>
       </div>
     </div>
