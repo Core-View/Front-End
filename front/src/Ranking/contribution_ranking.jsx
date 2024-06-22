@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import ReactPaginate from 'react-paginate';
 import './contribution_ranking.css';
 
 class Ranking extends Component {
@@ -7,6 +8,8 @@ class Ranking extends Component {
     super(props);
     this.state = {
       contributors: [],
+      currentPage: 0,
+      contributorsPerPage: 20,
       loading: true,
       error: null,
     };
@@ -27,8 +30,14 @@ class Ranking extends Component {
     }
   };
 
+  handlePageClick = (data) => {
+    let selected = data.selected;
+    this.setState({ currentPage: selected });
+  };
+
   render() {
-    const { contributors, loading, error } = this.state;
+    const { contributors, currentPage, contributorsPerPage, loading, error } =
+      this.state;
 
     if (loading) {
       return <div className="ranking-container">Loading...</div>;
@@ -37,6 +46,13 @@ class Ranking extends Component {
     if (error) {
       return <div className="ranking-container">Error: {error}</div>;
     }
+
+    const offset = currentPage * contributorsPerPage;
+    const currentContributors = contributors.slice(
+      offset,
+      offset + contributorsPerPage
+    );
+    const pageCount = Math.ceil(contributors.length / contributorsPerPage);
 
     return (
       <div className="ranking-container">
@@ -49,7 +65,7 @@ class Ranking extends Component {
             </tr>
           </thead>
           <tbody>
-            {contributors.map((contributor, index) => (
+            {currentContributors.map((contributor, index) => (
               <tr key={index}>
                 <td>{contributor.user_id}</td>
                 <td>{contributor.total_contribution}</td>
@@ -57,6 +73,18 @@ class Ranking extends Component {
             ))}
           </tbody>
         </table>
+        <ReactPaginate
+          previousLabel={'이전'}
+          nextLabel={'다음'}
+          breakLabel={'...'}
+          breakClassName={'break-me'}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={this.handlePageClick}
+          containerClassName={'pagination'}
+          activeClassName={'active'}
+        />
       </div>
     );
   }
