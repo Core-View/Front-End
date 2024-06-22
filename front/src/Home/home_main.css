@@ -24,7 +24,7 @@
 .slide {
   width: 100%;
   flex-shrink: 0;
-  position: relative; /* 추가 */
+  position: relative;
 }
 
 .slide img {
@@ -33,19 +33,19 @@
 }
 
 .slide-button {
-  position: absolute; /* 이미지 위에 버튼을 위치시키기 위해 추가 */
-  bottom: 10%; /* 원하는 위치로 조정 */
+  position: absolute; /* 이미지 위에 버튼을 위치 */
+  bottom: 10%;
   left: 85%;
   transform: translateX(-50%);
-  background-color: rgba(255, 255, 255, 0.7); /* 배경색을 더 어둡게 설정 */
+  background-color: rgba(255, 255, 255, 0.7);
   color: #191919;
   font-weight: bold;
   border: none;
-  padding: 20px 20px; /* 버튼 크기 조정 */
+  padding: 20px 20px;
   cursor: pointer;
-  z-index: 2; /* 버튼이 이미지 위에 나타나도록 z-index 설정 */
-  font-size: 15px; /* 폰트 크기 조정 */
-  border-radius: 5px; /* 모서리를 둥글게 */
+  z-index: 2; /* 버튼이 이미지 위에 나타나도록 z-index */
+  font-size: 15px;
+  border-radius: 5px;
 }
 
 .prev-button,
@@ -58,7 +58,7 @@
   color: white;
   padding: 10px;
   cursor: pointer;
-  z-index: 3; /* 버튼이 이미지 위에 나타나도록 z-index 설정 */
+  z-index: 3; /* 버튼이 이미지 위에 나타나도록 z-index */
 }
 
 .prev-button {
@@ -83,4 +83,19 @@
 
 .end-card img {
   width: 100%;
+}
+
+/* 페이드인 추가해볼게요 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 1s forwards;
 }

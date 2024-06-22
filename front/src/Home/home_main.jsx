@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './home_main.css';
 
@@ -37,6 +37,41 @@ const HomeMain = () => {
     navigate(link);
   };
 
+  const imagesRef = useRef([]);
+  imagesRef.current = [];
+
+  const addToRefs = (el) => {
+    if (el && !imagesRef.current.includes(el)) {
+      imagesRef.current.push(el);
+    }
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('fade-in');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    imagesRef.current.forEach((image) => {
+      observer.observe(image);
+    });
+
+    return () => {
+      if (imagesRef.current) {
+        imagesRef.current.forEach((image) => {
+          observer.unobserve(image);
+        });
+      }
+    };
+  }, []);
+
   return (
     <div className="home-container">
       <div className="slider">
@@ -70,17 +105,20 @@ const HomeMain = () => {
           src={process.env.PUBLIC_URL + '/images/home_image/home-img-1.png'}
           alt="home-img-1"
           className="home-img"
+          ref={addToRefs}
         />
         <img
           src={process.env.PUBLIC_URL + '/images/home_image/home-img-2.png'}
           alt="home-img-2"
           className="home-img"
+          ref={addToRefs}
         />
       </div>
       <div className="end-card">
         <img
           src={process.env.PUBLIC_URL + '/images/home_image/home-end-card.png'}
           alt="home-end-card"
+          ref={addToRefs}
         />
       </div>
     </div>

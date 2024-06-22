@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import './post_feedback_popup.css';
+import './post_view_feedback_popup.css';
 import { FaRegThumbsUp, FaThumbsUp } from 'react-icons/fa';
 import Draggable from 'react-draggable';
 
