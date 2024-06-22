@@ -11,7 +11,7 @@
 }
 
 /* 제목과 메타데이터 섹션 */
-.post-header {
+.post-view-header {
   text-align: left;
   margin-bottom: 20px;
   display: flex;
@@ -24,7 +24,7 @@
 }
 
 .post-title {
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   font-weight: bold;
   color: #333;
   margin-bottom: 10px;
@@ -52,6 +52,7 @@
 
 .post-author {
   font-size: 1.2rem;
+  font-weight: bold;
   color: #555;
   margin-right: 10px;
 }

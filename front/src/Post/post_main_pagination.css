@@ -20,11 +20,13 @@
 }
 
 .pagination li.active a {
-  background-color: #3d3d3d;
-  color: white;
+  background-color: #ddd;
+  border: 1px solid #ddd;
+  color: black;
 }
 
 .pagination li:hover a {
-  background-color: #191919;
-  color: white;
+  background-color: #ddd;
+  border: 1px solid #ddd;
+  color: black;
 }

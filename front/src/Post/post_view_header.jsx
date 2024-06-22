@@ -14,7 +14,7 @@ const PostHeader = ({
   author,
 }) => {
   return (
-    <div className="post-header">
+    <div className="post-view-header">
       <div className="header-content">
         <h1 className="post-title">
           <img src={languageIcons[language]} alt="" className="language-icon" />{' '}

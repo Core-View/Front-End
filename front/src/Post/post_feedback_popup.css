@@ -75,7 +75,7 @@
 }
 
 .feedback-list {
-  max-height: 300px; /* 높이를 늘림 */
+  max-height: 300px;
   overflow-y: auto;
   margin-bottom: 20px;
 }
@@ -86,8 +86,8 @@
   margin-bottom: 10px;
   border-left: 5px solid #191919;
   display: flex;
-  justify-content: space-between; /* Flexbox를 사용하여 내용과 이모티콘 사이 공간 확보 */
-  align-items: center; /* 세로 정렬을 가운데로 맞춤 */
+  justify-content: space-between; /* 내용과 이모티콘 사이 공간 확보 */
+  align-items: center;
 }
 
 .feedback-nickname {
@@ -126,7 +126,7 @@
   border-radius: 8px;
   padding: 10px;
   font-family: 'Arial', sans-serif;
-  resize: none; /* textarea 크기 조정 불가능하게 설정 */
+  resize: none;
 }
 
 .popup-buttons {
