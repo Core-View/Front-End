@@ -92,13 +92,15 @@ class Ranking extends Component {
         <table className="ranking-table">
           <thead>
             <tr>
-              <th>프로필</th>
+              <th>순위</th>
+              <th>유저</th>
               <th>기여도</th>
             </tr>
           </thead>
           <tbody>
             {currentContributors.map((contributor, index) => (
               <tr key={index}>
+                <td>{offset + index + 1}</td>
                 <td>
                   <div className="profile-info">
                     <img src={contributor.profile_picture} alt="profile" />
@@ -118,8 +120,8 @@ class Ranking extends Component {
           </tbody>
         </table>
         <ReactPaginate
-          previousLabel={'Previous'}
-          nextLabel={'Next'}
+          previousLabel={'이전'}
+          nextLabel={'다음'}
           breakLabel={'...'}
           breakClassName={'break-me'}
           pageCount={pageCount}
