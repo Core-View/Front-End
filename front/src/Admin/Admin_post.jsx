@@ -1,18 +1,19 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Contribution from "../Common/Contribution";
-
-import "./admin_post.css";
-import axios from "axios";
+import React, { useEffect } from 'react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Contribution from '../Common/Contribution';
+import { Cookies } from 'react-cookie';
+import './admin_post.css';
+import axios from 'axios';
 
 const AdminPost = () => {
+  const cookies = new Cookies();
   const [postlist, setPostList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 10;
 
   const getAdminPosts = () => {
-    axios.get("http://localhost:3000/post/latest").then((response) => {
+    axios.get('http://localhost:3000/post/latest').then((response) => {
       setPostList(response.data);
     });
   };
@@ -41,20 +42,26 @@ const AdminPost = () => {
   }
 
   const deletePoster = async (post_id) => {
-    if (window.confirm("삭제하시겠습니까?")) {
+    if (
+      window.confirm('삭제하시겠습니까?') &&
+      cookies.get('adminpw') === 'passed'
+    ) {
       try {
         const response = await axios.delete(
           `http://localhost:3000/api/delete/${post_id}`
         );
-        if (response.data.message === "Post deleted successfully") {
-          alert("삭제되었습니다.");
+        if (response.data.message === 'Post deleted successfully') {
+          alert('삭제되었습니다.');
           getAdminPosts(); // 삭제 후 최신 게시글 목록을 다시 불러옵니다.
         } else {
-          alert("게시글을 찾을 수 없습니다.");
+          alert('게시글을 찾을 수 없습니다.');
         }
       } catch (error) {
-        alert("삭제에 실패했습니다.");
+        alert('삭제에 실패했습니다.');
       }
+    } else {
+      alert('잘못된 접근입니다.');
+      navigate('/');
     }
   };
 
@@ -101,7 +108,7 @@ const AdminPost = () => {
           <button
             key={number}
             onClick={() => setCurrentPage(number)}
-            className={`pagebtn ${currentPage === number ? "active" : ""}`}
+            className={`pagebtn ${currentPage === number ? 'active' : ''}`}
           >
             {number}
           </button>

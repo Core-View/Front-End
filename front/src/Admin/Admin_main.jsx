@@ -5,49 +5,29 @@ import AdPost from './Admin_post';
 import AdUsers from './Admin_user';
 import axios from 'axios';
 import Contribution from '../Common/Contribution';
-import { useNavigate } from 'react-router-dom';
 import { Cookies } from 'react-cookie';
+import { useNavigate } from 'react-router-dom';
 
 const Admin = () => {
   const cookies = new Cookies();
+  const navigate = useNavigate();
   const [selectedMenu, setSelectedMenu] = useState('어떤관리');
   const [member, setMember] = useState([]);
-  const [userId, setUserId] = useState(cookies.get('user_id'));
-  const [role, setRole] = useState(cookies.get('role'));
+
   const [clicked, setClicked] = useState([false, false, false]);
 
-  const navigate = useNavigate();
-
-  const clickedAdmin = () => {
-    let inputPassword = prompt('비밀번호를 입력하세요.', '');
-    if (inputPassword) {
-      axios
-        .post(`http://localhost:3000/admin/login/${userId}`, {
-          user_id: userId,
-          role: role,
-          admin_password: inputPassword,
-        })
-        .then((response) => {
-          console.log(response);
-          if (response.status === 200) {
-            alert('관리자페이지 접속 성공');
-          }
-        })
-        .catch(() => {
-          navigate('/');
-          alert('(비밀번호를 확인하세요).');
-        });
+  const getMember = () => {
+    if (cookies.get('adminpw') === 'passed') {
+      axios.get('http://localhost:3000/notice/viewuser').then((response) => {
+        if (response.data.success === true) {
+          setMember(response.data.user);
+        }
+      });
     } else {
+      alert('잘못된 접근!');
+      cookies.remove('adminpw');
       navigate('/');
     }
-  };
-
-  const getMember = () => {
-    axios.get('http://localhost:3000/notice/viewuser').then((response) => {
-      if (response.data.success === true) {
-        setMember(response.data.user);
-      }
-    });
   };
 
   const handleDelete = (userId) => {
@@ -80,12 +60,8 @@ const Admin = () => {
   const maxContribute = Math.max(...member.map((m) => m.USER_CONTRIBUTE));
 
   useEffect(() => {
-    clickedAdmin();
-  }, []);
-
-  useEffect(() => {
     getMember();
-  }, [handleDelete]);
+  }, []);
 
   return (
     <div className="admin-container">

@@ -13,6 +13,7 @@ function Header() {
   const deleteCookies = () => {
     cookies.remove('user_id');
     cookies.remove('role');
+    cookies.remove('adminpw');
     setUserId(undefined);
     setRole(undefined);
     window.location.reload();
@@ -51,7 +52,9 @@ function Header() {
                 <Link to="/my_main">내 정보</Link>
               )}
             </li>
-            <li>{role === 1 ? <Link to="/admin">관리자페이지</Link> : ''}</li>
+            <li>
+              {role === 1 ? <Link to="/admin/check">관리자페이지</Link> : ''}
+            </li>
           </ul>
         </div>
         <div className="header-nav-right">
