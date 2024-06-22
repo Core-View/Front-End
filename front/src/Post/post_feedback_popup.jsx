@@ -86,7 +86,7 @@ const FeedbackPopup = ({
             style={{
               opacity: opacity,
               position: 'absolute',
-              top: `calc(50% + ${scrollPosition.top}px)`,
+              top: `calc(${scrollPosition.top}px)`,
               left: `calc(50% + ${scrollPosition.left}px)`,
               transform: 'translate(-50%, -50%)',
             }}
