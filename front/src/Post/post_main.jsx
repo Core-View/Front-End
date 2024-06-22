@@ -18,6 +18,7 @@ const Empty = () => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [postsPerPage, setPostsPerPage] = useState(15); // 페이지당 게시글 수 기본값
+  const [selectedLanguages, setSelectedLanguages] = useState([]); // 선택된 언어들
 
   const [userInfos, setUserInfos] = useState({});
 
@@ -60,14 +61,14 @@ const Empty = () => {
     const fetchNotices = async () => {
       try {
         const response = await axios.get('http://localhost:3000/notice/view');
-        setNotices(response.data);
+        console.log(response);
+        setNotices(response.data.notice);
         setLoading(false);
       } catch (err) {
         setError('공지를 가져오는 데 실패했습니다.');
         setLoading(false);
       }
     };
-
     fetchNotices();
   }, []);
 
@@ -93,20 +94,45 @@ const Empty = () => {
     fetchPosts();
   }, []);
 
-  // 검색 핸들러
+  // 검색 및 필터링 핸들러
   const handleSearch = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
-    const filtered = posts.filter((post) =>
-      post.post_title.toLowerCase().includes(query.toLowerCase())
-    );
-    setFilteredPosts(filtered);
+    filterPosts(query, selectedLanguages);
     setCurrentPage(0); // 검색 시 첫 페이지로 이동
+  };
+
+  const handleLanguageToggle = (language) => {
+    const newSelectedLanguages = selectedLanguages.includes(language)
+      ? selectedLanguages.filter((lang) => lang !== language)
+      : [...selectedLanguages, language];
+    setSelectedLanguages(newSelectedLanguages);
+    filterPosts(searchQuery, newSelectedLanguages);
+    setCurrentPage(0); // 필터 변경 시 첫 페이지로 이동
+  };
+
+  const filterPosts = (query, languages) => {
+    let filtered = posts;
+    if (query) {
+      filtered = filtered.filter((post) =>
+        post.post_title.toLowerCase().includes(query.toLowerCase())
+      );
+    }
+    if (languages.length > 0) {
+      filtered = filtered.filter((post) => languages.includes(post.language));
+    }
+    setFilteredPosts(filtered);
   };
 
   // 게시글 클릭 핸들러
   const handlePostClick = (post) => {
     navigate(`/post_view/${post.post_id}`);
+  };
+
+  // 공지 클릭 핸들러
+  const handleNoticeClick = (id) => {
+    console.log(id);
+    navigate(`/notice/view/${id}`);
   };
 
   // 페이지 변경 핸들러
@@ -159,28 +185,44 @@ const Empty = () => {
             <div className="post-main-date">작성날짜</div>
           </h4>
           {notices.length > 0 ? (
-            notices.slice(0, 3).map((notice, index) => (
-              <li key={index} onClick={() => handlePostClick(notice)}>
-                <div className="post-main-meta">
-                  <div className="post-main-title">
-                    <img
-                      src="/icons/notice_icon.png"
-                      alt=""
-                      className="post-main-language-icon"
-                    />{' '}
-                    {notice.notice_title}
+            [...notices]
+              .reverse()
+              .slice(0, 3)
+              .map((notice, index) => (
+                <li
+                  key={index}
+                  onClick={() => handleNoticeClick(notice.NOTICE_ID)}
+                >
+                  <div className="post-main-meta">
+                    <div className="post-main-title">
+                      <img
+                        src="/icons/notice_icon.png"
+                        alt=""
+                        className="post-main-language-icon"
+                      />{' '}
+                      {notice.NOTICE_TITLE}
+                    </div>
+                    <div className="post-main-user-name"></div>
+                    <div className="post-main-date">
+                      {formatDate(notice.NOTICE_DATE)}
+                    </div>
                   </div>
-                  <div className="post-main-user-name"></div>
-                  <div className="post-main-date">
-                    {formatDate(notice.notice_date)}
-                  </div>
-                </div>
-              </li>
-            ))
+                </li>
+              ))
           ) : (
             <li>게시글이 없습니다.</li>
           )}
         </ul>
+      </section>
+      <section className="post-top">
+        <div className="view-all-button-container">
+          <button
+            className="view-all-button"
+            onClick={() => navigate('/post_notification')}
+          >
+            공지 전체보기
+          </button>
+        </div>
       </section>
       <section className="post-top">
         <div className="post-top-left">
@@ -209,14 +251,58 @@ const Empty = () => {
         </div>
       </section>
       <section className="post-mid">
-        <ul className="post-cate">
-          <div>
-            <h4>🔥Hot</h4>
-          </div>
-          <li>React</li>
-          <li>Hello</li>
-          <li>GitHub</li>
-        </ul>
+        <div className="post-language-buttons">
+          {/* <button
+            className={selectedLanguages.includes('') ? 'active' : ''}
+            onClick={() => handleLanguageToggle('')}
+          >
+            전체
+          </button> */}
+          <button
+            className={selectedLanguages.includes('c') ? 'active' : ''}
+            onClick={() => handleLanguageToggle('c')}
+          >
+            <img
+              src="/images/language_icons/c_icon.png"
+              alt=""
+              className="write-language-icon"
+            />{' '}
+            C
+          </button>
+          <button
+            className={selectedLanguages.includes('cpp') ? 'active' : ''}
+            onClick={() => handleLanguageToggle('cpp')}
+          >
+            <img
+              src="/images/language_icons/cpp_icon.png"
+              alt=""
+              className="write-language-icon"
+            />{' '}
+            C++
+          </button>
+          <button
+            className={selectedLanguages.includes('java') ? 'active' : ''}
+            onClick={() => handleLanguageToggle('java')}
+          >
+            <img
+              src="/images/language_icons/java_icon.png"
+              alt=""
+              className="write-language-icon"
+            />{' '}
+            Java
+          </button>
+          <button
+            className={selectedLanguages.includes('python') ? 'active' : ''}
+            onClick={() => handleLanguageToggle('python')}
+          >
+            <img
+              src="/images/language_icons/python_icon.png"
+              alt=""
+              className="write-language-icon"
+            />{' '}
+            Python
+          </button>
+        </div>
         <ul className="post-list">
           <h4 className="post-main-meta">
             <div className="post-main-title">제목</div>

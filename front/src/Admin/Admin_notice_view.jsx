@@ -23,7 +23,7 @@ const AdminNoticeView = () => {
 
   useEffect(() => {
     getNoticeDetail();
-  }, [id, noticeDetail]);
+  }, []);
 
   useEffect(() => {
     if (noticeDetail) {

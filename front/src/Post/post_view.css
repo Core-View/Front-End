@@ -1,14 +1,13 @@
-/* post_view.css */
-
 /* 포스트 전체 */
 .post-view {
-  max-width: 80%;
-  margin: 20px auto;
+  max-width: 60%;
+  margin: 10px auto;
   padding: 20px;
   background: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   font-family: 'Helvetica Neue', Arial, sans-serif;
+  min-width: 1280px;
 }
 
 /* 제목과 메타데이터 섹션 */
@@ -39,6 +38,7 @@
 .post-likes {
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .icon {
@@ -46,10 +46,21 @@
   color: #ff4500;
 }
 
-/* 작성자 */
-.post-author {
-  display: block;
+.post-author-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-top: 10px;
+}
+
+.profile-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.post-author {
   font-size: 1.2rem;
   color: #555;
 }
@@ -100,7 +111,7 @@
   user-select: none; /* 드래그 방지 */
 }
 
-/* 드래그 X */
+/* 드래그 방지 */
 .non-drag {
   user-select: none;
 }
@@ -159,7 +170,7 @@
   font-size: 1.2rem;
   transition: opacity 0.5s ease-in-out;
   opacity: 0;
-  pointer-events: none; /* 메시지가 보이지 않을 때 클릭을 막음 */
+  pointer-events: none;
 }
 
 .like-message.show {
