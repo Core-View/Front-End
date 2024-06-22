@@ -88,17 +88,19 @@ class Ranking extends Component {
 
     return (
       <div className="ranking-container">
-        <h1>기여도 랭킹</h1>
+        <h1>기여도 순위</h1>
         <table className="ranking-table">
           <thead>
             <tr>
-              <th>프로필</th>
-              <th>기여도 총합</th>
+              <th>순위</th>
+              <th>유저</th>
+              <th>기여도</th>
             </tr>
           </thead>
           <tbody>
             {currentContributors.map((contributor, index) => (
               <tr key={index}>
+                <td>{offset + index + 1}</td>
                 <td>
                   <div className="profile-info">
                     <img src={contributor.profile_picture} alt="profile" />

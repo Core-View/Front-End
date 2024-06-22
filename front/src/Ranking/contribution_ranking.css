@@ -1,19 +1,19 @@
 /* contribution_ranking.css */
 .ranking-container {
   display: flex;
+  margin: 10px auto;
   flex-direction: column;
   align-items: center;
-  margin: 20px;
   padding: 20px;
-  background-color: #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
-  max-width: 90%;
+  width: 100%;
+  max-width: 1280px;
   min-width: 300px;
 }
 
 h1 {
-  font-size: 2.5em;
+  font-size: 1.5em;
   color: #333;
   margin-bottom: 20px;
 }
@@ -21,16 +21,15 @@ h1 {
 .ranking-table {
   width: 100%;
   border-collapse: collapse;
-  margin: 20px 0;
   background-color: #fff;
 }
 
 .ranking-table th,
 .ranking-table td {
-  border: 1px solid #ddd;
-  padding: 12px;
+  /* border: 1px solid #ddd; */
+  padding: 8px;
   text-align: left;
-  vertical-align: top;
+  vertical-align: middle;
 }
 
 .ranking-table th {
@@ -38,18 +37,19 @@ h1 {
   font-weight: bold;
 }
 
-.ranking-table tr:nth-child(even) {
-  background-color: #f9f9f9;
+.ranking-table tbody tr {
+  border-bottom: 1px solid #ddd;
 }
 
-.ranking-table tr:hover {
-  background-color: #f1f1f1;
+.ranking-table tbody tr:last-child {
+  border-bottom: none;
 }
 
 .ranking-table img {
   border-radius: 50%;
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
+  /* margin-right: 10px; */
   object-fit: cover;
   margin-right: 10px;
 }
@@ -102,6 +102,7 @@ h1 {
 }
 
 .profile-bio {
+  font-size: 0.9rem;
   max-width: 300px;
   white-space: nowrap;
   overflow: hidden;
@@ -112,5 +113,6 @@ h1 {
 .contribution-score {
   font-size: 1.2em;
   font-weight: bold;
-  color: #333;
+  color: #4caf50;
+  text-align: right;
 }
