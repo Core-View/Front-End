@@ -19,7 +19,7 @@ const HomeMain = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const interval = setInterval(nextSlide, 5000); // 5초 간격으로 슬라이드
+    const interval = setInterval(nextSlide, 8000); // 8초 간격으로 슬라이드
     return () => clearInterval(interval);
   }, []);
 

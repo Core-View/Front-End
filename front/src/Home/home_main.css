@@ -4,7 +4,7 @@
   align-items: center;
   width: 100%;
   max-width: 1500px;
-  min-width: 1300px;
+  min-width: 1280px;
 }
 
 .slider {
@@ -39,10 +39,10 @@
   background-color: rgba(49, 49, 49, 0.7); /* 배경색을 더 어둡게 설정 */
   color: white;
   border: none;
-  padding: 10px 20px; /* 버튼 크기 조정 */
+  padding: 20px 20px; /* 버튼 크기 조정 */
   cursor: pointer;
   z-index: 2; /* 버튼이 이미지 위에 나타나도록 z-index 설정 */
-  font-size: 16px; /* 폰트 크기 조정 */
+  font-size: 15px; /* 폰트 크기 조정 */
   border-radius: 5px; /* 모서리를 둥글게 */
 }
 
