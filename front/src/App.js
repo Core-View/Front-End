@@ -21,10 +21,12 @@ import PostView from './Post/post_view';
 import PostWrite from './Post/post_write';
 // Admin
 import Admin from './Admin/Admin_main';
+import AdminCheck from './Admin/Admin_check';
 import AdminNotice from './Admin/Admin_notice';
 import AdminNoticeView from './Admin/Admin_notice_view';
 import AdminNoticePost from './Admin/Admin_notice_create';
 import AdminNoticeUpdate from './Admin/Admin_notice_update';
+
 //test
 import Alarm from './Common/Alarm';
 import FindPwd from './Sign/Sign_in/Find_pwd';
@@ -40,6 +42,7 @@ function App() {
               <Route path="/" element={<Main />} />
               {/* admin  */}
               <Route path="/admin" element={<Admin />} />
+              <Route path="/admin/check" element={<AdminCheck />} />
               <Route path="/notice" element={<AdminNotice />} />
               <Route path="/notice/view/:id" element={<AdminNoticeView />} />
               <Route path="/notice/post" element={<AdminNoticePost />} />

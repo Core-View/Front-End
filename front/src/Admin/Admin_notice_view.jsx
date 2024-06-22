@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import './admin_notice_view.css';
 import Viewer from '@toast-ui/editor/dist/toastui-editor-viewer';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
+import { RiDeleteBin6Line } from 'react-icons/ri';
+import { GoPencil } from 'react-icons/go';
+import { FaList } from 'react-icons/fa';
+import { Cookies } from 'react-cookie';
 
 const AdminNoticeView = () => {
+  const cookies = new Cookies();
   const navigate = useNavigate();
   const { id } = useParams();
   const [noticeDetail, setNoticeDetail] = useState(null);
@@ -36,18 +41,26 @@ const AdminNoticeView = () => {
   }, [noticeDetail]);
 
   const handleEdit = () => {
-    navigate(`/notice/modify/${id}`);
+    if (cookies.get('adminpw') === 'passed') {
+      navigate(`/notice/modify/${id}`);
+    } else {
+      alert('관리자만 수정할 수 있습니다.');
+    }
   };
 
   const handleDelete = () => {
-    axios
-      .delete(`http://localhost:3000/notice/delete/${id}`)
-      .then((response) => {
-        if (response.data.success === true) {
-          alert('삭제 성공!');
-          navigate('/admin');
-        }
-      });
+    if (cookies.get('adminpw') === 'passed') {
+      axios
+        .delete(`http://localhost:3000/notice/delete/${id}`)
+        .then((response) => {
+          if (response.data.success === true) {
+            alert('삭제 성공!');
+            navigate('/admin');
+          }
+        });
+    } else {
+      alert('관리자만 지울수 있습니다.');
+    }
   };
 
   if (!noticeDetail) {
@@ -59,11 +72,15 @@ const AdminNoticeView = () => {
       <div className="admin_notice_view_header">
         <div className="admin_notice_view_title">
           {noticeDetail[0].NOTICE_TITLE}
-        </div>
-        <div className="admin_notice_view_buttons">
           <button onClick={handleEdit} className="edit_button">
-            수정
+            <GoPencil />
           </button>
+        </div>
+
+        <div className="admin_notice_view_buttons">
+          <Link to="/notice" className="delete_button">
+            <FaList />
+          </Link>
           <button
             onClick={(e) => {
               e.preventDefault();
@@ -71,7 +88,7 @@ const AdminNoticeView = () => {
             }}
             className="delete_button"
           >
-            삭제
+            <RiDeleteBin6Line />
           </button>
         </div>
       </div>

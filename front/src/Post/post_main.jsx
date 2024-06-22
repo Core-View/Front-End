@@ -78,6 +78,7 @@ const Empty = () => {
       try {
         const response = await axios.get('http://localhost:3000/post/latest');
         const postsData = response.data;
+        console.log(postsData);
 
         const userIds = [...new Set(postsData.map((post) => post.user_id))];
         await fetchUserInfos(userIds);

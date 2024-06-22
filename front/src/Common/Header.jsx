@@ -43,7 +43,12 @@ function Header() {
 
   return (
     <header className="header">
-      <div className="header-logo-container">
+      <div
+        className="header-logo-container"
+        onClick={() => {
+          cookies.remove('adminpw');
+        }}
+      >
         <Link to="/">
           <img
             src="/images/logo_CV_black.png"
@@ -56,36 +61,58 @@ function Header() {
       <nav className="header-nav">
         <div className="header-nav-left">
           <ul>
-            {role === 1 ? (
-              <div className="gotoAdmin" onClick={clickedAdmin}>
-                관리자페이지
-              </div>
-            ) : null}
             <li>
+              {role === 1 ? <Link to="/admin/check">관리자페이지</Link> : null}
+            </li>
+            <li
+              onClick={() => {
+                cookies.remove('adminpw');
+              }}
+            >
               <Link to="/post_main">전체 게시글</Link>
             </li>
-            <li>
+            <li
+              onClick={() => {
+                cookies.remove('adminpw');
+              }}
+            >
               {userId === undefined ? (
                 <Link to="/users/sign-in">글 쓰기</Link>
               ) : (
                 <Link to="/post_write">글 쓰기</Link>
               )}
             </li>
-            <li>
+            <li
+              onClick={() => {
+                cookies.remove('adminpw');
+              }}
+            >
               <Link to="/contribution_ranking">랭킹</Link>
             </li>
           </ul>
         </div>
         <div className="header-nav-right">
           <ul>
-            <li>
+            <li
+              onClick={() => {
+                cookies.remove('adminpw');
+              }}
+            >
               {userId === undefined ? (
                 <Link to="/users/sign-in">내 정보</Link>
               ) : (
                 <Link to="/my_main">내 정보</Link>
               )}
             </li>
-            <li>
+          </ul>
+        </div>
+        <div className="header-nav-right">
+          <ul>
+            <li
+              onClick={() => {
+                cookies.remove('adminpw');
+              }}
+            >
               {userId === undefined ? (
                 <Link to="/users/sign-in">로그인</Link>
               ) : (

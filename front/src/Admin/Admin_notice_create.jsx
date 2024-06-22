@@ -4,8 +4,10 @@ import Editor from '@toast-ui/editor';
 import '@toast-ui/editor/dist/toastui-editor.css'; // Editor's Style
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { Cookies } from 'react-cookie';
 
 const AdminNoticeCreate = () => {
+  const cookies = new Cookies();
   const editorRef = useRef(null);
   const editorInstanceRef = useRef(null);
   const [title, setTitle] = useState('');
@@ -13,7 +15,7 @@ const AdminNoticeCreate = () => {
   const navigate = useNavigate();
 
   const handleRegisterButton = () => {
-    if (editorInstanceRef.current) {
+    if (editorInstanceRef.current && cookies.get('adminpw') === 'passed') {
       axios
         .post(`http://localhost:3000/notice/post`, {
           title: title,
@@ -36,11 +38,14 @@ const AdminNoticeCreate = () => {
       // 입력창에 입력한 내용을 MarkDown 형태로 취득
       console.log(editorInstanceRef.current.getMarkdown());
       console.log(typeof editorInstanceRef.current.getMarkdown());
+    } else {
+      alert('잘못된 접근입니다.');
+      navigate('/');
     }
   };
 
   useEffect(() => {
-    if (editorRef.current) {
+    if (editorRef.current && cookies.get('adminpw') === 'passed') {
       editorInstanceRef.current = new Editor({
         el: editorRef.current,
         height: '600px',
@@ -50,10 +55,6 @@ const AdminNoticeCreate = () => {
         language: 'ko-KR',
         hideModeSwitch: true,
         hooks: {
-          // addImageBlobHook(blob, callback) {
-          //   console.log(blob);
-          //   console.log(callback);
-          // },
           async addImageBlobHook(blob, callback) {
             try {
               const formData = new FormData();
@@ -84,6 +85,9 @@ const AdminNoticeCreate = () => {
           },
         },
       });
+    } else {
+      alert('잘못된 접근입니다.');
+      navigate('/');
     }
   }, []);
 
