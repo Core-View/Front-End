@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Cookies } from 'react-cookie';
 import FeedbackPopup from './post_feedback_popup';
 import { MdFavoriteBorder, MdFavorite } from 'react-icons/md';
 import { BiCommentDetail } from 'react-icons/bi';
-
 import './post_view.css';
 import './post_view_fb.css';
 
@@ -15,16 +14,18 @@ const PostView = () => {
   const { post_id } = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const location = useLocation();
   const [loginError, setLoginError] = useState('');
   const maxLength = 50;
 
-  const languageIcons = {
-    c: '/images/language_icons/c_icon.png',
-    cpp: '/images/language_icons/cpp_icon.png',
-    java: '/images/language_icons/java_icon.png',
-    python: '/images/language_icons/python_icon.png',
-  };
+  const languageIcons = useMemo(
+    () => ({
+      c: '/images/language_icons/c_icon.png',
+      cpp: '/images/language_icons/cpp_icon.png',
+      java: '/images/language_icons/java_icon.png',
+      python: '/images/language_icons/python_icon.png',
+    }),
+    []
+  );
 
   const [post, setPost] = useState({});
   const [feedback, setFeedback] = useState({});
@@ -41,9 +42,8 @@ const PostView = () => {
   const [message, setMessage] = useState('');
   const [showMessage, setShowMessage] = useState(false);
 
-  const fetchPostAndFeedback = async () => {
+  const fetchPostAndFeedback = useCallback(async () => {
     try {
-      // 첫 번째 요청: post 및 feedback 데이터 가져오기
       const [postResponse, feedbackResponse] = await Promise.all([
         axios.get(`http://localhost:3000/post/details/${post_id}`),
         axios.get(`http://localhost:3000/api/feedbacks/post/${post_id}`),
@@ -58,51 +58,42 @@ const PostView = () => {
         return acc;
       }, {});
 
-      // console.log(postData);
       setPost(postData);
       setFeedback(feedbackData);
       setLikesCount(postData.total_likes);
 
-      // 두 번째 요청: liked 데이터 가져오기
       const likedResponse = await axios.get(
         `http://localhost:3000/mypage/${loggedInUserId}/likedPosts`
       );
       const likedData = likedResponse.data;
       setLikedPosts(likedData);
-      // console.log(likedData);
 
-      // liked 상태 업데이트
       isLiked(likedData);
-
       setLoading(false);
     } catch (err) {
       setError(`데이터를 가져오는 데 실패했습니다: ${err.message}`);
       setLoading(false);
     }
-  };
+  }, [post_id, loggedInUserId]);
 
-  const isLiked = (likedData) => {
-    // console.log("Checking if post is liked");
-    // console.log("Liked Data:", likedData);
-    // console.log("Current Post ID:", post_id);
-    if (
-      likedData.some((likedPost) => likedPost.post_id === parseInt(post_id))
-    ) {
-      console.log('Post is liked');
-      setLiked(true);
-    }
-  };
+  const isLiked = useCallback(
+    (likedData) => {
+      if (
+        likedData.some((likedPost) => likedPost.post_id === parseInt(post_id))
+      ) {
+        setLiked(true);
+      }
+    },
+    [post_id]
+  );
 
   useEffect(() => {
     fetchPostAndFeedback();
-  }, [post_id]);
+  }, [fetchPostAndFeedback]);
 
   const title = post.post_title;
-  let user_image = post.user_image;
-  if (user_image == null) {
-    user_image = `${process.env.PUBLIC_URL}/images/original_profile.png`;
-  }
-  console.log(user_image);
+  const user_image =
+    post.user_image || `${process.env.PUBLIC_URL}/images/original_profile.png`;
   const author = post.user_nickname;
   const language = post.language;
   const date = post.post_date;
@@ -110,17 +101,20 @@ const PostView = () => {
   const code = post.post_code ? post.post_code.trim() : '';
   const result = post.post_result;
 
-  const handleFeedbackClick = (lineIndex, lineCode) => {
-    setPopup({
-      show: true,
-      line: lineIndex,
-      text: '',
-      codeContent: lineCode,
-      feedback: feedback[lineIndex] || [],
-    });
-  };
+  const handleFeedbackClick = useCallback(
+    (lineIndex, lineCode) => {
+      setPopup({
+        show: true,
+        line: lineIndex,
+        text: '',
+        codeContent: lineCode,
+        feedback: feedback[lineIndex] || [],
+      });
+    },
+    [feedback]
+  );
 
-  const handleFeedbackSubmit = async () => {
+  const handleFeedbackSubmit = useCallback(async () => {
     if (popup.text.trim() === '') return;
 
     const feedbackHandleData = {
@@ -143,7 +137,6 @@ const PostView = () => {
         throw new Error('Network response was not ok');
       }
 
-      // 새로운 피드백을 직접 추가하여 피드백 목록 업데이트
       const newFeedback = feedback[popup.line]
         ? [
             ...feedback[popup.line],
@@ -161,9 +154,11 @@ const PostView = () => {
             },
           ];
 
-      setFeedback({ ...feedback, [popup.line]: newFeedback });
+      setFeedback((prevFeedback) => ({
+        ...prevFeedback,
+        [popup.line]: newFeedback,
+      }));
 
-      // popup 상태도 업데이트하여 새 피드백이 바로 보이도록 함
       setPopup((prevPopup) => ({
         ...prevPopup,
         feedback: newFeedback,
@@ -172,9 +167,16 @@ const PostView = () => {
     } catch (error) {
       console.error('There was a problem with your fetch operation:', error);
     }
-  };
+  }, [
+    popup.text,
+    popup.line,
+    loggedInUserId,
+    post.user_nickname,
+    feedback,
+    post_id,
+  ]);
 
-  const truncateText = (text, maxLength) => {
+  const truncateText = useCallback((text, maxLength) => {
     const newlineIndex = text.indexOf('\n');
     if (newlineIndex !== -1 && newlineIndex <= maxLength) {
       return text.slice(0, newlineIndex) + '...';
@@ -183,9 +185,9 @@ const PostView = () => {
       return text;
     }
     return text.slice(0, maxLength) + '...';
-  };
+  }, []);
 
-  const handleLikeClick = async () => {
+  const handleLikeClick = useCallback(async () => {
     if (!loggedInUserId) {
       setMessage('로그인이 필요합니다.');
       setShowMessage(true);
@@ -205,7 +207,7 @@ const PostView = () => {
     setLikesCount(newLiked ? likesCount + 1 : likesCount - 1);
 
     const url = newLiked
-      ? `http://localhost:3000/post/like`
+      ? 'http://localhost:3000/post/like'
       : `http://localhost:3000/post/unlike/${post_id}/${loggedInUserId}`;
 
     const options = newLiked
@@ -232,7 +234,7 @@ const PostView = () => {
     } catch (error) {
       console.error('There was a problem with your fetch operation:', error);
     }
-  };
+  }, [liked, likesCount, loggedInUserId, post.user_id, post_id]);
 
   if (loading) {
     return <div>로딩 중...</div>;
@@ -314,11 +316,11 @@ const PostView = () => {
         handleFeedbackSubmit={handleFeedbackSubmit}
         loggedInUserId={loggedInUserId}
         loginError={loginError}
-        refreshFeedback={fetchPostAndFeedback} // 추가된 부분
+        refreshFeedback={fetchPostAndFeedback}
       />
       <div className="post-result">
         <h4>코드 실행 결과</h4>
-        <br></br>
+        <br />
         <pre>{result}</pre>
       </div>
     </div>

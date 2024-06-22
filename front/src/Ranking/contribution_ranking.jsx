@@ -67,8 +67,8 @@ class Ranking extends Component {
           <tbody>
             {currentContributors.map((contributor, index) => (
               <tr key={index}>
-                <td>{contributor.user_id}</td>
-                <td>{contributor.total_contribution}</td>
+                <td>{contributor.user_nickname}</td>
+                <td>{contributor.user_contribute}</td>
               </tr>
             ))}
           </tbody>

@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
-import "./post_feedback_popup.css";
-import { FaRegThumbsUp, FaThumbsUp } from "react-icons/fa";
-import ReactPaginate from "react-paginate";
+import React, { useEffect, useRef, useState } from 'react';
+import './post_feedback_popup.css';
+import { FaRegThumbsUp, FaThumbsUp } from 'react-icons/fa';
 
 const FeedbackPopup = ({
   popup,
@@ -9,10 +8,17 @@ const FeedbackPopup = ({
   handleFeedbackSubmit,
   loggedInUserId,
   loginError,
-  refreshFeedback, // 추가된 부분
+  refreshFeedback,
 }) => {
   const feedbackListRef = useRef(null);
+  const popupRef = useRef(null);
   const [likedFeedback, setLikedFeedback] = useState({});
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [popupPosition, setPopupPosition] = useState({
+    top: '50%',
+    left: '50%',
+  });
 
   useEffect(() => {
     if (feedbackListRef.current) {
@@ -29,14 +35,48 @@ const FeedbackPopup = ({
 
   const handleFeedbackSubmitWithRefresh = async () => {
     await handleFeedbackSubmit();
-    await refreshFeedback(); // 피드백 목록 새로고침
+    await refreshFeedback();
   };
+
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setDragStart({
+      x: e.clientX - popupRef.current.getBoundingClientRect().left,
+      y: e.clientY - popupRef.current.getBoundingClientRect().top,
+    });
+  };
+
+  const handleMouseMove = (e) => {
+    if (isDragging) {
+      setPopupPosition({
+        top: `${e.clientY - dragStart.y}px`,
+        left: `${e.clientX - dragStart.x}px`,
+      });
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDragging]);
 
   return (
     <>
       {popup.show && (
-        <div className="popup">
-          <div className="popup-header">
+        <div
+          className={`popup ${isDragging ? 'dragging' : ''}`}
+          ref={popupRef}
+          style={{ top: popupPosition.top, left: popupPosition.left }}
+        >
+          <div className="popup-header" onMouseDown={handleMouseDown}>
             <h3>Line: {popup.line + 1} 피드백 팝업</h3>
             <button
               className="popup-close"
@@ -44,8 +84,8 @@ const FeedbackPopup = ({
                 setPopup({
                   show: false,
                   line: null,
-                  text: "",
-                  codeContent: "",
+                  text: '',
+                  codeContent: '',
                 })
               }
             >
@@ -66,7 +106,7 @@ const FeedbackPopup = ({
                   </div>
                   <span
                     className={`thumbs-up-icon ${
-                      likedFeedback[fbIndex] ? "liked" : ""
+                      likedFeedback[fbIndex] ? 'liked' : ''
                     }`}
                     onClick={() => handleThumbsUpClick(fbIndex)}
                   >
@@ -85,13 +125,12 @@ const FeedbackPopup = ({
               rows="4"
               placeholder={
                 loggedInUserId
-                  ? "피드백을 남겨주세요."
-                  : "로그인 후 이용해주세요."
+                  ? '피드백을 남겨주세요.'
+                  : '로그인 후 이용해주세요.'
               }
               value={popup.text}
               onChange={(e) => setPopup({ ...popup, text: e.target.value })}
-              style={{ resize: "none" }}
-              disabled={!loggedInUserId} // 로그인이 안된 경우 비활성화
+              disabled={!loggedInUserId}
             />
             <div className="popup-buttons">
               <button
@@ -100,8 +139,8 @@ const FeedbackPopup = ({
                   setPopup({
                     show: false,
                     line: null,
-                    text: "",
-                    codeContent: "",
+                    text: '',
+                    codeContent: '',
                   })
                 }
               >
@@ -109,8 +148,8 @@ const FeedbackPopup = ({
               </button>
               <button
                 className="submit-button"
-                onClick={handleFeedbackSubmitWithRefresh} // 변경된 부분
-                disabled={!loggedInUserId} // 로그인이 안된 경우 비활성화
+                onClick={handleFeedbackSubmitWithRefresh}
+                disabled={!loggedInUserId}
               >
                 전송
               </button>

@@ -14,6 +14,12 @@
   max-width: 600px;
   font-family: 'Arial', sans-serif;
   animation: fadeIn 0.3s ease-in-out;
+  opacity: 1; /* 기본 투명도 */
+}
+
+.popup.dragging {
+  opacity: 0.8; /* 드래그 중 투명도 */
+  cursor: move;
 }
 
 @keyframes fadeIn {
@@ -29,6 +35,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  cursor: move; /* 드래그 커서 */
+  user-select: none;
 }
 
 .popup-header h3 {
