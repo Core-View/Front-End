@@ -36,8 +36,9 @@
   bottom: 10%; /* 원하는 위치로 조정 */
   left: 85%;
   transform: translateX(-50%);
-  background-color: rgba(49, 49, 49, 0.7); /* 배경색을 더 어둡게 설정 */
-  color: white;
+  background-color: rgba(255, 255, 255, 0.7); /* 배경색을 더 어둡게 설정 */
+  color: #191919;
+  font-weight: bold;
   border: none;
   padding: 20px 20px; /* 버튼 크기 조정 */
   cursor: pointer;
