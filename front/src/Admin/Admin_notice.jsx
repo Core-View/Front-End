@@ -46,7 +46,7 @@ const AdminNotice = () => {
   //공지작성관련
   const createNotice = () => {
     if (cookies.get('adminpw') === 'passed') {
-      navigate('/notice/post/check');
+      navigate('/notice/post');
     } else {
       alert('접근권한이 없습니다.');
       navigate('/');
@@ -55,7 +55,12 @@ const AdminNotice = () => {
 
   return (
     <div className="admin_notice_container">
-      <button className="create_notice" onClick={createNotice}>
+      <button
+        className="create_notice"
+        onClick={() => {
+          createNotice();
+        }}
+      >
         공지작성
       </button>
       <div className="notice_detail">

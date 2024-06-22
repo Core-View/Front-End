@@ -61,6 +61,11 @@
   font-size: 1.2em;
   line-height: 1.6;
   margin-bottom: 20px;
+  overflow: scroll;
+}
+
+.admin_notice_view_content::-webkit-scrollbar {
+  display: none;
 }
 
 .admin_notice_view_img img {

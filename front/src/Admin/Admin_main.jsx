@@ -30,20 +30,6 @@ const Admin = () => {
     }
   };
 
-  const handleDelete = (userId) => {
-    if (window.confirm('삭제하시겠습니까?')) {
-      axios
-        .delete(`http://localhost:3000/mypage/${userId}/delete`)
-        .then((response) => {
-          if (response.data.success) {
-            getMember(); // 회원 삭제 후 목록을 새로 불러옴
-          }
-        });
-    } else {
-      alert('취소하였습니다.');
-    }
-  };
-
   const renderMenuContent = () => {
     switch (selectedMenu) {
       case '회원관리':
@@ -62,6 +48,21 @@ const Admin = () => {
   useEffect(() => {
     getMember();
   }, []);
+
+  const handleDelete = (userId) => {
+    if (window.confirm('삭제하시겠습니까?')) {
+      axios
+        .delete(`http://localhost:3000/mypage/${userId}/delete`)
+        .then((response) => {
+          console.log(response);
+          if (response.status === 204) {
+            getMember(); // 회원 삭제 후 목록을 새로 불러옴
+          }
+        });
+    } else {
+      alert('취소하였습니다.');
+    }
+  };
 
   return (
     <div className="admin-container">
