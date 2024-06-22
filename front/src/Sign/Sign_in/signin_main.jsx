@@ -6,7 +6,6 @@ import { MdOutlineMailOutline } from 'react-icons/md';
 import { MdOutlineVpnKey } from 'react-icons/md';
 import { FcGoogle } from 'react-icons/fc';
 import { VscGithubInverted } from 'react-icons/vsc';
-import { SiNaver } from 'react-icons/si';
 
 import './Sign_in.css';
 
