@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Cookies } from 'react-cookie';
 import FeedbackPopup from './post_feedback_popup';
-import { MdFavoriteBorder, MdFavorite } from 'react-icons/md';
-import { BiCommentDetail } from 'react-icons/bi';
+import PostHeader from './post_view_header';
+import PostContent from './post_view_component';
+import PostCode from './post_view_code';
+import PostResult from './post_view_result';
 import './post_view.css';
 import './post_view_fb.css';
 
@@ -75,6 +77,8 @@ const PostView = () => {
       setLoading(false);
     }
   }, [post_id, loggedInUserId]);
+  const user_image =
+    post.user_image || `${process.env.PUBLIC_URL}/images/original_profile.png`;
 
   const isLiked = useCallback(
     (likedData) => {
@@ -90,16 +94,6 @@ const PostView = () => {
   useEffect(() => {
     fetchPostAndFeedback();
   }, [fetchPostAndFeedback]);
-
-  const title = post.post_title;
-  const user_image =
-    post.user_image || `${process.env.PUBLIC_URL}/images/original_profile.png`;
-  const author = post.user_nickname;
-  const language = post.language;
-  const date = post.post_date;
-  const content = post.post_content ? post.post_content.trim().split('\n') : [];
-  const code = post.post_code ? post.post_code.trim() : '';
-  const result = post.post_result;
 
   const handleFeedbackClick = useCallback(
     (lineIndex, lineCode) => {
@@ -251,65 +245,24 @@ const PostView = () => {
           {message}
         </div>
       )}
-      <div className="post-header">
-        <h1 className="post-title">
-          <img src={languageIcons[language]} alt="" className="language-icon" />{' '}
-          {title}
-        </h1>
-        <div className="post-meta">
-          <span className="post-date">{date}</span>
-          <span className="post-likes" onClick={handleLikeClick}>
-            {liked ? (
-              <MdFavorite className="icon active" />
-            ) : (
-              <MdFavoriteBorder className="icon" />
-            )}{' '}
-            {likesCount}
-          </span>
-        </div>
-        <div className="post-author-container">
-          <img src={user_image} alt="profile" className="profile-image" />
-          <span className="post-author">{author}</span>
-        </div>
-      </div>
-      <div className="post-content">
-        {content.map((line, index) => (
-          <div key={index} className="post-line">
-            <span>{line}</span>
-          </div>
-        ))}
-      </div>
-      <pre className="post-code">
-        {code.split('\n').map((line, index) => (
-          <div key={index} className="post-code-line">
-            <span className="non-drag">
-              <span className="line-number">{index + 1} | </span>
-            </span>
-            <span>{line}</span>
-            <span
-              className={`feedback-button ${feedback[index] ? 'active' : ''}`}
-              onClick={() => handleFeedbackClick(index, line)}
-            >
-              <BiCommentDetail />
-              <span>
-                {feedback[index] ? `(${feedback[index].length})` : ''}
-              </span>
-            </span>
-            {feedback[index] && feedback[index].length > 0 && (
-              <div className="feedback-text">
-                <div className="non-drag">
-                  [최근 피드백]{' '}
-                  {truncateText(
-                    feedback[index][feedback[index].length - 1]
-                      .feedback_comment,
-                    maxLength
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-        ))}
-      </pre>
+      <PostHeader
+        title={post.post_title}
+        language={post.language}
+        languageIcons={languageIcons}
+        date={post.post_date}
+        liked={liked}
+        likesCount={likesCount}
+        handleLikeClick={handleLikeClick}
+        user_image={user_image}
+        author={post.user_nickname}
+      />
+      <PostContent content={post.post_content} />
+      <PostCode
+        code={post.post_code}
+        feedback={feedback}
+        handleFeedbackClick={handleFeedbackClick}
+        truncateText={truncateText}
+      />
       <FeedbackPopup
         popup={popup}
         setPopup={setPopup}
@@ -318,11 +271,7 @@ const PostView = () => {
         loginError={loginError}
         refreshFeedback={fetchPostAndFeedback}
       />
-      <div className="post-result">
-        <h4>코드 실행 결과</h4>
-        <br />
-        <pre>{result}</pre>
-      </div>
+      <PostResult result={post.post_result} />
     </div>
   );
 };
