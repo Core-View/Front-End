@@ -1,190 +1,84 @@
-/* home_main.css */
-
 .home-container {
   display: flex;
-  /* padding: 0px 200px; */
-}
-
-.home_left {
-  width: 20%;
-  padding: 20px;
-}
-
-.ranking {
-  background-color: #f9f9f9;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  position: relative;
-}
-
-.ranking h2 {
-  margin-top: 0;
-  display: flex;
+  flex-direction: column;
   align-items: center;
-}
-
-.tooltip {
-  display: none;
-  position: absolute;
-  top: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: rgba(0, 0, 0, 0.7);
-  color: white;
-  padding: 10px;
-  border-radius: 5px;
-  z-index: 1000;
   width: 100%;
-  text-align: center;
-  font-size: 0.9rem;
+  max-width: 1500px;
+  min-width: 1300px;
 }
 
-.tooltip::after {
-  content: '';
-  position: absolute;
-  top: -5px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 5px;
-  border-style: solid;
-  border-color: transparent transparent rgba(0, 0, 0, 0.7) transparent;
-}
-
-.ranking h2:hover .tooltip {
-  display: block;
-}
-
-.ranking-list {
-  list-style: none;
-  padding: 0;
-}
-
-.ranking-list li {
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-  transition: background-color 0.3s;
-}
-
-.ranking-list li:last-child {
-  border-bottom: none;
-}
-
-.ranking-list li:hover {
-  background-color: #f1f1f1;
-  cursor: pointer;
-}
-
-.ranking-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.ranking-user-id {
-  font-weight: bold;
-}
-
-.ranking-contribution {
-  color: #888;
-}
-
-.home_mid {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  flex: 1;
-  padding: 20px 20px;
-}
-
-.post {
-  background-color: #f9f9f9;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.post h2 {
-  margin-top: 0;
-}
-
-.postcode {
-  list-style: none;
-  padding: 0;
-}
-
-.postcode li {
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-  transition: background-color 0.3s;
-}
-
-.postcode li:hover,
-.post-list li:hover {
-  background-color: #f1f1f1;
-  cursor: pointer;
-}
-
-.postcode li:last-child {
-  border-bottom: none;
-}
-
-.home_right {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  margin: 20px 20px;
-  background-color: #333;
-  color: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.home_right:hover {
-  background-color: #191919;
-}
-
-.home_right svg {
-  font-size: 60px;
-  margin-bottom: 10px;
-}
-
-.home_right div {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.post-main-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.post-main-title {
-  flex: 3;
-}
-
-.post-main-user-name {
-  flex: 1;
-  text-align: center;
-}
-
-.post-main-date {
-  flex: 1;
-  text-align: right;
-}
-
-.post-main-language-icon {
-  max-width: 25px;
-  margin-left: 10px;
-}
-
-.tooltip-icon {
-  margin-left: 5px;
-  cursor: pointer;
+.slider {
+  width: 100%;
+  overflow: hidden;
   position: relative;
+  margin-bottom: 20px;
+}
+
+.slides {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  width: 100%;
+}
+
+.slide {
+  width: 100%;
+  flex-shrink: 0;
+  position: relative; /* 추가 */
+}
+
+.slide img {
+  width: 100%;
+  height: auto;
+}
+
+.slide-button {
+  position: absolute; /* 이미지 위에 버튼을 위치시키기 위해 추가 */
+  bottom: 10%; /* 원하는 위치로 조정 */
+  left: 85%;
+  transform: translateX(-50%);
+  background-color: rgba(49, 49, 49, 0.7); /* 배경색을 더 어둡게 설정 */
+  color: white;
+  border: none;
+  padding: 10px 20px; /* 버튼 크기 조정 */
+  cursor: pointer;
+  z-index: 2; /* 버튼이 이미지 위에 나타나도록 z-index 설정 */
+  font-size: 16px; /* 폰트 크기 조정 */
+  border-radius: 5px; /* 모서리를 둥글게 */
+}
+
+.prev-button,
+.next-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 3; /* 버튼이 이미지 위에 나타나도록 z-index 설정 */
+}
+
+.prev-button {
+  left: 10px;
+}
+
+.next-button {
+  right: 10px;
+}
+
+.images-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.home-img {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.end-card img {
+  width: 100%;
 }
