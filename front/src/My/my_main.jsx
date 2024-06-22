@@ -305,7 +305,7 @@ const Mypost = ({ posts = [], handlePostClick, languageIcons, formatDate }) => {
           <div className="post-content">
             {post.post_id ? (
               <>
-                <div className="post-header">
+                <div className="post-header_my">
                   <img
                     src={post.profile_picture}
                     alt="profile"
@@ -343,7 +343,7 @@ const Myfeedback = ({ comments = [], handlePostClick, languageIcons, formatDate 
           <div className="post-content">
             {comment.post_id ? (
               <>
-                <div className="post-header">
+                <div className="post-header_my">
                   <img
                     src={comment.profile_picture}
                     alt="profile"
@@ -381,7 +381,7 @@ const Mylike = ({ likes = [], handlePostClick, languageIcons, formatDate }) => {
           <div className="post-content">
             {like.post_id ? (
               <>
-                <div className="post-header">
+                <div className="post-header_my">
                   <img
                     src={like.profile_picture}
                     alt="profile"
