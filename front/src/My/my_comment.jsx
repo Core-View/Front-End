@@ -166,7 +166,7 @@ const Empty = () => {
                       className="my-like-main-picture"/>
                   </div>
                   <div className="mylike-main-user-name">
-                    {post.user_nickname || '탈퇴한 회원'}
+                    {post.nickname || '탈퇴한 회원'}
                   </div>
                   <div className="mylike-main-date">
                     {formatDate(post.post_date)}
