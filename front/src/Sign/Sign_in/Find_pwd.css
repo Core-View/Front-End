@@ -54,7 +54,7 @@
   gap: 10px;
 }
 
-.input_area {
+.input_areaF {
   width: 100%;
   padding: 8px;
   border: 1px solid #ced4da;
@@ -76,8 +76,7 @@
   font-size: 14px;
 }
 
-#ChangePassword,
-.email_auth {
+#ChangePassword {
   width: 100%;
   padding: 10px;
   border: none;

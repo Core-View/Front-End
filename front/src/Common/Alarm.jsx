@@ -32,7 +32,8 @@ const Alarm = () => {
     }
   };
   const moving = (post) => {
-    navigate(`/post_view/${post.post_id}`);
+    console.log(post);
+    navigate(`/post_view/${post}`);
   };
   useEffect(() => {
     es.current = new EventSource(
@@ -122,7 +123,7 @@ const Alarm = () => {
                     a.alarm_check === 0 ? '0 0 3px 1px limeGreen' : 'none',
                   opacity: a.alarm_check === 0 ? '1' : '0.6',
                 }}
-                onClick={() => moving(a)}
+                onClick={() => moving(a.post_id)}
               >
                 <div className="al_category">feedback</div>
                 <div className="al_time">
