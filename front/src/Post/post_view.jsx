@@ -12,7 +12,9 @@ import './post_view_feedback.css';
 
 const PostView = () => {
   const cookies = new Cookies();
+  console.log(cookies);
   const loggedInUserId = cookies.get('user_id');
+  // const loggedInUserNickname = cookies.get('user_nickname');
   const { post_id } = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -179,31 +181,31 @@ const PostView = () => {
         throw new Error('Network response was not ok');
       }
 
-      const newFeedback = feedback[popup.line]
-        ? [
-            ...feedback[popup.line],
-            {
-              user_id: loggedInUserId,
-              feedback_comment: popup.text,
-              user_nickname: '방금 작성한 피드백',
-            },
-          ]
-        : [
-            {
-              user_id: loggedInUserId,
-              feedback_comment: popup.text,
-              user_nickname: '방금 작성한 피드백',
-            },
-          ];
+      // const newFeedback = feedback[popup.line]
+      //   ? [
+      //       ...feedback[popup.line],
+      //       {
+      //         user_id: loggedInUserId,
+      //         feedback_comment: popup.text,
+      //         user_nickname: '방금 작성한 피드백',
+      //       },
+      //     ]
+      //   : [
+      //       {
+      //         user_id: loggedInUserId,
+      //         feedback_comment: popup.text,
+      //         user_nickname: '방금 작성한 피드백',
+      //       },
+      //     ];
 
-      setFeedback((prevFeedback) => ({
-        ...prevFeedback,
-        [popup.line]: newFeedback,
-      }));
+      // setFeedback((prevFeedback) => ({
+      //   ...prevFeedback,
+      //   [popup.line]: newFeedback,
+      // }));
 
       setPopup((prevPopup) => ({
         ...prevPopup,
-        feedback: newFeedback,
+        // feedback: newFeedback,
         text: '',
       }));
     } catch (error) {
@@ -311,16 +313,16 @@ const PostView = () => {
       />
       {loggedInUserId === post.user_id && (
         <div>
-          <button onClick={handleDeletePost} className="delete-button">
-            삭제
-          </button>
           <button
             onClick={() => {
               handleUpdatePost();
             }}
-            className="delete-button"
+            className="update-button"
           >
             수정
+          </button>
+          <button onClick={handleDeletePost} className="delete-button">
+            삭제
           </button>
         </div>
       )}
@@ -338,6 +340,8 @@ const PostView = () => {
         loggedInUserId={loggedInUserId}
         loginError={loginError}
         refreshFeedback={fetchPostAndFeedback}
+        postWriterId={post.user_id}
+        postId={post.post_id}
         // likedFeedback={likedFeedback}
         // setLikedFeedback={setLikedFeedback}
       />

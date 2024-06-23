@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './home_main.css';
+import { Cookies } from 'react-cookie';
+import useAuthStore from '../Sign/Store';
 
 const HomeMain = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const cookies = new Cookies();
+
   const slides = [
     {
       src: process.env.PUBLIC_URL + '/images/home_image/home-card-1.png',
@@ -17,6 +21,7 @@ const HomeMain = () => {
     },
   ];
   const navigate = useNavigate();
+  const setLogin = useAuthStore((state) => state.setLogin);
 
   useEffect(() => {
     const interval = setInterval(nextSlide, 8000); // 8초 간격으로 슬라이드
@@ -47,6 +52,9 @@ const HomeMain = () => {
   };
 
   useEffect(() => {
+    if (cookies.get('user_id') !== undefined) {
+      setLogin(cookies.get('user_id'), cookies.get('role'));
+    }
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
