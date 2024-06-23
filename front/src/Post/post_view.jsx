@@ -74,15 +74,14 @@ const PostView = () => {
       isLiked(likedData);
       setLoading(false);
 
-      // Fetch liked feedbacks
-      const feedbackLikeResponse = await axios.get(
-        `http://localhost:3000/api/feedbacklikes/${post_id}/${loggedInUserId}`
-      );
-      const likedFeedbackIds = feedbackLikeResponse.data.reduce((acc, fb) => {
-        acc[fb.feedback_id] = fb.feedbacklike_id;
-        return acc;
-      }, {});
-      setLikedFeedback(likedFeedbackIds);
+      // const feedbackLikeResponse = await axios.get(
+      //   `http://localhost:3000/api/feedbacklikes/${post_id}/${loggedInUserId}`
+      // );
+      // const likedFeedbackIds = feedbackLikeResponse.data.reduce((acc, fb) => {
+      //   acc[fb.feedback_id] = fb.feedbacklike_id;
+      //   return acc;
+      // // }, {});
+      // setLikedFeedback(likedFeedbackIds);
     } catch (err) {
       setError(`데이터를 가져오는 데 실패했습니다: ${err.message}`);
       setLoading(false);
@@ -282,8 +281,8 @@ const PostView = () => {
         loggedInUserId={loggedInUserId}
         loginError={loginError}
         refreshFeedback={fetchPostAndFeedback}
-        likedFeedback={likedFeedback}
-        setLikedFeedback={setLikedFeedback}
+        // likedFeedback={likedFeedback}
+        // setLikedFeedback={setLikedFeedback}
       />
       <PostResult result={post.post_result} />
     </div>

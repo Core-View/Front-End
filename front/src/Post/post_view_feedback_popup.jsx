@@ -11,8 +11,8 @@ const FeedbackPopup = ({
   loggedInUserId,
   loginError,
   refreshFeedback,
-  likedFeedback,
-  setLikedFeedback,
+  // likedFeedback,
+  // setLikedFeedback,
 }) => {
   const feedbackListRef = useRef(null);
   const [opacity, setOpacity] = useState(1);
@@ -63,56 +63,56 @@ const FeedbackPopup = ({
     };
   }, []);
 
-  const handleThumbsUpClick = useCallback(
-    async (feedbackId, index) => {
-      if (!loggedInUserId) {
-        alert('로그인이 필요합니다.');
-        return;
-      }
+  // const handleThumbsUpClick = useCallback(
+  //   async (feedbackId, index) => {
+  //     if (!loggedInUserId) {
+  //       alert('로그인이 필요합니다.');
+  //       return;
+  //     }
 
-      const isLiked = likedFeedback[feedbackId];
-      const url = isLiked
-        ? `http://localhost:3000/api/feedbacklikes/${isLiked}`
-        : 'http://localhost:3000/api/feedbacklikes';
+  //     const isLiked = likedFeedback[feedbackId];
+  //     const url = isLiked
+  //       ? `http://localhost:3000/api/feedbacklikes/${isLiked}`
+  //       : 'http://localhost:3000/api/feedbacklikes';
 
-      const options = isLiked
-        ? { method: 'DELETE' }
-        : {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              user_id: loggedInUserId,
-              feedback_id: feedbackId,
-            }),
-          };
+  //     const options = isLiked
+  //       ? { method: 'DELETE' }
+  //       : {
+  //           method: 'POST',
+  //           headers: {
+  //             'Content-Type': 'application/json',
+  //           },
+  //           body: JSON.stringify({
+  //             user_id: loggedInUserId,
+  //             feedback_id: feedbackId,
+  //           }),
+  //         };
 
-      try {
-        const response = await fetch(url, options);
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.error('Response error data:', errorData);
-          throw new Error('Network response was not ok');
-        }
+  //     try {
+  //       const response = await fetch(url, options);
+  //       if (!response.ok) {
+  //         const errorData = await response.json();
+  //         console.error('Response error data:', errorData);
+  //         throw new Error('Network response was not ok');
+  //       }
 
-        const data = isLiked ? null : await response.json();
+  //       const data = isLiked ? null : await response.json();
 
-        setLikedFeedback((prevLikedFeedback) => {
-          const newLikedFeedback = { ...prevLikedFeedback };
-          if (isLiked) {
-            delete newLikedFeedback[feedbackId];
-          } else {
-            newLikedFeedback[feedbackId] = data.id;
-          }
-          return newLikedFeedback;
-        });
-      } catch (error) {
-        console.error('Failed to process feedback like/unlike:', error);
-      }
-    },
-    [loggedInUserId, likedFeedback, setLikedFeedback]
-  );
+  //       setLikedFeedback((prevLikedFeedback) => {
+  //         const newLikedFeedback = { ...prevLikedFeedback };
+  //         if (isLiked) {
+  //           delete newLikedFeedback[feedbackId];
+  //         } else {
+  //           newLikedFeedback[feedbackId] = data.id;
+  //         }
+  //         return newLikedFeedback;
+  //       });
+  //     } catch (error) {
+  //       console.error('Failed to process feedback like/unlike:', error);
+  //     }
+  //   },
+  //   [loggedInUserId, likedFeedback, setLikedFeedback]
+  // );
 
   const handleFeedbackSubmitWithRefresh = async () => {
     await handleFeedbackSubmit();
@@ -161,11 +161,12 @@ const FeedbackPopup = ({
                   <div key={fb.feedback_id} className="feedback-text">
                     <div>
                       <span className="feedback-nickname">
-                        [{fb.feedback_id}] {fb.user_nickname}
+                        {/* [{fb.feedback_id}] {fb.user_nickname} */}
+                        {fb.user_nickname}
                       </span>
                       : {fb.feedback_comment}
                     </div>
-                    <span
+                    {/* <span
                       className={`thumbs-up-icon ${
                         likedFeedback[fb.feedback_id] ? 'liked' : ''
                       }`}
@@ -177,7 +178,7 @@ const FeedbackPopup = ({
                       ) : (
                         <FaRegThumbsUp />
                       )}
-                    </span>
+                    </span> */}
                   </div>
                 ))}
             </div>
