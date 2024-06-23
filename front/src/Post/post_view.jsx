@@ -42,6 +42,7 @@ const PostView = () => {
   const [likesCount, setLikesCount] = useState(0);
   const [message, setMessage] = useState('');
   const [showMessage, setShowMessage] = useState(false);
+  const [likedFeedback, setLikedFeedback] = useState({});
 
   const fetchPostAndFeedback = useCallback(async () => {
     try {
@@ -71,13 +72,24 @@ const PostView = () => {
 
       isLiked(likedData);
       setLoading(false);
+
+      // Fetch liked feedbacks
+      const feedbackLikeResponse = await axios.get(
+        `http://localhost:3000/api/feedbacklikes/${post_id}/${loggedInUserId}`
+      );
+      const likedFeedbackIds = feedbackLikeResponse.data.reduce((acc, fb) => {
+        acc[fb.feedback_id] = fb.feedbacklike_id;
+        return acc;
+      }, {});
+      setLikedFeedback(likedFeedbackIds);
     } catch (err) {
       setError(`데이터를 가져오는 데 실패했습니다: ${err.message}`);
       setLoading(false);
     }
   }, [post_id, loggedInUserId]);
+
   const user_image =
-    post.user_image || `${process.env.PUBLIC_URL}images/original_profile.png`;
+    post.user_image || `${process.env.PUBLIC_URL}/images/original_profile.png`;
 
   const isLiked = useCallback(
     (likedData) => {
@@ -229,9 +241,9 @@ const PostView = () => {
     }
   }, [liked, likesCount, loggedInUserId, post.user_id, post_id]);
 
-  // if (loading) {
-  //   return <div>로딩 중...</div>;
-  // }
+  if (loading) {
+    return <div>로딩 중...</div>;
+  }
 
   if (error) {
     return <div>{error}</div>;
@@ -269,6 +281,8 @@ const PostView = () => {
         loggedInUserId={loggedInUserId}
         loginError={loginError}
         refreshFeedback={fetchPostAndFeedback}
+        likedFeedback={likedFeedback}
+        setLikedFeedback={setLikedFeedback}
       />
       <PostResult result={post.post_result} />
     </div>
