@@ -146,7 +146,7 @@ const Find_pwd = () => {
       .then((response) => {
         if (response.status === 200) {
           alert('비밀번호 변경 완료');
-          navigate('/users/sign-up');
+          navigate('/users/sign-in');
         } else {
           alert('유효하지 않은 이메일입니다.');
         }
