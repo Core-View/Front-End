@@ -199,3 +199,22 @@
   cursor: pointer;
   transition: background 0.3s;
 }
+
+.feedback-delete-button {
+  padding: 4px 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, transform 0.3s;
+}
+
+.feedback-delete-button {
+  background-color: #e04040;
+  color: white;
+}
+
+.feedback-delete-button:hover {
+  background-color: #e04040;
+  transform: translateY(-1px);
+}
