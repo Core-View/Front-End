@@ -286,6 +286,10 @@ const PostView = () => {
     return <div>{error}</div>;
   }
 
+  const handleUpdatePost = () => {
+    navigate(`/post_update/${post_id}`);
+  };
+
   return (
     <div className="post-view">
       {message && (
@@ -295,6 +299,7 @@ const PostView = () => {
       )}
       <PostHeader
         title={post.post_title}
+        id={post.post_id}
         language={post.language}
         languageIcons={languageIcons}
         date={post.post_date}
@@ -305,9 +310,19 @@ const PostView = () => {
         author={post.user_nickname}
       />
       {loggedInUserId === post.user_id && (
-        <button onClick={handleDeletePost} className="delete-button">
-          삭제
-        </button>
+        <div>
+          <button onClick={handleDeletePost} className="delete-button">
+            삭제
+          </button>
+          <button
+            onClick={() => {
+              handleUpdatePost();
+            }}
+            className="delete-button"
+          >
+            수정
+          </button>
+        </div>
       )}
       <PostContent content={post.post_content} />
       <PostCode

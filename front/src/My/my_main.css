@@ -1,5 +1,5 @@
-.allofthem{
-  padding-top: 20px;
+.allofthem {
+  background-color: white;
   height: 100%;
 }
 .my_all {
@@ -8,14 +8,14 @@
   justify-content: center;
   align-items: center;
 }
-.info_space{
+.info_space {
   margin-top: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width:50%;
+  width: 50%;
 }
-.my_label{
+.my_label {
   flex: 1;
   display: flex;
   justify-content: center;
@@ -23,12 +23,12 @@
   margin: 20px;
 }
 
-.my_info_zone{
-  flex:2;
+.my_info_zone {
+  flex: 2;
   display: flex;
 }
-.image_profile{
-  flex:1;
+.image_profile {
+  flex: 1;
   position: relative;
   margin-left: 38px;
 }
@@ -38,58 +38,58 @@
   border-radius: 70%;
   object-fit: cover;
 }
-.my_info_all_zone{
-  flex:3;
+.my_info_all_zone {
+  flex: 3;
   display: flex;
   flex-direction: row;
 }
 
-.my_rgood{
-  flex:1;
+.my_rgood {
+  flex: 1;
   margin-left: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: end;
 }
-.my_contri{
-  flex:1;
+.my_contri {
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
-.my_contri_icon{
-  flex:1;
+.my_contri_icon {
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items:flex-start;
+  align-items: flex-start;
 }
 .my_contri span,
-.my_contri_icon span{
+.my_contri_icon span {
   font-size: 20px;
 }
-.my_contri_icon span{
+.my_contri_icon span {
   margin-left: 9px;
 }
 
-.my_nickname{
+.my_nickname {
   margin-bottom: 7px;
   font-size: 25px;
   font-weight: bold;
 }
-.my_introduce{
+.my_introduce {
   margin-bottom: 40px;
   font-size: 22px;
 }
-.my_profile_all_zone_one{
+.my_profile_all_zone_one {
   display: flex;
   flex-direction: column;
   flex: 1;
   position: relative;
 }
-.my_modify{
+.my_modify {
   text-align: end;
 }
 .modi_link {
@@ -105,36 +105,36 @@
   top: 162px; /* 부모 요소의 위쪽에서 50px 아래 */
   left: 178px; /* 부모 요소의 왼쪽에서 100px 오른쪽 */
 }
-.my_check_input{
+.my_check_input {
   border-bottom: 1px solid black;
 }
-.my_check_input:focus{
+.my_check_input:focus {
   outline: none;
 }
 .modi_link:hover {
   color: rgba(33, 3, 117, 0.893);
 }
 
-.modi_link span{
+.modi_link span {
   font-size: 30px;
 }
-.my_introduce_zone{
+.my_introduce_zone {
   margin-top: 25px;
   margin-left: 66px;
 }
 
-.my_post_zone{
+.my_post_zone {
   flex: 3;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.my_post_contailner{
+.my_post_contailner {
   background-color: gray;
-  width:100%;
+  width: 100%;
 }
-.my_post_tabs{
+.my_post_tabs {
   display: flex;
   flex-direction: row;
   border-bottom: 2px solid #dee2e6;
@@ -161,7 +161,7 @@
   border: none;
   border-bottom: 2px solid #007bff;
 }
-.my_add_btn{
+.my_add_btn {
   width: 95px;
   height: 35px;
   border-top-left-radius: 10px;
@@ -171,7 +171,7 @@
   margin-left: 10px;
   cursor: pointer;
 }
-.my_add_btn:hover{
+.my_add_btn:hover {
   background-color: #333;
   color: white;
 }
@@ -212,7 +212,7 @@
   margin-bottom: 10px;
   flex-direction: row;
 }
-.post-header_my span{
+.post-header_my span {
   font-size: 20px;
   font-weight: bold;
   height: 50px;
@@ -228,7 +228,7 @@
   margin-right: 10px;
   border: none;
 }
-.feedback-language-icon{
+.feedback-language-icon {
   width: 25px;
   height: 25px;
 }
@@ -240,13 +240,13 @@
   justify-content: space-between;
 }
 
-.post_user_div{
+.post_user_div {
   flex: 1;
   margin-left: 5px;
   font-size: 0.9em;
   text-align: start;
 }
-.post_date_div{
+.post_date_div {
   flex: 1;
   display: flex;
   justify-content: end;
@@ -263,7 +263,7 @@
   color: #bbb;
 }
 
-.feedback_picture{
+.feedback_picture {
   width: 50px;
   height: 50px;
   margin-right: 10px;
@@ -274,7 +274,7 @@
 .my_close_btn {
   position: absolute;
   top: 10px;
-  right:10px;
+  right: 10px;
   text-align: right;
 }
 
@@ -332,7 +332,7 @@
   flex-direction: column;
   align-items: center;
 }
-.my_modal_btn{
+.my_modal_btn {
   width: 75px;
   height: 35px;
   cursor: pointer;
@@ -345,13 +345,13 @@
 }
 .my_modal_btn:hover {
   background-color: rgb(217, 217, 217);
-  color:black;
+  color: black;
 }
 .my_error {
   color: red;
   font-size: 18px;
 }
-.last_div{
+.last_div {
   height: 85px;
   display: flex;
   flex-direction: column;

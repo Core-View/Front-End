@@ -6,7 +6,7 @@ import { MdOutlineMailOutline } from 'react-icons/md';
 import { MdOutlineVpnKey } from 'react-icons/md';
 import { FcGoogle } from 'react-icons/fc';
 import { VscGithubInverted } from 'react-icons/vsc';
-
+import useAuthStore from '../Store';
 import './Sign_in.css';
 
 const Sign_in = () => {
@@ -14,6 +14,7 @@ const Sign_in = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const setLogin = useAuthStore((state) => state.setLogin);
   const onchangeEmail = useCallback((e) => {
     setEmail(e.target.value);
   }, []);
@@ -36,14 +37,12 @@ const Sign_in = () => {
           console.log(response);
           cookies.set('user_id', response.data.user_id);
           cookies.set('role', response.data.role);
+          setLogin(response.data.user_id, response.data.role); // Zustand 스토어에 로그인 상태 설정
           alert('성공');
+          navigate('/'); // 상대 경로로 이동
         } else {
           alert('비번틀림');
         }
-      })
-      .then(() => {
-        navigate('/'); // 상대 경로로 이동
-        window.location.reload();
       })
       .catch((error) => {
         alert(error.message);
@@ -51,13 +50,6 @@ const Sign_in = () => {
   };
 
   const googleLog = () => {
-    // axios.get('http://localhost:3000/auth/google').then((response) => {
-    //   if (response.status === 200) {
-    //     alert('성공');
-    //     navigate('/'); // 상대 경로로 이동
-    //   }
-    // });
-
     window.location.href = 'http://localhost:3000/sign/google';
   };
   return (

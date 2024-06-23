@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import './post_write.css';
 import { Cookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 
-const PostWrite = () => {
+const PostUpdate = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [code, setCode] = useState('');
@@ -14,25 +15,28 @@ const PostWrite = () => {
   const [codeError, setCodeError] = useState('');
   const contentRef = useRef(null);
   const codeRef = useRef(null);
+  const { post_id } = useParams();
 
   const TITLE_MAX_LENGTH = 30;
   const CONTENT_MAX_LENGTH = 3000;
   const CODE_MAX_LENGTH = 65535; // LONGTEXT
 
+  const getPrevDetail = () => {
+    console.log(post_id);
+    axios
+      .get(`http://localhost:3000/post/details/${post_id}`)
+      .then((response) => {
+        console.log(response);
+        setTitle(response.data.post_title);
+        setContent(response.data.post_content);
+        setCode(response.data.post_code);
+        setLanguage(response.data.language);
+      });
+  };
+
   useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      if (title || content || code) {
-        event.preventDefault();
-        event.returnValue = ''; // Chrome에서는 설정이 필요합니다.
-      }
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, [title, content, code]);
+    getPrevDetail();
+  }, []);
 
   const navigate = useNavigate();
 
@@ -61,17 +65,17 @@ const PostWrite = () => {
       language: language,
       code: code,
       content: content,
-      user_id: loggedInUserId,
+      postId: post_id,
     };
 
     try {
-      const response = await axios.post(
-        'http://localhost:3000/api/compile',
+      const response = await axios.put(
+        'http://localhost:3000/api/update',
         postData
       );
 
       if (response.status === 200) {
-        alert('게시글이 성공적으로 등록되었습니다!');
+        alert('게시글이 성공적으로 수정되었습니다!');
         setTitle('');
         setContent('');
         setCode('');
@@ -81,8 +85,8 @@ const PostWrite = () => {
         navigate(`/post_view/${response.data.postId}`);
       }
     } catch (error) {
-      console.error('게시글 등록 중 오류 발생:', error);
-      alert('게시글 등록 중 오류가 발생했습니다.');
+      console.error('게시글 수정 중 오류 발생:', error);
+      alert('게시글 수정 중 오류가 발생했습니다.');
     }
   };
 
@@ -108,7 +112,6 @@ const PostWrite = () => {
       setTitleError('');
     }
   };
-
   return (
     <div className="post-write-container">
       <form onSubmit={handleSubmit} className="post-write-form">
@@ -217,11 +220,11 @@ const PostWrite = () => {
           </div>
         </div>
         <button className="write-button" type="submit">
-          게시글 등록
+          게시글 수정
         </button>
       </form>
     </div>
   );
 };
 
-export default PostWrite;
+export default PostUpdate;
