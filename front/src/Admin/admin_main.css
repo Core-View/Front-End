@@ -43,7 +43,8 @@
   width: 70%;
   height: 694px;
   margin-bottom: 20px;
-  background: url(`../../../../public/images/CoreView_logo_black.png) no-repeat center;
+  background: url(`../../../../public/images/CoreView_logo_black.png) no-repeat
+    center;
   background-size: contain;
   background-size: 50%;
   background-position: 50% 70%;
