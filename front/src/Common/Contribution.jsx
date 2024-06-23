@@ -15,7 +15,7 @@ const Contribution = ({ contribute }) => {
     } else if (9 < contribute && contribute < 25) {
       return <FaTree style={{ color: 'green' }} />;
     } else if (24 < contribute && contribute < 60) {
-      return <GiForest />;
+      return <GiForest style={{ color: 'green' }}/>;
     } else if (59 < contribute && contribute < 200) {
       return <FaEarthAsia style={{ color: 'green' }} />;
     } else if (contribute > 199) {
