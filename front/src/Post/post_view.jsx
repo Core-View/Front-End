@@ -311,9 +311,6 @@ const PostView = () => {
       />
       {loggedInUserId === post.user_id && (
         <div>
-          <button onClick={handleDeletePost} className="delete-button">
-            삭제
-          </button>
           <button
             onClick={() => {
               handleUpdatePost();
@@ -321,6 +318,9 @@ const PostView = () => {
             className="update-button"
           >
             수정
+          </button>
+          <button onClick={handleDeletePost} className="delete-button">
+            삭제
           </button>
         </div>
       )}
