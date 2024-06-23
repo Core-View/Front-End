@@ -338,6 +338,7 @@ const PostView = () => {
         loggedInUserId={loggedInUserId}
         loginError={loginError}
         refreshFeedback={fetchPostAndFeedback}
+        postWriterId={post.user_id}
         // likedFeedback={likedFeedback}
         // setLikedFeedback={setLikedFeedback}
       />
