@@ -22,12 +22,6 @@
   margin-right: 20px;
 }
 
-.post-likes {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-
 .icon {
   margin-right: 5px;
   color: #ff4500;
