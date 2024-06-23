@@ -332,3 +332,33 @@
   color: black;
   transform: translateY(-2px);
 }
+
+.sort-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.sort-buttons button {
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, transform 0.3s;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sort-buttons button.active {
+  background-color: #303030;
+  color: white;
+  border: 1px solid #303030;
+}
+
+.sort-buttons button:hover {
+  background-color: #303030;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
