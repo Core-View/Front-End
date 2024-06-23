@@ -192,7 +192,7 @@
 .submit_I{
   cursor: pointer;
   margin-top: 10px;
-  width: 200px;
+  width: 150px;
   height: 40px;
   font-size: 17px;
   font-weight: 600;
@@ -205,7 +205,7 @@
 
 .submit_I:hover{
   color: white;
-  width: 200px;
+  width: 150px;
   height: 40px;
   font-size: 17px;
   box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.9);

@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 import "./my_modify.css";
 import { IoIosWarning } from "react-icons/io";
 import { Cookies } from "react-cookie";
+import axios from 'axios';
 
 const Mymodify = () => {
   const cookies = new Cookies();
+  const userPasswordCookie = cookies.get("user_password");
   const navigate = useNavigate();
   const [imageSrc, setImageSrc] = useState("/images/original_profile.png");
   const [imageFile, setImageFile] = useState(null);
@@ -19,6 +21,7 @@ const Mymodify = () => {
   const [passwordValid, setPasswordValid] = useState(false);
   const [passwordValidityMessage, setPasswordValidityMessage] = useState("");
   const [userId, setUserId] = useState(null);
+  const [preimage,setpreimage] = useState();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [user_password, setUserPassword] = useState("");
@@ -65,7 +68,7 @@ const Mymodify = () => {
   };
 
   const validatePasswords = (pw, confirmPw) => {
-    if (pw && confirmPw && pw !== confirmPw) {
+    if (confirmPw && pw !== confirmPw) {
       setPasswordError("비밀번호가 일치하지 않습니다.");
     } else {
       setPasswordError("");
@@ -126,9 +129,30 @@ const Mymodify = () => {
 
         const imageData = await imageResponse.json();
         if (imageData.access) {
+          try {
+            const imageDResponse = await axios.post(
+              `http://localhost:3000/mypage/${userId}/deleteImage`,
+              {
+                preimage,
+              }
+            );
+              console.log("이전",preimage);
+    
+            const imageDataD = await imageDResponse;
+            console.log(imageDataD)
+            if (imageDataD.data.access) {
+            
+            } else {
+              alert("프로필이 삭제되지 않았습니다. 관리자에게 문의 부탁드립니다.");
+            }
+            
+          } catch (error) {
+            console.error("Error uploading image:", error);
+            alert("이미지 삭제 중 오류가 발생했습니다. 관리자에게 문의하세요.");
+            return;
+          }
           alert(imageData.message);
           navigate('/my_main');
-          return;
         } else {
           alert("프로필이 수정되지 않았습니다. 관리자에게 문의 부탁드립니다.");
         }
@@ -138,22 +162,19 @@ const Mymodify = () => {
         return;
       }
     }
+    const finalPassword = password || userPasswordCookie;
+    const finalConfirmPassword = confirmPassword || userPasswordCookie;
     const profileData = {
       user_nickname: nickname,
-      user_password: password || "",
-      user_password_confirm: confirmPassword,
+      user_password: finalPassword,
+      user_password_confirm: finalConfirmPassword,
       user_intro: intro,
     };
-    if (!passwordValid) {
-        alert("비밀번호가 유효하지 않습니다. 조건을 확인해 주세요.");
-        return;
-    } else if (password !== confirmPassword) {
-        alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-        return;
-    } else if (intro.length > 30) {
-        alert("자기소개는 30자를 초과할 수 없습니다.");
+    if ((!passwordValid && password) || password !== confirmPassword || intro.length > 30) {
+        alert("입력조건이 유효하지 않습니다. 조건을 확인해 주세요.");
         return;
     }else{
+      
       try {
         const response = await fetch(
           `http://localhost:3000/mypage/${userId}/modify`,
@@ -172,6 +193,7 @@ const Mymodify = () => {
   
         const data = await response.json();
         if (data.access) {
+          console.log("멍",profileData);
           alert(data.message);
           navigate("/my_main");
         } else {
@@ -210,6 +232,7 @@ const Mymodify = () => {
       try {
         const response = await fetch(`http://localhost:3000/mypage/${userId}`);
         const data = await response.json();
+        setpreimage(data.profile_picture);
         if (!data.profile_picture || data.profile_picture === "null") {
           data.profile_picture = `${process.env.PUBLIC_URL}/images/original_profile.png`;
         }
@@ -218,7 +241,7 @@ const Mymodify = () => {
             `${process.env.PUBLIC_URL}/images/original_profile.png`
         );
         setNickname(data.nickname);
-        setIntro(data.introduction || '제 꿈은 개발자입니다.')
+        setIntro(data.introduction || '제 꿈은 개발자입니다.');
         console.log("이미지", data.profile_picture);
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -250,6 +273,7 @@ const Mymodify = () => {
           body: JSON.stringify({ user_password }),
         }
       );
+      
 
       const data = await response.json();
       if (data.success) {

@@ -10,7 +10,7 @@ import { Cookies } from 'react-cookie';
 import './my_like.css';
 
 const Empty = () => {
-    const cookies = new Cookies();
+  const cookies = new Cookies();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [posts, setPosts] = useState([]);
