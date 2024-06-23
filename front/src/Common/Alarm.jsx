@@ -6,6 +6,7 @@ import { GiBackwardTime } from 'react-icons/gi';
 import './Alarm.css';
 import { Cookies } from 'react-cookie';
 import axios from 'axios';
+import { BiCommentDetail } from 'react-icons/bi';
 
 const Alarm = () => {
   const [isStarted, setIsStarted] = useState(false);
@@ -54,13 +55,15 @@ const Alarm = () => {
     };
 
     es.current.onmessage = (event) => {
-      if (event.data === 'finished') {
-        es.current.close();
-        return;
-      }
-      setAlarm(JSON.parse(event.data).alarm);
+      if (es.current !== null) {
+        if (event.data === 'finished') {
+          es.current.close();
+          return;
+        }
+        setAlarm(JSON.parse(event.data).alarm);
 
-      serur(JSON.parse(event.data).count[0].alarm_unreaded);
+        serur(JSON.parse(event.data).count[0].alarm_unreaded);
+      }
     };
 
     es.current.onerror = (err) => {
@@ -114,21 +117,17 @@ const Alarm = () => {
               <div
                 key={index}
                 className="dropdown-item"
-                style={{
-                  border:
-                    a.alarm_check === 0
-                      ? '3px solid limeGreen'
-                      : '1px solid black',
-                  boxShadow:
-                    a.alarm_check === 0 ? '0 0 3px 1px limeGreen' : 'none',
-                  opacity: a.alarm_check === 0 ? '1' : '0.6',
-                }}
                 onClick={() => moving(a.post_id)}
+                style={{ opacity: a.alarm_check === 0 ? '1' : '0.6' }}
               >
-                <div className="al_category">feedback</div>
                 <div className="al_time">
-                  <GiBackwardTime className="timer" />
-                  <span>{timeAgo(a.time)}</span>
+                  <BiCommentDetail
+                    style={{
+                      color: a.alarm_check === 0 ? 'rgb(76, 207, 71)' : 'none',
+                    }}
+                    className="feedback_logo"
+                  />
+                  <span className="howlong">{timeAgo(a.time)}</span>
                 </div>
                 <div className="al_content">
                   <div
@@ -136,14 +135,18 @@ const Alarm = () => {
                       color: a.alarm_check === 0 ? 'black' : 'gray',
                     }}
                   >
-                    {a.title}에 피드백 옴
+                    <span className="feedback_content_al">
+                      {a.title.slice(0, 9)}
+                    </span>
+                    에 <span className="feedback_content_al">피드백</span>이
+                    달렸습니다.
                   </div>
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <div className="dropdown"></div>
+          <div></div>
         )}
       </div>
     </div>

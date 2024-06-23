@@ -127,6 +127,7 @@ const Mypage = () => {
       });
       const data = await response.json();
       if (data.success) {
+        cookies.set('user_password', user_password);
         navigate('/my_modify');
       } else {
         setErrorMessage('비밀번호가 일치하지 않습니다.');
@@ -256,7 +257,7 @@ const Mypage = () => {
               </div>
             </div>
             <div className="my_content">
-              {renderContent()}
+              {renderContent(userInfo.user_id)}
             </div>
           </div>
         </div>
@@ -296,7 +297,9 @@ const Mypage = () => {
 };
 
 const Mypost = ({ posts = [], handlePostClick, languageIcons, formatDate }) => {
-  const displayedPosts = posts.length < 6 ? [...posts, ...Array(6 - posts.length).fill({})] : posts.slice(0, 6);
+  // posts가 배열인지 확인하고, 배열이 아니면 빈 배열로 설정
+  const validPosts = Array.isArray(posts) ? posts : [];
+  const displayedPosts = validPosts.length < 6 ? [...validPosts, ...Array(6 - validPosts.length).fill({})] : validPosts.slice(0, 6);
 
   return (
     <div className="grid-container">
@@ -313,9 +316,9 @@ const Mypost = ({ posts = [], handlePostClick, languageIcons, formatDate }) => {
                   <img src={languageIcons[post.language]} alt="" className="feedback-language-icon" />
                   <span>{post.post_title}</span>
                 </div>
-                <hr style={{ border: '1px solid #ccc' }} />
+                <hr style={{ border: '1px solid #ddd' }} />
                 <div className="post-meta">
-                  <div className='post_user_div'>
+                  <div className="post_user_div">
                     <span className="post-user">{post.user_nickname || '탈퇴한 회원'}</span>
                   </div>
                   <div className='post_date_div'>
@@ -332,6 +335,7 @@ const Mypost = ({ posts = [], handlePostClick, languageIcons, formatDate }) => {
     </div>
   );
 };
+
 
 const Myfeedback = ({ comments = [], handlePostClick, languageIcons, formatDate }) => {
   const displayedComments = comments.length < 6 ? [...comments, ...Array(6 - comments.length).fill({})] : comments.slice(0, 6);

@@ -14,6 +14,7 @@ function Header() {
   const deleteCookies = () => {
     cookies.remove('user_id');
     cookies.remove('role');
+    cookies.remove('user_password');
     setUserId(undefined);
     setRole(undefined);
     window.location.reload();

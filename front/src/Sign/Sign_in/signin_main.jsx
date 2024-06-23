@@ -118,8 +118,11 @@ const Sign_in = () => {
             <div className="line" />
           </div>
           <div className="loginicons">
-            <FcGoogle />
-            <VscGithubInverted />
+            <FcGoogle onClick={googleLog} style={{ cursor: 'pointer' }} />
+            <VscGithubInverted
+              onClick={googleLog}
+              style={{ cursor: 'pointer' }}
+            />
             <img
               src="/images/navericon.png"
               className="naverIcon"
