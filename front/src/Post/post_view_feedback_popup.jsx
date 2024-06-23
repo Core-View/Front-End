@@ -11,9 +11,10 @@ const FeedbackPopup = ({
   loggedInUserId,
   loginError,
   refreshFeedback,
+  likedFeedback,
+  setLikedFeedback,
 }) => {
   const feedbackListRef = useRef(null);
-  const [likedFeedback, setLikedFeedback] = useState({});
   const [opacity, setOpacity] = useState(1);
   const [scrollPosition, setScrollPosition] = useState({
     top: window.scrollY,
@@ -62,36 +63,12 @@ const FeedbackPopup = ({
     };
   }, []);
 
-  useEffect(() => {
-    const fetchLikedFeedback = async () => {
-      if (loggedInUserId && popup.show) {
-        try {
-          const response = await axios.get(
-            `http://localhost:3000/api/feedbacklikes/${popup.post_id}/${loggedInUserId}`
-          );
-          const likedFeedbackData = response.data.reduce((acc, fb) => {
-            acc[fb.feedback_id] = fb.id;
-            return acc;
-          }, {});
-          setLikedFeedback(likedFeedbackData);
-        } catch (error) {
-          console.error('Failed to fetch liked feedback:', error);
-        }
-      }
-    };
-
-    fetchLikedFeedback();
-  }, [loggedInUserId, popup.show, popup.post_id]);
-
   const handleThumbsUpClick = useCallback(
-    async (feedbackId) => {
+    async (feedbackId, index) => {
       if (!loggedInUserId) {
         alert('로그인이 필요합니다.');
         return;
       }
-
-      console.log(`feedbackId: ${feedbackId}`);
-      console.log(`likedFeedback[feedbackId]: ${likedFeedback[feedbackId]}`);
 
       const isLiked = likedFeedback[feedbackId];
       const url = isLiked
@@ -114,16 +91,10 @@ const FeedbackPopup = ({
       try {
         const response = await fetch(url, options);
         if (!response.ok) {
-          // document.getElementById(`span${feedbackId}`).innerHTML = 'in if';
-          // console.log(document.getElementById(`span${feedbackId}`));
           const errorData = await response.json();
           console.error('Response error data:', errorData);
           throw new Error('Network response was not ok');
         }
-        // document.getElementById(`span${feedbackId}`).innerHTML = (
-        //   <FaRegThumbsUp />
-        // );
-        // console.log(document.getElementById(`span${feedbackId}`));
 
         const data = isLiked ? null : await response.json();
 
@@ -136,12 +107,11 @@ const FeedbackPopup = ({
           }
           return newLikedFeedback;
         });
-        console.log(`likedFeedback[feedbackId]: ${likedFeedback[feedbackId]}`);
       } catch (error) {
         console.error('Failed to process feedback like/unlike:', error);
       }
     },
-    [loggedInUserId, likedFeedback]
+    [loggedInUserId, likedFeedback, setLikedFeedback]
   );
 
   const handleFeedbackSubmitWithRefresh = async () => {
@@ -187,7 +157,7 @@ const FeedbackPopup = ({
             <div className="post-code">{popup.codeContent}</div>
             <div className="feedback-list" ref={feedbackListRef}>
               {popup.feedback &&
-                popup.feedback.map((fb) => (
+                popup.feedback.map((fb, index) => (
                   <div key={fb.feedback_id} className="feedback-text">
                     <div>
                       <span className="feedback-nickname">
@@ -200,7 +170,7 @@ const FeedbackPopup = ({
                         likedFeedback[fb.feedback_id] ? 'liked' : ''
                       }`}
                       id={`span${fb.feedback_id}`}
-                      onClick={() => handleThumbsUpClick(fb.feedback_id)}
+                      onClick={() => handleThumbsUpClick(fb.feedback_id, index)}
                     >
                       {likedFeedback[fb.feedback_id] ? (
                         <FaThumbsUp />
