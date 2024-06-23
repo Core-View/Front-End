@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { FaArrowRight } from 'react-icons/fa';
+// import { FaArrowRight } from 'react-icons/fa';
 
 import { Button } from 'react-bootstrap';
 import './Find_pwd.css';
+import { useNavigate } from 'react-router';
 
 const Find_pwd = () => {
   const [password, setPassword] = useState('');
@@ -17,6 +18,8 @@ const Find_pwd = () => {
   const [rePasswordValid, setRePasswordValid] = useState(null);
   const [emailValid, setEmailValid] = useState(null);
   const [checkEmailValid, setCheckEmailValid] = useState(null);
+  const [formCompleted, setFormCompleted] = useState(false); // 새로운 상태 추가
+
   const regex = {
     name: /^.{1,}$/,
     nickname: /^.{1,10}$/,
@@ -25,7 +28,7 @@ const Find_pwd = () => {
     email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
     checkEmail: /^\d{6}$/,
   };
-
+  const navigate = useNavigate();
   const isValid = useCallback((checkReg, string) => {
     return checkReg.test(string);
   }, []);
@@ -39,7 +42,12 @@ const Find_pwd = () => {
   }, [password, rePassword]);
   useEffect(() => {
     const changePasswordButton = document.getElementById('ChangePassword');
-    if (passwordValid && rePasswordValid) {
+    if (
+      passwordValid &&
+      rePasswordValid &&
+      email === email_show &&
+      mailComplete
+    ) {
       changePasswordButton.removeAttribute('disabled');
     } else {
       changePasswordButton.setAttribute('disabled', 'disabled');
@@ -76,6 +84,7 @@ const Find_pwd = () => {
       .then((response) => {
         if (response.status === 200) {
           setEmail_show(email);
+          alert('인증번호 전송 완료 되었습니다.');
         } else {
           alert('유효하지 않은 이메일입니다.');
         }
@@ -99,7 +108,7 @@ const Find_pwd = () => {
               .getElementById('FindCheckEmail')
               .setAttribute('disabled', true);
             let emailAuthButtons =
-              document.getElementsByClassName('email_auth');
+              document.getElementsByClassName('email_authf');
             for (var i = 0; i < emailAuthButtons.length; i++) {
               emailAuthButtons[i].setAttribute('disabled', true);
             }
@@ -107,14 +116,26 @@ const Find_pwd = () => {
               .querySelector('.input_componentFF')
               .classList.add('disabled');
           }
-          setMailComplete(!mailComplete);
+          setMailComplete(true);
+          setFormCompleted(true);
+          alert('인증 완료 되었습니다.');
         } else {
           alert('유효하지 않은 인증 번호입니다.');
         }
+      })
+      .catch((err) => {
+        alert('유효하지 않은 인증 번호입니다.');
       });
   };
   const sendingChangePassword = () => {
-    if (!emailValid || !checkEmailValid || !passwordValid || !rePasswordValid) {
+    if (
+      !emailValid ||
+      !checkEmailValid ||
+      !passwordValid ||
+      !rePasswordValid ||
+      !email_show ||
+      !mailComplete
+    ) {
       return;
     }
     axios
@@ -124,22 +145,20 @@ const Find_pwd = () => {
       })
       .then((response) => {
         if (response.status === 200) {
-          setEmail_show(email);
+          alert('비밀번호 변경 완료');
+          navigate('/users/sign-up');
         } else {
           alert('유효하지 않은 이메일입니다.');
         }
       });
   };
   return (
-    <div className="find_main">
-      <h3>비밀번호 변경</h3>
-
-      <div className="flexi">
+    <div className={`find_main ${formCompleted ? 'form-completed' : ''}`}>
+      <div className="flexi ">
         <div className="input_componentFF">
-          <h4>1단계</h4>
+          <h4>이메일 인증후에 변경가능합니다이</h4>
 
           <div className="input_spaceF">
-            <label htmlFor="FindEmail">이메일</label>
             <input
               type="email"
               id="FindEmail"
@@ -148,19 +167,20 @@ const Find_pwd = () => {
               onChange={onchangeEmail}
               className="input_areaF"
             />
-            {emailValid !== null &&
+            {email.length > 0 &&
               (emailValid ? (
-                <p className="passRegex">사용가능 합니다</p>
+                <></>
               ) : (
-                <p className="nonPassRegexF">이메일 형식에 맞춰 주세요</p>
+                <p className="nonPassRegexF">
+                  영문자 또는 한글과 숫자 특수문자를 포함해야 합니다.
+                </p>
               ))}
-            <Button className="email_auth" onClick={sendingEmail}>
+            <Button className="email_authf" onClick={sendingEmail}>
               이메일 인증
             </Button>
           </div>
 
           <div className="input_spaceF">
-            <label htmlFor="FindCheckEmail">인증번호</label>
             <input
               type="text"
               id="FindCheckEmail"
@@ -169,23 +189,25 @@ const Find_pwd = () => {
               onChange={onchangeCheckEmail}
               className="input_areaF"
             />
-            {checkEmailValid !== null &&
+            {checkEmail.length > 0 &&
               (checkEmailValid ? (
-                <p className="passRegex">사용가능 합니다</p>
+                <></>
               ) : (
-                <p className="nonPassRegexF">6글자의 숫자 입력해주세요</p>
+                <p className="nonPassRegexF">
+                  영문자 또는 한글과 숫자 특수문자를 포함해야 합니다.
+                </p>
               ))}
-            <Button className="email_auth" onClick={sendingCheckEmail_auth}>
+            <Button className="email_authf" onClick={sendingCheckEmail_auth}>
               인증 확인
             </Button>
           </div>
+          <div style={{ height: '11px' }}></div>
         </div>
-        <FaArrowRight />
+        {/* <FaArrowRight /> */}
 
-        <div className="input_componentFF">
-          <h4>2단계</h4>
+        <div className="input_componentFFF">
+          <h4>새비밀 번호 설정가능합니다이</h4>
           <div className="input_spaceF">
-            <label htmlFor="loginPassword">비밀번호</label>
             <input
               type="password"
               id="loginPassword"
@@ -194,17 +216,16 @@ const Find_pwd = () => {
               onChange={onchangePassword}
               className="input_areaF"
             />
-            {passwordValid !== null &&
+            {password.length > 0 &&
               (passwordValid ? (
-                <p className="passRegex">사용가능 합니다</p>
+                <></>
               ) : (
                 <p className="nonPassRegexF">
-                  영문자 또는 한글 과 숫자 특수문자를 꼭 포함해야 합니다
+                  영문자 또는 한글과 숫자 특수문자를 포함해야 합니다.
                 </p>
               ))}
           </div>
           <div className="input_spaceF">
-            <label htmlFor="loginRePassword">비밀번호 확인</label>
             <input
               type="password"
               id="loginRePassword"
@@ -213,11 +234,13 @@ const Find_pwd = () => {
               onChange={onchangeRePassword}
               className="input_areaF"
             />
-            {rePasswordValid !== null &&
+            {rePassword.length > 0 &&
               (rePasswordValid ? (
-                <p className="passRegex">사용가능 합니다</p>
+                <></>
               ) : (
-                <p className="nonPassRegexF">일치하지 않습니다</p>
+                <p className="nonPassRegexF">
+                  영문자 또는 한글과 숫자 특수문자를 포함해야 합니다.
+                </p>
               ))}
           </div>
           <button id="ChangePassword" onClick={sendingChangePassword}>
