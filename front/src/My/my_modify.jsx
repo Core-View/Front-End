@@ -4,11 +4,13 @@ import "./my_modify.css";
 import { IoIosWarning } from "react-icons/io";
 import { Cookies } from "react-cookie";
 import axios from 'axios';
+import useAuthStore from '../Sign/Store'; // useAuthStore를 가져옵니다
 
 const Mymodify = () => {
   const cookies = new Cookies();
   const userPasswordCookie = cookies.get("user_password");
   const navigate = useNavigate();
+  const { setLogout } = useAuthStore(); // setLogout을 사용합니다
   const [imageSrc, setImageSrc] = useState("/images/original_profile.png");
   const [imageFile, setImageFile] = useState(null);
   const [nickname, setNickname] = useState("");
@@ -218,7 +220,10 @@ const Mymodify = () => {
       if (!response.ok) {
         throw new Error("Account deletion failed");
       }
-
+      cookies.remove("user_id");
+      cookies.remove("role");
+      cookies.remove("user_password");
+      setLogout();
       alert("회원탈퇴가 완료되었습니다.");
       navigate("/");
     } catch (error) {
