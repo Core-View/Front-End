@@ -2,13 +2,13 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Cookies } from 'react-cookie';
-import FeedbackPopup from './post_feedback_popup';
+import FeedbackPopup from './post_view_feedback_popup';
 import PostHeader from './post_view_header';
 import PostContent from './post_view_component';
 import PostCode from './post_view_code';
 import PostResult from './post_view_result';
 import './post_view.css';
-import './post_view_fb.css';
+import './post_view_feedback.css';
 
 const PostView = () => {
   const cookies = new Cookies();
@@ -77,7 +77,7 @@ const PostView = () => {
     }
   }, [post_id, loggedInUserId]);
   const user_image =
-    post.user_image || `${process.env.PUBLIC_URL}/images/original_profile.png`;
+    post.user_image || `${process.env.PUBLIC_URL}images/original_profile.png`;
 
   const isLiked = useCallback(
     (likedData) => {
