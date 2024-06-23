@@ -36,6 +36,7 @@ const Mypage = () => {
     cpp: '/images/language_icons/cpp_icon.png',
     java: '/images/language_icons/java_icon.png',
     python: '/images/language_icons/python_icon.png',
+    other: '/images/language_icons/other_icon.png',
   };
 
   useEffect(() => {
