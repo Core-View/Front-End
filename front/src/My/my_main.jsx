@@ -57,11 +57,9 @@ const Mypage = () => {
     try {
       const response = await fetch(`http://localhost:3000/mypage/${userId}`);
       const data = await response.json();
-      console.log("이미지!!",data.profile_picture);
       if (!data.profile_picture || data.profile_picture === "null") {
         data.profile_picture = `${process.env.PUBLIC_URL}/images/original_profile.png`;
       }
-      console.log("이미지!!1s",data.profile_picture);
       setUserInfo(data);
     } catch (error) {
       console.error('Error fetching user data:', error);
@@ -72,10 +70,13 @@ const Mypage = () => {
     try {
       const response = await fetch(`http://localhost:3000/mypage/${userId}/posts`);
       const data = await response.json();
-      if (!data.profile_picture) {
-        data.profile_picture = `${process.env.PUBLIC_URL}/images/original_profile.png`;
-      }
-      setPosts(data || []);
+      const processedData = data.map(post => ({
+        ...post,
+        profile_picture: (post.profile_picture === "null" || !post.profile_picture)
+          ? `${process.env.PUBLIC_URL}/images/original_profile.png`
+          : post.profile_picture,
+      }));
+      setPosts(processedData || []);
     } catch (error) {
       console.error('Error fetching post data:', error);
     }
@@ -182,6 +183,7 @@ const Mypage = () => {
     }
   };
 
+  console.log("전체",posts);
   return (
     <div className='allofthem'>
       <div className="my_all">

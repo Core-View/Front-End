@@ -20,6 +20,7 @@ import Post from './Post/post_main';
 import PostMainNotification from './Post/post_main_notification';
 import PostView from './Post/post_view';
 import PostWrite from './Post/post_write';
+import PostUpdate from './Post/post_update';
 // Admin
 import Admin from './Admin/Admin_main';
 import AdminCheck from './Admin/Admin_check';
@@ -67,6 +68,7 @@ function App() {
               />
               <Route path="/post_view/:post_id" element={<PostView />} />
               <Route path="post_write" element={<PostWrite />} />
+              <Route path="post_update/:post_id" element={<PostUpdate />} />
               {/* user  */}
               <Route path="users">
                 <Route path="sign-in" element={<SignIn />} />
