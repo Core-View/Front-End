@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 // Common
 import Header from './Common/Header';
+import Footer from './Common/Footer';
 // Home
 import Main from './Home/home_main';
 // My
@@ -76,6 +77,7 @@ function App() {
             </Routes>
           </div>
         </div>
+        <Footer />
       </Router>
     </div>
   );

@@ -22,7 +22,11 @@ const PostHeader = ({
         </h1>
         <div className="meta-container">
           <div className="post-author-container">
-            <img src={user_image} alt="profile" className="profile-image" />
+            <img
+              src={`/${user_image}`}
+              alt="profile"
+              className="profile-image"
+            />
             <span className="post-author">{author}</span>
             <span className="post-date">{date}</span>
           </div>

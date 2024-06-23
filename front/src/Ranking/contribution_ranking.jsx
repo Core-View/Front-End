@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import './contribution_ranking.css';
+import Contribution from '../Common/Contribution';
 
 class Ranking extends Component {
   constructor(props) {
@@ -104,6 +105,9 @@ class Ranking extends Component {
                 <td>
                   <div className="profile-info">
                     <img src={contributor.profile_picture} alt="profile" />
+                    <div className="contribution-icon-style">
+                      <Contribution contribute={contributor.user_contribute} />
+                    </div>
                     <div>
                       <strong>{contributor.user_nickname}</strong>
                       <span className="profile-bio">
