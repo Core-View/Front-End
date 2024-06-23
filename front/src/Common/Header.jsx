@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './Header.css';
+import './header.css';
 import Alarm from './Alarm';
 import { Cookies } from 'react-cookie';
 import axios from 'axios';
