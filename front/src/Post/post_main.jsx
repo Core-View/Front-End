@@ -1,25 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import { formatDistanceToNow, parseISO } from 'date-fns';
-import { ko } from 'date-fns/locale'; // 한국어 로케일 import
+import { ko } from 'date-fns/locale';
 
 import './post_main_pagination.css';
 import './post_main.css';
 
 const Empty = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const initialPage = parseInt(queryParams.get('page') || '0', 10);
+  const initialSortOrder = queryParams.get('sort') || 'latest';
+
   const [searchQuery, setSearchQuery] = useState('');
   const [posts, setPosts] = useState([]);
   const [notices, setNotices] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(initialPage);
   const [postsPerPage, setPostsPerPage] = useState(15);
   const [selectedLanguages, setSelectedLanguages] = useState([]);
-  const [sortOrder, setSortOrder] = useState('latest');
+  const [sortOrder, setSortOrder] = useState(initialSortOrder);
 
   const [userInfos, setUserInfos] = useState({});
 
@@ -59,7 +64,6 @@ const Empty = () => {
   };
 
   useEffect(() => {
-    // 공지 데이터
     const fetchNotices = async () => {
       try {
         const response = await axios.get('http://localhost:3000/notice/view');
@@ -75,7 +79,6 @@ const Empty = () => {
   }, []);
 
   useEffect(() => {
-    // 게시글 데이터
     const fetchPosts = async () => {
       try {
         const response = await axios.get(
@@ -98,6 +101,19 @@ const Empty = () => {
 
     fetchPosts();
   }, [sortOrder]);
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const page = parseInt(queryParams.get('page') || '0', 10);
+    const sort = queryParams.get('sort') || 'latest';
+
+    if (page !== currentPage) {
+      setCurrentPage(page);
+    }
+    if (sort !== sortOrder) {
+      setSortOrder(sort);
+    }
+  }, [location.search]);
 
   const handleSearch = (e) => {
     const query = e.target.value;
@@ -138,7 +154,9 @@ const Empty = () => {
   };
 
   const handlePageClick = (data) => {
-    setCurrentPage(data.selected);
+    const selectedPage = data.selected;
+    setCurrentPage(selectedPage);
+    navigate(`${location.pathname}?page=${selectedPage}&sort=${sortOrder}`);
   };
 
   const handlePostsPerPageChange = (e) => {
@@ -149,6 +167,8 @@ const Empty = () => {
   const handleSortOrderChange = (order) => {
     setSortOrder(order);
     setLoading(true);
+    setCurrentPage(0);
+    navigate(`${location.pathname}?page=0&sort=${order}`);
   };
 
   const offset = currentPage * postsPerPage;
@@ -372,6 +392,7 @@ const Empty = () => {
           onPageChange={handlePageClick}
           containerClassName={'pagination'}
           activeClassName={'active'}
+          forcePage={currentPage} // 현재 페이지를 강제로 설정합니다.
         />
       </section>
     </div>
