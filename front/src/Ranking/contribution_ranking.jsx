@@ -25,38 +25,14 @@ class Ranking extends Component {
       const response = await axios.get(
         `http://localhost:3000/post/top-contributors`
       );
-      const contributors = await Promise.all(
-        response.data.map(async (contributor) => {
-          try {
-            const userProfile = await axios.get(
-              `http://localhost:3000/mypage/${contributor.user_id}`
-            );
-            const profile_picture = userProfile.data.profile_picture;
-            if (
-              !userProfile.profile_picture ||
-              userProfile.profile_picture === 'null'
-            ) {
-              userProfile.profile_picture = `${process.env.PUBLIC_URL}/images/original_profile.png`;
-            }
-            return {
-              ...contributor,
-              ...userProfile.data,
-              profile_picture,
-            };
-          } catch (error) {
-            console.error(
-              `Failed to fetch user profile for user ID ${contributor.user_id}:`,
-              error
-            );
-            return {
-              ...contributor,
-              profile_picture: `${process.env.PUBLIC_URL}/images/original_profile.png`,
-              user_nickname: 'Unknown',
-              introduction: '',
-            };
-          }
-        })
-      );
+      const contributors = response.data.map((contributor) => ({
+        ...contributor,
+        profile_picture:
+          contributor.user_image ||
+          `${process.env.PUBLIC_URL}/images/original_profile.png`,
+        user_nickname: contributor.user_nickname || 'Unknown',
+        introduction: contributor.user_intro || '',
+      }));
       this.setState({ contributors, loading: false });
     } catch (error) {
       this.setState({ error: error.message, loading: false });
