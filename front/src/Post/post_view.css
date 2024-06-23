@@ -157,3 +157,34 @@
 .like-message.show {
   opacity: 1;
 }
+
+.delete-button,
+.update-button {
+  padding: 10px 15px;
+  margin: 5px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, transform 0.3s;
+}
+
+.delete-button {
+  background-color: #ff4757;
+  color: white;
+}
+
+.update-button {
+  background-color: #1e90ff;
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #e04040;
+  transform: translateY(-1px);
+}
+
+.update-button:hover {
+  background-color: #187bcd;
+  transform: translateY(-1px);
+}

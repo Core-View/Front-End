@@ -364,7 +364,8 @@ const Empty = () => {
                       alt=""
                       className="post-main-language-icon"
                     />{' '}
-                    {post.post_id}. {post.post_title}
+                    {/* {post.post_id}. {post.post_title} */}
+                    {post.post_title}
                   </div>
                   <div className="post-main-user-name">
                     {userInfos[post.user_id]?.nickname || '탈퇴한 회원'}
