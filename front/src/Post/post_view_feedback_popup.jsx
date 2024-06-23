@@ -91,6 +91,7 @@ const FeedbackPopup = ({
       }
 
       console.log(`feedbackId: ${feedbackId}`);
+      console.log(`likedFeedback[feedbackId]: ${likedFeedback[feedbackId]}`);
 
       const isLiked = likedFeedback[feedbackId];
       const url = isLiked
@@ -113,10 +114,16 @@ const FeedbackPopup = ({
       try {
         const response = await fetch(url, options);
         if (!response.ok) {
+          // document.getElementById(`span${feedbackId}`).innerHTML = 'in if';
+          // console.log(document.getElementById(`span${feedbackId}`));
           const errorData = await response.json();
           console.error('Response error data:', errorData);
           throw new Error('Network response was not ok');
         }
+        // document.getElementById(`span${feedbackId}`).innerHTML = (
+        //   <FaRegThumbsUp />
+        // );
+        // console.log(document.getElementById(`span${feedbackId}`));
 
         const data = isLiked ? null : await response.json();
 
@@ -129,6 +136,7 @@ const FeedbackPopup = ({
           }
           return newLikedFeedback;
         });
+        console.log(`likedFeedback[feedbackId]: ${likedFeedback[feedbackId]}`);
       } catch (error) {
         console.error('Failed to process feedback like/unlike:', error);
       }
@@ -191,6 +199,7 @@ const FeedbackPopup = ({
                       className={`thumbs-up-icon ${
                         likedFeedback[fb.feedback_id] ? 'liked' : ''
                       }`}
+                      id={`span${fb.feedback_id}`}
                       onClick={() => handleThumbsUpClick(fb.feedback_id)}
                     >
                       {likedFeedback[fb.feedback_id] ? (

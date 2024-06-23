@@ -20,6 +20,7 @@ const PostView = () => {
 
   const languageIcons = useMemo(
     () => ({
+      other: '/images/language_icons/other_icon.png',
       c: '/images/language_icons/c_icon.png',
       cpp: '/images/language_icons/cpp_icon.png',
       java: '/images/language_icons/java_icon.png',
