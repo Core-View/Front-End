@@ -10,7 +10,6 @@
   min-width: 1280px;
 }
 
-/* 제목과 메타데이터 섹션 */
 .post-view-header {
   text-align: left;
   margin-bottom: 20px;
@@ -43,6 +42,13 @@
   align-items: center;
 }
 
+.post-likes-container {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  width: 50%;
+}
+
 .profile-image {
   width: 40px;
   height: 40px;
@@ -66,7 +72,13 @@
   display: flex;
   align-items: center;
   cursor: pointer;
-  font-size: 1.5rem; /* 하트 아이콘과 글자 크기를 약간 키움 */
+  font-size: 1.5rem;
+}
+
+.post-likes-count {
+  display: flex;
+  align-items: center;
+  font-size: 1.3rem;
 }
 
 .icon {

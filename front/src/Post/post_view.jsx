@@ -299,6 +299,7 @@ const PostView = () => {
       )}
       <PostHeader
         title={post.post_title}
+        id={post.post_id}
         language={post.language}
         languageIcons={languageIcons}
         date={post.post_date}
