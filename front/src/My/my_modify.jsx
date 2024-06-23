@@ -19,7 +19,6 @@ const Mymodify = () => {
   const [passwordValid, setPasswordValid] = useState(false);
   const [passwordValidityMessage, setPasswordValidityMessage] = useState("");
   const [userId, setUserId] = useState(null);
-  const [myprofile,setmyprofile]=useState(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [user_password, setUserPassword] = useState("");
@@ -127,9 +126,9 @@ const Mymodify = () => {
 
         const imageData = await imageResponse.json();
         if (imageData.access) {
-          setmyprofile(true);
           alert(imageData.message);
-          console.log("먼데!",myprofile);
+          navigate('/my_main');
+          return;
         } else {
           alert("프로필이 수정되지 않았습니다. 관리자에게 문의 부탁드립니다.");
         }
@@ -146,29 +145,14 @@ const Mymodify = () => {
       user_intro: intro,
     };
     if (!passwordValid) {
-      console.log("머야",myprofile);
-      if(!myprofile){
         alert("비밀번호가 유효하지 않습니다. 조건을 확인해 주세요.");
         return;
-      }else{
-        navigate("/my_main");
-      }
     } else if (password !== confirmPassword) {
-      console.log("머야",myprofile);
-      if(!myprofile){
         alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
         return;
-      }else{
-        navigate("/my_main");
-      }
     } else if (intro.length > 30) {
-      console.log("머야",myprofile);
-      if(!myprofile){
         alert("자기소개는 30자를 초과할 수 없습니다.");
         return;
-      }else{
-        navigate("/my_main");
-      }
     }else{
       try {
         const response = await fetch(
@@ -284,7 +268,6 @@ const Mymodify = () => {
       <form className="form-container" onSubmit={handleSubmit}>
         <div className="modi_field">
           <h1>내 정보</h1>
-          <br />
           <hr style={{ backgroundColor: "#ccc", height: "2px" }} />
           <br />
           <div className="photo">
@@ -375,7 +358,7 @@ const Mymodify = () => {
               <input
                 type="submit"
                 value="수정하기"
-                className="submit_B"
+                className="submit_I"
               ></input>
             </div>
           </div>
@@ -389,6 +372,7 @@ const Mymodify = () => {
             setUserPassword("");
             setErrorMessage("");
           }}
+          className="delete_B"
         >
           회원탈퇴
         </button>

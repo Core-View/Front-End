@@ -229,9 +229,9 @@ const PostView = () => {
     }
   }, [liked, likesCount, loggedInUserId, post.user_id, post_id]);
 
-  if (loading) {
-    return <div>로딩 중...</div>;
-  }
+  // if (loading) {
+  //   return <div>로딩 중...</div>;
+  // }
 
   if (error) {
     return <div>{error}</div>;

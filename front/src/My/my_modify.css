@@ -7,6 +7,7 @@
 .modi_field {
   background-color: white;
   margin: 20px;
+  margin-bottom: 5px;
   width: 40%;
   border: 2px solid #eee;
   border-radius: 10px;
@@ -186,44 +187,41 @@
 .submit_D {
   flex: 1;
   text-align: center;
+  margin-top: 20px;
 }
-
-.submit_B {
-  background-color: rgb(217, 217, 217);
-  /* 밝은 파란색 배경 */
-  color: black;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 5px;
-  box-shadow: 0 5px #aaa;
-  /* 그림자 효과 */
+.submit_I{
   cursor: pointer;
-  outline: none;
-  /* 포커스 아웃라인 제거 */
-  transition: all 0.3s;
-  /* 부드러운 전환 효과 */
+  margin-top: 10px;
+  width: 200px;
+  height: 40px;
+  font-size: 17px;
+  font-weight: 600;
+  color: rgb(61, 61, 61);
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0);
+  border: 1px solid rgba(189, 189, 189, 0.3);
+  transition: all 0.1s;
 }
 
-.submit_B:hover {
-  background-color: #333;
+.submit_I:hover{
   color: white;
-  /* 호버 시 색상 어둡게 */
-  box-shadow: 0 4px #aaa;
-  /* 호버 시 그림자 조정 */
-  transform: translateY(-2px);
-  /* 버튼을 약간 위로 이동 */
-}
-
-.submit_B:active {
-  box-shadow: 0 2px #333;
-  /* 클릭 시 그림자 조정 */
-  transform: translateY(4px);
-  /* 클릭 시 버튼을 아래로 이동 */
+  width: 200px;
+  height: 40px;
+  font-size: 17px;
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.9);
+  background-color: rgba(151, 151, 151, 0.377);
 }
 
 .delete_D {
   margin-left: 35%;
   text-align: center;
+}
+.delete_B{
+  background-color: white;
+  color: rgb(110, 110, 110);
+  cursor: pointer;
+  font-weight: 600;
+  opacity: 50%;
 }
 
 .modi_close_btn {
