@@ -161,8 +161,8 @@ const PostWrite = () => {
         <div className="language-buttons">
           <button
             type="button"
-            className={language === '' ? 'active' : ''}
-            onClick={() => handleLanguageChange('')}
+            className={language === 'other' ? 'active' : ''}
+            onClick={() => handleLanguageChange('other')}
           >
             기타
           </button>

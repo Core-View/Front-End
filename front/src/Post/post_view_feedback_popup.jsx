@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import './post_view_feedback_popup.css';
 import { FaRegThumbsUp, FaThumbsUp } from 'react-icons/fa';
 import Draggable from 'react-draggable';
+import axios from 'axios';
 
 const FeedbackPopup = ({
   popup,
@@ -10,9 +11,10 @@ const FeedbackPopup = ({
   loggedInUserId,
   loginError,
   refreshFeedback,
+  // likedFeedback,
+  // setLikedFeedback,
 }) => {
   const feedbackListRef = useRef(null);
-  const [likedFeedback, setLikedFeedback] = useState({});
   const [opacity, setOpacity] = useState(1);
   const [scrollPosition, setScrollPosition] = useState({
     top: window.scrollY,
@@ -61,12 +63,56 @@ const FeedbackPopup = ({
     };
   }, []);
 
-  const handleThumbsUpClick = (feedbackIndex) => {
-    setLikedFeedback((prevLikedFeedback) => ({
-      ...prevLikedFeedback,
-      [feedbackIndex]: !prevLikedFeedback[feedbackIndex],
-    }));
-  };
+  // const handleThumbsUpClick = useCallback(
+  //   async (feedbackId, index) => {
+  //     if (!loggedInUserId) {
+  //       alert('로그인이 필요합니다.');
+  //       return;
+  //     }
+
+  //     const isLiked = likedFeedback[feedbackId];
+  //     const url = isLiked
+  //       ? `http://localhost:3000/api/feedbacklikes/${isLiked}`
+  //       : 'http://localhost:3000/api/feedbacklikes';
+
+  //     const options = isLiked
+  //       ? { method: 'DELETE' }
+  //       : {
+  //           method: 'POST',
+  //           headers: {
+  //             'Content-Type': 'application/json',
+  //           },
+  //           body: JSON.stringify({
+  //             user_id: loggedInUserId,
+  //             feedback_id: feedbackId,
+  //           }),
+  //         };
+
+  //     try {
+  //       const response = await fetch(url, options);
+  //       if (!response.ok) {
+  //         const errorData = await response.json();
+  //         console.error('Response error data:', errorData);
+  //         throw new Error('Network response was not ok');
+  //       }
+
+  //       const data = isLiked ? null : await response.json();
+
+  //       setLikedFeedback((prevLikedFeedback) => {
+  //         const newLikedFeedback = { ...prevLikedFeedback };
+  //         if (isLiked) {
+  //           delete newLikedFeedback[feedbackId];
+  //         } else {
+  //           newLikedFeedback[feedbackId] = data.id;
+  //         }
+  //         return newLikedFeedback;
+  //       });
+  //     } catch (error) {
+  //       console.error('Failed to process feedback like/unlike:', error);
+  //     }
+  //   },
+  //   [loggedInUserId, likedFeedback, setLikedFeedback]
+  // );
 
   const handleFeedbackSubmitWithRefresh = async () => {
     await handleFeedbackSubmit();
@@ -111,26 +157,28 @@ const FeedbackPopup = ({
             <div className="post-code">{popup.codeContent}</div>
             <div className="feedback-list" ref={feedbackListRef}>
               {popup.feedback &&
-                popup.feedback.map((fb, fbIndex) => (
-                  <div key={fbIndex} className="feedback-text">
+                popup.feedback.map((fb, index) => (
+                  <div key={fb.feedback_id} className="feedback-text">
                     <div>
                       <span className="feedback-nickname">
+                        {/* [{fb.feedback_id}] {fb.user_nickname} */}
                         {fb.user_nickname}
                       </span>
                       : {fb.feedback_comment}
                     </div>
-                    <span
+                    {/* <span
                       className={`thumbs-up-icon ${
-                        likedFeedback[fbIndex] ? 'liked' : ''
+                        likedFeedback[fb.feedback_id] ? 'liked' : ''
                       }`}
-                      onClick={() => handleThumbsUpClick(fbIndex)}
+                      id={`span${fb.feedback_id}`}
+                      onClick={() => handleThumbsUpClick(fb.feedback_id, index)}
                     >
-                      {likedFeedback[fbIndex] ? (
+                      {likedFeedback[fb.feedback_id] ? (
                         <FaThumbsUp />
                       ) : (
                         <FaRegThumbsUp />
                       )}
-                    </span>
+                    </span> */}
                   </div>
                 ))}
             </div>

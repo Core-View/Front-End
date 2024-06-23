@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Cookies } from 'react-cookie';
 import FeedbackPopup from './post_view_feedback_popup';
@@ -17,9 +17,11 @@ const PostView = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [loginError, setLoginError] = useState('');
+  const navigate = useNavigate();
 
   const languageIcons = useMemo(
     () => ({
+      other: '/images/language_icons/other_icon.png',
       c: '/images/language_icons/c_icon.png',
       cpp: '/images/language_icons/cpp_icon.png',
       java: '/images/language_icons/java_icon.png',
@@ -42,6 +44,7 @@ const PostView = () => {
   const [likesCount, setLikesCount] = useState(0);
   const [message, setMessage] = useState('');
   const [showMessage, setShowMessage] = useState(false);
+  const [likedFeedback, setLikedFeedback] = useState({});
 
   const fetchPostAndFeedback = useCallback(async () => {
     try {
@@ -71,13 +74,59 @@ const PostView = () => {
 
       isLiked(likedData);
       setLoading(false);
+
+      // const feedbackLikeResponse = await axios.get(
+      //   `http://localhost:3000/api/feedbacklikes/${post_id}/${loggedInUserId}`
+      // );
+      // const likedFeedbackIds = feedbackLikeResponse.data.reduce((acc, fb) => {
+      //   acc[fb.feedback_id] = fb.feedbacklike_id;
+      //   return acc;
+      // // }, {});
+      // setLikedFeedback(likedFeedbackIds);
     } catch (err) {
       setError(`데이터를 가져오는 데 실패했습니다: ${err.message}`);
       setLoading(false);
     }
   }, [post_id, loggedInUserId]);
+
+  const handleDeletePost = useCallback(async () => {
+    if (loggedInUserId !== post.user_id) {
+      setMessage('게시글을 삭제할 권한이 없습니다.');
+      setShowMessage(true);
+      setTimeout(() => setShowMessage(false), 2000);
+      return;
+    }
+
+    if (!window.confirm('정말로 이 게시글을 삭제하시겠습니까?')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/delete/${post_id}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      setMessage('게시글이 삭제되었습니다.');
+      setShowMessage(true);
+      setTimeout(() => setShowMessage(false), 2000);
+      navigate('/post_main');
+    } catch (error) {
+      console.error('There was a problem with your fetch operation:', error);
+    }
+  }, [loggedInUserId, post.user_id, post_id, navigate]);
+
   const user_image =
-    post.user_image || `${process.env.PUBLIC_URL}images/original_profile.png`;
+    post.user_image || `${process.env.PUBLIC_URL}/images/original_profile.png`;
 
   const isLiked = useCallback(
     (likedData) => {
@@ -229,9 +278,9 @@ const PostView = () => {
     }
   }, [liked, likesCount, loggedInUserId, post.user_id, post_id]);
 
-  // if (loading) {
-  //   return <div>로딩 중...</div>;
-  // }
+  if (loading) {
+    return <div>로딩 중...</div>;
+  }
 
   if (error) {
     return <div>{error}</div>;
@@ -255,6 +304,11 @@ const PostView = () => {
         user_image={user_image}
         author={post.user_nickname}
       />
+      {loggedInUserId === post.user_id && (
+        <button onClick={handleDeletePost} className="delete-button">
+          삭제
+        </button>
+      )}
       <PostContent content={post.post_content} />
       <PostCode
         code={post.post_code}
@@ -269,6 +323,8 @@ const PostView = () => {
         loggedInUserId={loggedInUserId}
         loginError={loginError}
         refreshFeedback={fetchPostAndFeedback}
+        // likedFeedback={likedFeedback}
+        // setLikedFeedback={setLikedFeedback}
       />
       <PostResult result={post.post_result} />
     </div>
