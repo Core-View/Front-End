@@ -112,7 +112,7 @@
   outline: none;
 }
 .modi_link:hover {
-  color: rgba(33, 3, 117, 0.8);
+  color: rgba(33, 3, 117, 0.893);
 }
 
 .modi_link span{
@@ -219,7 +219,7 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  max-width: 150px;
+  max-width: 100px;
 }
 
 .post-language-icon {
@@ -299,7 +299,7 @@
   background-color: #ffffff;
   border-radius: 10px;
   width: 480px;
-  height: 420px;
+  height: 410px;
   padding: 15px;
   display: flex;
   justify-content: space-evenly;
