@@ -1,24 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import { formatDistanceToNow, parseISO } from 'date-fns';
-import { ko } from 'date-fns/locale'; // 한국어 로케일 import
+import { ko } from 'date-fns/locale';
 
 import './post_main_pagination.css';
 import './post_main.css';
 
 const Empty = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const initialPage = parseInt(queryParams.get('page') || '0', 10);
+  const initialSortOrder = queryParams.get('sort') || 'latest';
+
   const [searchQuery, setSearchQuery] = useState('');
   const [posts, setPosts] = useState([]);
   const [notices, setNotices] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [postsPerPage, setPostsPerPage] = useState(15); // 페이지당 게시글 수 기본값
-  const [selectedLanguages, setSelectedLanguages] = useState([]); // 선택된 언어들
+  const [currentPage, setCurrentPage] = useState(initialPage);
+  const [postsPerPage, setPostsPerPage] = useState(15);
+  const [selectedLanguages, setSelectedLanguages] = useState([]);
+  const [sortOrder, setSortOrder] = useState(initialSortOrder);
 
   const [userInfos, setUserInfos] = useState({});
 
@@ -40,7 +46,7 @@ const Empty = () => {
         }))
         .catch(() => ({
           userId: id,
-          data: { nickname: '탈퇴한 회원' }, // 사용자 정보가 없는 경우 처리
+          data: { nickname: '탈퇴한 회원' },
         }))
     );
 
@@ -58,7 +64,6 @@ const Empty = () => {
   };
 
   useEffect(() => {
-    // 서버에서 공지 데이터를 가져옴
     const fetchNotices = async () => {
       try {
         const response = await axios.get('http://localhost:3000/notice/view');
@@ -74,10 +79,11 @@ const Empty = () => {
   }, []);
 
   useEffect(() => {
-    // 서버에서 게시글 데이터를 가져옴
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/post/latest');
+        const response = await axios.get(
+          `http://localhost:3000/post/${sortOrder}`
+        );
         const postsData = response.data;
         console.log(postsData);
 
@@ -94,14 +100,26 @@ const Empty = () => {
     };
 
     fetchPosts();
-  }, []);
+  }, [sortOrder]);
 
-  // 검색 및 필터링 핸들러
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const page = parseInt(queryParams.get('page') || '0', 10);
+    const sort = queryParams.get('sort') || 'latest';
+
+    if (page !== currentPage) {
+      setCurrentPage(page);
+    }
+    if (sort !== sortOrder) {
+      setSortOrder(sort);
+    }
+  }, [location.search]);
+
   const handleSearch = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
     filterPosts(query, selectedLanguages);
-    setCurrentPage(0); // 검색 시 첫 페이지로 이동
+    setCurrentPage(0);
   };
 
   const handleLanguageToggle = (language) => {
@@ -110,7 +128,7 @@ const Empty = () => {
       : [...selectedLanguages, language];
     setSelectedLanguages(newSelectedLanguages);
     filterPosts(searchQuery, newSelectedLanguages);
-    setCurrentPage(0); // 필터 변경 시 첫 페이지로 이동
+    setCurrentPage(0);
   };
 
   const filterPosts = (query, languages) => {
@@ -126,32 +144,36 @@ const Empty = () => {
     setFilteredPosts(filtered);
   };
 
-  // 게시글 클릭 핸들러
   const handlePostClick = (post) => {
     navigate(`/post_view/${post.post_id}`);
   };
 
-  // 공지 클릭 핸들러
   const handleNoticeClick = (id) => {
     console.log(id);
     navigate(`/notice/view/${id}`);
   };
 
-  // 페이지 변경 핸들러
   const handlePageClick = (data) => {
-    setCurrentPage(data.selected);
+    const selectedPage = data.selected;
+    setCurrentPage(selectedPage);
+    navigate(`${location.pathname}?page=${selectedPage}&sort=${sortOrder}`);
   };
 
-  // 페이지당 게시글 수 변경 핸들러
   const handlePostsPerPageChange = (e) => {
     setPostsPerPage(Number(e.target.value));
-    setCurrentPage(0); // 페이지 수 변경 시 첫 페이지로 이동
+    setCurrentPage(0);
+  };
+
+  const handleSortOrderChange = (order) => {
+    setSortOrder(order);
+    setLoading(true);
+    setCurrentPage(0);
+    navigate(`${location.pathname}?page=0&sort=${order}`);
   };
 
   const offset = currentPage * postsPerPage;
   const currentPageData = filteredPosts.slice(offset, offset + postsPerPage);
 
-  // 날짜 형식 변환 함수
   const formatDate = (dateString) => {
     const date = parseISO(dateString);
     const now = new Date();
@@ -250,6 +272,22 @@ const Empty = () => {
             <option value={30}>30개 씩</option>
             <option value={50}>50개 씩</option>
           </select>
+        </div>
+      </section>
+      <section className="post-top">
+        <div className="sort-buttons">
+          <button
+            className={sortOrder === 'latest' ? 'active' : ''}
+            onClick={() => handleSortOrderChange('latest')}
+          >
+            최신순
+          </button>
+          <button
+            className={sortOrder === 'mostlike' ? 'active' : ''}
+            onClick={() => handleSortOrderChange('mostlike')}
+          >
+            좋아요순
+          </button>
         </div>
       </section>
       <section className="post-mid">
@@ -354,6 +392,7 @@ const Empty = () => {
           onPageChange={handlePageClick}
           containerClassName={'pagination'}
           activeClassName={'active'}
+          forcePage={currentPage} // 현재 페이지를 강제로 설정합니다.
         />
       </section>
     </div>
