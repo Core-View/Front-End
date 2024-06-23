@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import './post_view_feedback_popup.css';
-import { FaRegThumbsUp, FaThumbsUp } from 'react-icons/fa';
+// import { FaRegThumbsUp, FaThumbsUp } from 'react-icons/fa';
 import Draggable from 'react-draggable';
 import axios from 'axios';
 import Contribution from '../Common/Contribution';
@@ -12,6 +12,7 @@ const FeedbackPopup = ({
   loggedInUserId,
   loginError,
   refreshFeedback,
+  postWriterId,
   // likedFeedback,
   // setLikedFeedback,
 }) => {
@@ -114,6 +115,33 @@ const FeedbackPopup = ({
     setOpacity(e.target.value);
   };
 
+  const handleFeedbackDelete = async (feedback_id) => {
+    if (!window.confirm('정말로 이 피드백을 삭제하시겠습니까?')) {
+      return;
+    }
+
+    try {
+      const response = await axios.delete(
+        `http://localhost:3000/api/feedbacks/${feedback_id}`
+      );
+
+      if (response.status === 200) {
+        alert('피드백이 삭제되었습니다.');
+        await refreshFeedback();
+        setPopup((prevPopup) => ({
+          ...prevPopup,
+          feedback: prevPopup.feedback.filter(
+            (fb) => fb.feedback_id !== feedback_id
+          ),
+        }));
+      } else {
+        throw new Error('Network response was not ok');
+      }
+    } catch (error) {
+      console.error('There was a problem with your delete operation:', error);
+    }
+  };
+
   return (
     <>
       {popup.show && (
@@ -163,6 +191,15 @@ const FeedbackPopup = ({
                       </span>
                       : {fb.feedback_comment}
                     </div>
+                    {(loggedInUserId === fb.user_id ||
+                      loggedInUserId === postWriterId) && (
+                      <button
+                        className="feedback-delete-button"
+                        onClick={() => handleFeedbackDelete(fb.feedback_id)}
+                      >
+                        삭제
+                      </button>
+                    )}
                   </div>
                 ))}
             </div>
