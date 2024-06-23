@@ -77,7 +77,7 @@ const PostView = () => {
     }
   }, [post_id, loggedInUserId]);
   const user_image =
-    post.user_image || `${process.env.PUBLIC_URL}/images/original_profile.png`;
+    post.user_image || `${process.env.PUBLIC_URL}images/original_profile.png`;
 
   const isLiked = useCallback(
     (likedData) => {
