@@ -4,20 +4,17 @@ import './header.css';
 import Alarm from './Alarm';
 import { Cookies } from 'react-cookie';
 import axios from 'axios';
-
+import useAuthStore from '../Sign/Store';
 function Header() {
   const cookies = new Cookies();
-  const [userId, setUserId] = useState(cookies.get('user_id'));
-  const [role, setRole] = useState(cookies.get('role'));
   const navigate = useNavigate();
-
+  const { isLoggedIn, userId, role, setLogout } = useAuthStore();
   const deleteCookies = () => {
     cookies.remove('user_id');
     cookies.remove('role');
     cookies.remove('user_password');
-    setUserId(undefined);
-    setRole(undefined);
-    window.location.reload();
+    setLogout();
+    navigate('/');
   };
 
   const clickedAdmin = () => {
@@ -110,7 +107,7 @@ function Header() {
                 cookies.remove('adminpw');
               }}
             >
-              {userId === undefined ? (
+              {isLoggedIn === false ? (
                 <Link to="/users/sign-in">로그인</Link>
               ) : (
                 <Link to="/" onClick={deleteCookies}>
