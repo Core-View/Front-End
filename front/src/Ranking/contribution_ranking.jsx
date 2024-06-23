@@ -3,6 +3,7 @@ import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import './contribution_ranking.css';
 import Contribution from '../Common/Contribution';
+import { Cookies } from 'react-cookie';
 
 class Ranking extends Component {
   constructor(props) {
@@ -13,6 +14,7 @@ class Ranking extends Component {
       contributorsPerPage: 10,
       loading: true,
       error: null,
+      myPosition: null,
     };
   }
 
@@ -25,39 +27,22 @@ class Ranking extends Component {
       const response = await axios.get(
         `http://localhost:3000/post/top-contributors`
       );
-      const contributors = await Promise.all(
-        response.data.map(async (contributor) => {
-          try {
-            const userProfile = await axios.get(
-              `http://localhost:3000/mypage/${contributor.user_id}`
-            );
-            const profile_picture = userProfile.data.profile_picture;
-            if (
-              !userProfile.profile_picture ||
-              userProfile.profile_picture === 'null'
-            ) {
-              userProfile.profile_picture = `${process.env.PUBLIC_URL}/images/original_profile.png`;
-            }
-            return {
-              ...contributor,
-              ...userProfile.data,
-              profile_picture,
-            };
-          } catch (error) {
-            console.error(
-              `Failed to fetch user profile for user ID ${contributor.user_id}:`,
-              error
-            );
-            return {
-              ...contributor,
-              profile_picture: `${process.env.PUBLIC_URL}/images/original_profile.png`,
-              user_nickname: 'Unknown',
-              introduction: '',
-            };
-          }
-        })
+      const cookies = new Cookies();
+      const loggedInUserId = cookies.get('user_id');
+      const contributors = response.data.map((contributor) => ({
+        ...contributor,
+        profile_picture:
+          contributor.user_image ||
+          `${process.env.PUBLIC_URL}/images/original_profile.png`,
+        user_nickname: contributor.user_nickname || 'Unknown',
+        introduction: contributor.user_intro || '',
+      }));
+
+      const myPosition = contributors.findIndex(
+        (contributor) => contributor.user_id === loggedInUserId
       );
-      this.setState({ contributors, loading: false });
+
+      this.setState({ contributors, loading: false, myPosition });
     } catch (error) {
       this.setState({ error: error.message, loading: false });
     }
@@ -68,9 +53,21 @@ class Ranking extends Component {
     this.setState({ currentPage: selected });
   };
 
+  handleMyPositionClick = () => {
+    const { myPosition, contributorsPerPage } = this.state;
+    const myPage = Math.floor(myPosition / contributorsPerPage);
+    this.setState({ currentPage: myPage });
+  };
+
   render() {
-    const { contributors, currentPage, contributorsPerPage, loading, error } =
-      this.state;
+    const {
+      contributors,
+      currentPage,
+      contributorsPerPage,
+      loading,
+      error,
+      myPosition,
+    } = this.state;
 
     if (loading) {
       return <div className="ranking-container loading">Loading...</div>;
@@ -90,6 +87,14 @@ class Ranking extends Component {
     return (
       <div className="ranking-container">
         <h1>기여도 순위</h1>
+        {myPosition !== -1 && (
+          <button
+            onClick={this.handleMyPositionClick}
+            className="my-position-button"
+          >
+            내 위치 보기
+          </button>
+        )}
         <table className="ranking-table">
           <thead>
             <tr>
@@ -134,6 +139,7 @@ class Ranking extends Component {
           onPageChange={this.handlePageClick}
           containerClassName={'pagination'}
           activeClassName={'active'}
+          forcePage={currentPage}
         />
       </div>
     );

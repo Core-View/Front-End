@@ -20,7 +20,7 @@ const PostMainNotification = () => {
     const fetchNotices = async () => {
       try {
         const response = await axios.get('http://localhost:3000/notice/view');
-        setNotices(response.data.notice);
+        setNotices(response.data.notice.reverse());
         setLoading(false);
       } catch (err) {
         setError('공지를 가져오는 데 실패했습니다.');

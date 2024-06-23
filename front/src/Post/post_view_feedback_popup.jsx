@@ -3,6 +3,7 @@ import './post_view_feedback_popup.css';
 import { FaRegThumbsUp, FaThumbsUp } from 'react-icons/fa';
 import Draggable from 'react-draggable';
 import axios from 'axios';
+import Contribution from '../Common/Contribution';
 
 const FeedbackPopup = ({
   popup,
@@ -20,6 +21,7 @@ const FeedbackPopup = ({
     top: window.scrollY,
     left: window.scrollX,
   });
+  const [contributions, setContributions] = useState({});
 
   useEffect(() => {
     if (feedbackListRef.current) {
@@ -63,56 +65,45 @@ const FeedbackPopup = ({
     };
   }, []);
 
-  // const handleThumbsUpClick = useCallback(
-  //   async (feedbackId, index) => {
-  //     if (!loggedInUserId) {
-  //       alert('로그인이 필요합니다.');
-  //       return;
-  //     }
+  const fetchContribution = useCallback(async (userId) => {
+    try {
+      const response = await axios.post(
+        'http://localhost:3000/post/contribution',
+        {
+          user_id: userId,
+        }
+      );
+      return response.data.user_contribute;
+    } catch (error) {
+      console.error(
+        `Failed to fetch contribution for user ID ${userId}:`,
+        error
+      );
+      return null;
+    }
+  }, []);
 
-  //     const isLiked = likedFeedback[feedbackId];
-  //     const url = isLiked
-  //       ? `http://localhost:3000/api/feedbacklikes/${isLiked}`
-  //       : 'http://localhost:3000/api/feedbacklikes';
+  useEffect(() => {
+    const fetchContributions = async () => {
+      const uniqueUserIds = [
+        ...new Set(popup.feedback.map((fb) => fb.user_id)),
+      ];
+      const contributionsData = {};
+      await Promise.all(
+        uniqueUserIds.map(async (userId) => {
+          const contribution = await fetchContribution(userId);
+          if (contribution !== null) {
+            contributionsData[userId] = contribution;
+          }
+        })
+      );
+      setContributions(contributionsData);
+    };
 
-  //     const options = isLiked
-  //       ? { method: 'DELETE' }
-  //       : {
-  //           method: 'POST',
-  //           headers: {
-  //             'Content-Type': 'application/json',
-  //           },
-  //           body: JSON.stringify({
-  //             user_id: loggedInUserId,
-  //             feedback_id: feedbackId,
-  //           }),
-  //         };
-
-  //     try {
-  //       const response = await fetch(url, options);
-  //       if (!response.ok) {
-  //         const errorData = await response.json();
-  //         console.error('Response error data:', errorData);
-  //         throw new Error('Network response was not ok');
-  //       }
-
-  //       const data = isLiked ? null : await response.json();
-
-  //       setLikedFeedback((prevLikedFeedback) => {
-  //         const newLikedFeedback = { ...prevLikedFeedback };
-  //         if (isLiked) {
-  //           delete newLikedFeedback[feedbackId];
-  //         } else {
-  //           newLikedFeedback[feedbackId] = data.id;
-  //         }
-  //         return newLikedFeedback;
-  //       });
-  //     } catch (error) {
-  //       console.error('Failed to process feedback like/unlike:', error);
-  //     }
-  //   },
-  //   [loggedInUserId, likedFeedback, setLikedFeedback]
-  // );
+    if (popup.show) {
+      fetchContributions();
+    }
+  }, [popup.feedback, fetchContribution, popup.show]);
 
   const handleFeedbackSubmitWithRefresh = async () => {
     await handleFeedbackSubmit();
@@ -159,26 +150,19 @@ const FeedbackPopup = ({
               {popup.feedback &&
                 popup.feedback.map((fb, index) => (
                   <div key={fb.feedback_id} className="feedback-text">
-                    <div>
+                    <div className="profile-info">
+                      {contributions[fb.user_id] !== undefined && (
+                        <div className="contribution-icon-style">
+                          <Contribution
+                            contribute={contributions[fb.user_id]}
+                          />
+                        </div>
+                      )}
                       <span className="feedback-nickname">
-                        {/* [{fb.feedback_id}] {fb.user_nickname} */}
                         {fb.user_nickname}
                       </span>
                       : {fb.feedback_comment}
                     </div>
-                    {/* <span
-                      className={`thumbs-up-icon ${
-                        likedFeedback[fb.feedback_id] ? 'liked' : ''
-                      }`}
-                      id={`span${fb.feedback_id}`}
-                      onClick={() => handleThumbsUpClick(fb.feedback_id, index)}
-                    >
-                      {likedFeedback[fb.feedback_id] ? (
-                        <FaThumbsUp />
-                      ) : (
-                        <FaRegThumbsUp />
-                      )}
-                    </span> */}
                   </div>
                 ))}
             </div>
