@@ -13,6 +13,7 @@ const FeedbackPopup = ({
   loginError,
   refreshFeedback,
   postWriterId,
+  postId,
   // likedFeedback,
   // setLikedFeedback,
 }) => {
@@ -109,6 +110,22 @@ const FeedbackPopup = ({
   const handleFeedbackSubmitWithRefresh = async () => {
     await handleFeedbackSubmit();
     await refreshFeedback();
+
+    const response = await axios.get(
+      `http://localhost:3000/api/feedbacks/post/${postId}`
+    );
+    const feedbackData = response.data.reduce((acc, fb) => {
+      if (!acc[fb.feedback_codenumber]) {
+        acc[fb.feedback_codenumber] = [];
+      }
+      acc[fb.feedback_codenumber].push(fb);
+      return acc;
+    }, {});
+
+    setPopup((prevPopup) => ({
+      ...prevPopup,
+      feedback: feedbackData[prevPopup.line] || [],
+    }));
   };
 
   const handleOpacityChange = (e) => {
@@ -187,9 +204,9 @@ const FeedbackPopup = ({
                         </div>
                       )}
                       <span className="feedback-nickname">
-                        {fb.user_nickname}
+                        {fb.user_nickname}:
                       </span>
-                      : {fb.feedback_comment}
+                      {fb.feedback_comment}
                     </div>
                     {(loggedInUserId === fb.user_id ||
                       loggedInUserId === postWriterId) && (
