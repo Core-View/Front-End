@@ -1,25 +1,20 @@
+.fPcontainer {
+  text-align: center;
+}
 .find_main {
   width: 100%;
   height: 80vh;
   display: flex;
-  gap: 20px;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #f8f9fa;
-  /* 밝은 배경색 */
 }
 
 .flexi {
-  width: 100%;
-  max-width: 1200px;
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  align-items: center;
-  justify-content: center;
+  width: 300px;
+  height: 408px;
+  position: relative;
 }
-
 .input_componentFF {
   width: 300px;
   height: 408px;
@@ -34,50 +29,86 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-
+  z-index: 2;
   transition: opacity 0.3s;
   /* 불투명도 전환 효과 */
 }
-
 .input_componentFF.disabled {
   opacity: 0.6;
   /* 불투명도 설정 */
   pointer-events: none;
   /* 사용자 이벤트 비활성화 */
 }
-
+.input_componentFF > h4 {
+  height: 30px;
+}
+.input_componentFFF {
+  width: 300px;
+  height: 408px;
+  padding: 20px;
+  border: 1px solid #ced4da;
+  /* 밝은 회색 테두리 */
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* 가벼운 그림자 */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 1;
+  transition: opacity 0.3s;
+  /* 불투명도 전환 효과 */
+}
+.input_componentFFF.disabled {
+  opacity: 0.6;
+  /* 불투명도 설정 */
+  pointer-events: none;
+  /* 사용자 이벤트 비활성화 */
+}
 .input_spaceF {
   padding: 10px;
   width: 300px;
+  height: 100px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 3px;
 }
 
 .input_areaF {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  font-size: 16px;
-}
+  width: 200px;
+  height: 30px;
+  font-size: 15px;
+  line-height: 50px;
 
-.passRegex {
-  color: #28a745;
-  /* 성공 메시지 색상 */
-  font-weight: 600;
-  font-size: 14px;
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+  border-bottom: 1px solid black;
 }
-
+.input_areaF :focus {
+  outline: none;
+}
+.input_componentFFF > .input_spaceF {
+  padding: 10px;
+  width: 300px;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 3px;
+}
 .nonPassRegexF {
   color: #dc3545;
   /* 오류 메시지 색상 */
   font-weight: 600;
-  font-size: 14px;
+  font-size: 8px;
 }
 
 #ChangePassword {
-  width: 100%;
+  width: 80%;
   padding: 10px;
   border: none;
   border-radius: 4px;
@@ -89,10 +120,20 @@
   transition: background-color 0.3s;
 }
 
-#ChangePassword {
-  width: 280px;
+.email_authf {
+  width: 100px;
+  height: 30px;
+  font-weight: 700;
+  font-size: 15px;
+  background-color: rgba(189, 189, 189, 0.808);
+  border-radius: 5px;
+  color: rgb(105, 104, 104);
+  cursor: pointer;
 }
-
+.email_authf:hover {
+  color: white;
+  background-color: #898787;
+}
 #ChangePassword:disabled,
 .email_auth:disabled {
   background-color: #6c757d;
@@ -102,5 +143,38 @@
 
 #ChangePassword:hover:not(:disabled) .email_auth:hover:not(:disabled) {
   background-color: #0056b3;
+  cursor: pointer;
   /* 호버 시 버튼 배경색 */
+}
+/* 애니메이션 효과를 위한 초기 상태 */
+
+.input_componentFF,
+.input_componentFFF {
+  width: 300px;
+  height: 408px;
+  padding: 20px;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  transform: translateX(0);
+  opacity: 1;
+}
+/* 애니메이션 트리거 클래스 */
+.form-completed .input_componentFF {
+  transform: translateX(-60%);
+  opacity: 1;
+}
+
+.form-completed .input_componentFFF {
+  transform: translateX(60%);
+  opacity: 1;
 }
