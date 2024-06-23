@@ -318,7 +318,7 @@ const PostView = () => {
             onClick={() => {
               handleUpdatePost();
             }}
-            className="delete-button"
+            className="update-button"
           >
             수정
           </button>
