@@ -17,8 +17,9 @@ const Empty = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
-  const [postsPerPage, setPostsPerPage] = useState(15); // 페이지당 게시글 수 기본값
-  const [selectedLanguages, setSelectedLanguages] = useState([]); // 선택된 언어들
+  const [postsPerPage, setPostsPerPage] = useState(15);
+  const [selectedLanguages, setSelectedLanguages] = useState([]);
+  const [sortOrder, setSortOrder] = useState('latest');
 
   const [userInfos, setUserInfos] = useState({});
 
@@ -40,7 +41,7 @@ const Empty = () => {
         }))
         .catch(() => ({
           userId: id,
-          data: { nickname: '탈퇴한 회원' }, // 사용자 정보가 없는 경우 처리
+          data: { nickname: '탈퇴한 회원' },
         }))
     );
 
@@ -58,7 +59,7 @@ const Empty = () => {
   };
 
   useEffect(() => {
-    // 서버에서 공지 데이터를 가져옴
+    // 공지 데이터
     const fetchNotices = async () => {
       try {
         const response = await axios.get('http://localhost:3000/notice/view');
@@ -74,10 +75,12 @@ const Empty = () => {
   }, []);
 
   useEffect(() => {
-    // 서버에서 게시글 데이터를 가져옴
+    // 게시글 데이터
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/post/latest');
+        const response = await axios.get(
+          `http://localhost:3000/post/${sortOrder}`
+        );
         const postsData = response.data;
         console.log(postsData);
 
@@ -94,14 +97,13 @@ const Empty = () => {
     };
 
     fetchPosts();
-  }, []);
+  }, [sortOrder]);
 
-  // 검색 및 필터링 핸들러
   const handleSearch = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
     filterPosts(query, selectedLanguages);
-    setCurrentPage(0); // 검색 시 첫 페이지로 이동
+    setCurrentPage(0);
   };
 
   const handleLanguageToggle = (language) => {
@@ -110,7 +112,7 @@ const Empty = () => {
       : [...selectedLanguages, language];
     setSelectedLanguages(newSelectedLanguages);
     filterPosts(searchQuery, newSelectedLanguages);
-    setCurrentPage(0); // 필터 변경 시 첫 페이지로 이동
+    setCurrentPage(0);
   };
 
   const filterPosts = (query, languages) => {
@@ -126,32 +128,32 @@ const Empty = () => {
     setFilteredPosts(filtered);
   };
 
-  // 게시글 클릭 핸들러
   const handlePostClick = (post) => {
     navigate(`/post_view/${post.post_id}`);
   };
 
-  // 공지 클릭 핸들러
   const handleNoticeClick = (id) => {
     console.log(id);
     navigate(`/notice/view/${id}`);
   };
 
-  // 페이지 변경 핸들러
   const handlePageClick = (data) => {
     setCurrentPage(data.selected);
   };
 
-  // 페이지당 게시글 수 변경 핸들러
   const handlePostsPerPageChange = (e) => {
     setPostsPerPage(Number(e.target.value));
-    setCurrentPage(0); // 페이지 수 변경 시 첫 페이지로 이동
+    setCurrentPage(0);
+  };
+
+  const handleSortOrderChange = (order) => {
+    setSortOrder(order);
+    setLoading(true);
   };
 
   const offset = currentPage * postsPerPage;
   const currentPageData = filteredPosts.slice(offset, offset + postsPerPage);
 
-  // 날짜 형식 변환 함수
   const formatDate = (dateString) => {
     const date = parseISO(dateString);
     const now = new Date();
@@ -250,6 +252,22 @@ const Empty = () => {
             <option value={30}>30개 씩</option>
             <option value={50}>50개 씩</option>
           </select>
+        </div>
+      </section>
+      <section className="post-top">
+        <div className="sort-buttons">
+          <button
+            className={sortOrder === 'latest' ? 'active' : ''}
+            onClick={() => handleSortOrderChange('latest')}
+          >
+            최신순
+          </button>
+          <button
+            className={sortOrder === 'mostlike' ? 'active' : ''}
+            onClick={() => handleSortOrderChange('mostlike')}
+          >
+            좋아요순
+          </button>
         </div>
       </section>
       <section className="post-mid">
