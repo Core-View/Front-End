@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import { PiBellFill } from 'react-icons/pi';
-import { GiBackwardTime } from 'react-icons/gi';
 import './Alarm.css';
 import { Cookies } from 'react-cookie';
 import axios from 'axios';
@@ -55,7 +53,7 @@ const Alarm = () => {
     };
 
     es.current.onmessage = (event) => {
-      if (es.current !== null) {
+      if (es.current !== null || !alarm) {
         if (event.data === 'finished') {
           es.current.close();
           return;
