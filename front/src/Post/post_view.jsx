@@ -97,6 +97,10 @@ const PostView = () => {
       return;
     }
 
+    if (!window.confirm('정말로 이 게시글을 삭제하시겠습니까?')) {
+      return;
+    }
+
     try {
       const response = await fetch(
         `http://localhost:3000/api/delete/${post_id}`,
@@ -302,7 +306,7 @@ const PostView = () => {
       />
       {loggedInUserId === post.user_id && (
         <button onClick={handleDeletePost} className="delete-button">
-          게시글 삭제
+          삭제
         </button>
       )}
       <PostContent content={post.post_content} />
