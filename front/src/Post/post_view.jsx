@@ -12,7 +12,6 @@ import './post_view_feedback.css';
 
 const PostView = () => {
   const cookies = new Cookies();
-  console.log(cookies);
   const loggedInUserId = cookies.get('user_id');
   // const loggedInUserNickname = cookies.get('user_nickname');
   const { post_id } = useParams();

@@ -104,8 +104,6 @@ const Sign_in = () => {
       return;
     }
     if (email !== email_show) {
-      console.log(email);
-      console.log(email_show);
       alert('인증한 이메일과 다릅니다');
       return;
     }
@@ -145,7 +143,6 @@ const Sign_in = () => {
       .then((response) => {
         if (response.status === 200) {
           setEmail_show(email);
-          console.log(email_show);
           alert('이메일 전송했습니다');
         } else {
           alert('유효하지 않은 이메일입니다.');

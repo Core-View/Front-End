@@ -217,7 +217,6 @@ const Mypage = () => {
     }
   };
 
-  console.log('전체', posts);
   return (
     <div className="allofthem">
       <div className="my_all">

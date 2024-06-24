@@ -59,8 +59,6 @@ const AdminNoticeUpdate = () => {
                 .then((response) => {
                   if (response.data.hi === 'hello') {
                     const filename = `/images/post_notice/${blob.name}`;
-                    console.log('서버에 저장된 파일명 : ', filename);
-                    console.log(formData.get('image'));
                     // 이미지 URL을 에디터에 렌더링
                     const imageUrl = `${filename}`;
                     callback(imageUrl, 'image alt attribute');
@@ -87,13 +85,11 @@ const AdminNoticeUpdate = () => {
         })
         .then((Response) => {
           if (Response.data.success === true) {
-            console.log(editorInstanceRef.current.getMarkdown());
             alert('수정 성공!!');
             navigate('/admin');
           } else if (Response.data.success === false) {
             alert('수정 실패! 다시 시도해주세요');
           }
-          console.log(Response);
         })
         .catch((error) => {
           console.log(error);

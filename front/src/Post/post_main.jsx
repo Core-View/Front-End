@@ -67,7 +67,6 @@ const Empty = () => {
     const fetchNotices = async () => {
       try {
         const response = await axios.get('http://localhost:3000/notice/view');
-        console.log(response);
         setNotices(response.data.notice);
         setLoading(false);
       } catch (err) {
@@ -85,7 +84,6 @@ const Empty = () => {
           `http://localhost:3000/post/${sortOrder}`
         );
         const postsData = response.data;
-        console.log(postsData);
 
         const userIds = [...new Set(postsData.map((post) => post.user_id))];
         await fetchUserInfos(userIds);
@@ -149,7 +147,6 @@ const Empty = () => {
   };
 
   const handleNoticeClick = (id) => {
-    console.log(id);
     navigate(`/notice/view/${id}`);
   };
 
