@@ -22,7 +22,6 @@ const PostUpdate = () => {
   const CODE_MAX_LENGTH = 65535; // LONGTEXT
 
   const getPrevDetail = () => {
-    console.log(post_id);
     axios
       .get(`http://localhost:3000/post/details/${post_id}`)
       .then((response) => {

@@ -16,7 +16,6 @@ const AdminNotice = () => {
       if (response.data.success === true) {
         let noticeList = response.data.notice;
         setNoticeLists(noticeList);
-        console.log(noticeList);
       }
     });
   };

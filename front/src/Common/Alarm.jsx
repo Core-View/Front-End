@@ -34,7 +34,6 @@ const Alarm = () => {
     }
   };
   const moving = (post) => {
-    console.log(post);
     navigate(`/post_view/${post}`);
   };
   useEffect(() => {
