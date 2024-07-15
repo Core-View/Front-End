@@ -46,7 +46,7 @@ const PostView = () => {
   const [likesCount, setLikesCount] = useState(0);
   const [message, setMessage] = useState('');
   const [showMessage, setShowMessage] = useState(false);
-  const [likedFeedback, setLikedFeedback] = useState({});
+  // const [likedFeedback, setLikedFeedback] = useState({});
 
   const fetchPostAndFeedback = useCallback(async () => {
     try {
