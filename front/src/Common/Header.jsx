@@ -7,6 +7,7 @@ import useAuthStore from '../Sign/Store';
 import TokenChecker from './TokenStore';
 function Header() {
   const { admin, accessToken } = TokenChecker();
+  console.log('aasdfsdfa', admin);
   const cookies = new Cookies();
   const navigate = useNavigate();
   const { isLoggedIn, userId, role, setLogout } = useAuthStore();

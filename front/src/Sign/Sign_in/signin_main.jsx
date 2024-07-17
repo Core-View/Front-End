@@ -17,7 +17,7 @@ const Sign_in = () => {
   const [password, setPassword] = useState('');
   const setLogin = useAuthStore((state) => state.setLogin);
   const setToken = TokenChecker((state) => state.setToken);
-  const setAdmin = TokenChecker((state) => state.setToken);
+  const checkAdmin = TokenChecker((state) => state.checkAdmin);
   const onchangeEmail = useCallback((e) => {
     setEmail(e.target.value);
   }, []);
@@ -41,11 +41,15 @@ const Sign_in = () => {
           response.data.Authorization
         );
         axios
-          .post('http://localhost:3000/admin/check', {
-            headers: {
-              Authorization: response.data.Authorization,
-            },
-          })
+          .post(
+            'http://localhost:3000/admin/check',
+            {},
+            {
+              headers: {
+                Authorization: response.data.Authorization,
+              },
+            }
+          )
           .then(
             axios.interceptors.response.use(function (response) {
               // 2xx 범위에 있는 상태 코드는 이 함수를 트리거 합니다.
@@ -55,14 +59,13 @@ const Sign_in = () => {
               setLogin(response.data.user_id, response.data.role); // Zustand 스토어에 로그인 상태 설정
               //Zustand 스토어에 토큰 상태 설정
               setToken(response.data.Authorization);
-              setAdmin(true);
+              checkAdmin(response.data.success);
               alert('성공');
               navigate('/'); // 상대 경로로 이동
               return response;
             })
           );
       })
-
       .catch((error) => {
         alert(error.message);
       });
