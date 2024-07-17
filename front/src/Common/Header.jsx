@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './header.css';
 import Alarm from './Alarm';
 import { Cookies } from 'react-cookie';
-import axios from 'axios';
 import useAuthStore from '../Sign/Store';
+import TokenChecker from './TokenStore';
 function Header() {
+  const { admin, accessToken } = TokenChecker();
   const cookies = new Cookies();
   const navigate = useNavigate();
   const { isLoggedIn, userId, role, setLogout } = useAuthStore();
@@ -17,30 +18,9 @@ function Header() {
     navigate('/');
   };
 
-  const clickedAdmin = () => {
-    let inputPassword = prompt('비밀번호를 입력하세요.', '');
-    if (inputPassword) {
-      axios
-        .post(`http://localhost:3000/admin/login/${userId}`, {
-          user_id: userId,
-          role: role,
-          password: inputPassword,
-        })
-        .then((response) => {
-          if (response.data.success) {
-            navigate('/admin');
-          } else {
-            alert('오류발생!');
-            navigate('/');
-          }
-        });
-    } else {
-      alert('오류발생!');
-    }
-  };
-
   return (
     <header className="header">
+      {console.log(accessToken)}
       <div
         className="header-logo-container"
         onClick={() => {
@@ -60,7 +40,7 @@ function Header() {
         <div className="header-nav-left">
           <ul>
             <li>
-              {role === 1 ? <Link to="/admin/check">관리자페이지</Link> : null}
+              {admin ? <Link to="/admin/check">관리자페이지</Link> : null}
             </li>
             <li
               onClick={() => {

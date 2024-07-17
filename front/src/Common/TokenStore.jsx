@@ -2,11 +2,10 @@ import { create } from 'zustand';
 
 const TokenChecker = create((set) => ({
   accessToken: null,
-  refreshToken: null,
-  setToken: (accessToken, refreshToken) =>
-    set({ accessToken: 'sdfwdf', refreshToken: 'aasdfdw' }),
-  delToken: (accessToken, refreshToken) =>
-    set({ accessToken: null, refreshToken: null }),
+  admin: false,
+  setToken: (accessToken) => set({ accessToken }),
+  checkAdmin: (admin) => set({ admin }),
+  delToken: () => set({ accessToken: null, admin: false }),
 }));
 
 export default TokenChecker;

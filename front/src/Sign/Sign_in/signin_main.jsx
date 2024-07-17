@@ -7,7 +7,7 @@ import { MdOutlineVpnKey } from 'react-icons/md';
 import { FcGoogle } from 'react-icons/fc';
 import { VscGithubInverted } from 'react-icons/vsc';
 import useAuthStore from '../Store';
-import TokenChecker from '../../Common/TokenStroe';
+import TokenChecker from '../../Common/TokenStore';
 import './Sign_in.css';
 
 const Sign_in = () => {
@@ -17,6 +17,7 @@ const Sign_in = () => {
   const [password, setPassword] = useState('');
   const setLogin = useAuthStore((state) => state.setLogin);
   const setToken = TokenChecker((state) => state.setToken);
+  const setAdmin = TokenChecker((state) => state.setToken);
   const onchangeEmail = useCallback((e) => {
     setEmail(e.target.value);
   }, []);
@@ -34,33 +35,34 @@ const Sign_in = () => {
         user_email: email,
         user_password: password,
       })
-      .then(
-        axios.interceptors.response.use(
-          function (response) {
-            // 2xx 범위에 있는 상태 코드는 이 함수를 트리거 합니다.
-            // 응답 데이터가 있는 작업 수행
-            return response;
-          },
-          function (error) {
-            // 2xx 외의 범위에 있는 상태 코드는 이 함수를 트리거 합니다.
-            // 응답 오류가 있는 작업 수행
-            return Promise.reject(error);
-          }
-        )
-      )
       .then((response) => {
-        if (response.status === 200) {
-          cookies.set('user_id', response.data.user_id);
-          cookies.set('role', response.data.role);
-          setLogin(response.data.user_id, response.data.role); // Zustand 스토어에 로그인 상태 설정
-          //Zustand 스토어에 토큰 상태 설정
-          setToken(response.data.access, response.data.refresh);
-          alert('성공');
-          navigate('/'); // 상대 경로로 이동
-        } else {
-          alert('비번틀림');
-        }
+        console.log(
+          '이거이거이ㅓ기어기어기어기ㅓ',
+          response.data.Authorization
+        );
+        axios
+          .post('http://localhost:3000/admin/check', {
+            headers: {
+              Authorization: response.data.Authorization,
+            },
+          })
+          .then(
+            axios.interceptors.response.use(function (response) {
+              // 2xx 범위에 있는 상태 코드는 이 함수를 트리거 합니다.
+              // 응답 데이터가 있는 작업 수행
+              cookies.set('user_id', response.data.user_id);
+              cookies.set('role', response.data.role);
+              setLogin(response.data.user_id, response.data.role); // Zustand 스토어에 로그인 상태 설정
+              //Zustand 스토어에 토큰 상태 설정
+              setToken(response.data.Authorization);
+              setAdmin(true);
+              alert('성공');
+              navigate('/'); // 상대 경로로 이동
+              return response;
+            })
+          );
       })
+
       .catch((error) => {
         alert(error.message);
       });
