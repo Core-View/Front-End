@@ -167,14 +167,12 @@ const Mymodify = () => {
       user_password_confirm: finalConfirmPassword,
       user_intro: intro,
     };
-    if (
-      (!passwordValid && password) ||
-      password !== confirmPassword ||
-      intro.length > 30
-    ) {
-      alert('입력조건이 유효하지 않습니다. 조건을 확인해 주세요.');
-      return;
-    } else {
+    
+    if ((!passwordValid && password) || password !== confirmPassword || intro.length > 30) {
+        alert("입력조건이 유효하지 않습니다. 조건을 확인해 주세요.");
+        return;
+    }else{
+      
       try {
         const response = await axios.put(
           `http://localhost:3000/mypage/${userId}/modify`,
