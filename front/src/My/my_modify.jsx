@@ -43,11 +43,11 @@ const Mymodify = () => {
       /^(?=.*[a-zA-Z가-힣])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z가-힣\d@$!%*?&]{8,}$/,
   };
 
-  const isValid = useCallback((checkReg, string) => {
+  const isValid = useCallback((checkReg, string) => {//비밀번호 유효성 검사
     return checkReg.test(string);
   }, []);
 
-  const encodeFileToBase64 = (fileBlob) => {
+  const encodeFileToBase64 = (fileBlob) => {  //프로필 이미지 미리보기 저장
     const reader = new FileReader();
     reader.readAsDataURL(fileBlob);
     reader.onload = () => {
@@ -56,20 +56,20 @@ const Mymodify = () => {
     };
   };
 
-  const handlePasswordChange = (e) => {
+  const handlePasswordChange = (e) => { //비밀번호
     const newPw = e.target.value;
     setPassword(newPw);
     validatePasswords(newPw, confirmPassword);
     validatePasswordFormat(newPw);
   };
 
-  const handleConfirmPasswordChange = (e) => {
+  const handleConfirmPasswordChange = (e) => {  //비밀번호 확인
     const newConfirmPw = e.target.value;
     setConfirmPassword(newConfirmPw);
     validatePasswords(password, newConfirmPw);
   };
 
-  const validatePasswords = (pw, confirmPw) => {
+  const validatePasswords = (pw, confirmPw) => {  //다르다면 오류 메세지 띄어줌
     if (confirmPw && pw !== confirmPw) {
       setPasswordError('비밀번호가 일치하지 않습니다.');
     } else {
@@ -77,7 +77,7 @@ const Mymodify = () => {
     }
   };
 
-  const validatePasswordFormat = (password) => {
+  const validatePasswordFormat = (password) => {  //비밀번호 유효성 검사 적합하지 않으면 오류 메세지 띄어줌
     if (!isValid(regex.password, password)) {
       setPasswordValid(false);
       setPasswordValidityMessage(
@@ -89,7 +89,7 @@ const Mymodify = () => {
     }
   };
 
-  const handleNicknameChange = (e) => {
+  const handleNicknameChange = (e) => { //닉네임 글자수 제한
     const newNickname = e.target.value;
     setNickname(newNickname);
     if (newNickname.length > 10) {
@@ -99,7 +99,7 @@ const Mymodify = () => {
     }
   };
 
-  const handleIntroChange = (e) => {
+  const handleIntroChange = (e) => {  //자기소개 글자수 제한
     const value = e.target.value;
     setIntro(value);
     if (value.length > 30) {
@@ -112,25 +112,22 @@ const Mymodify = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (imageFile) {
+    if (imageFile) {  //이미지를 수정했다면 이미지 수정 api 요청
       const formData = new FormData();
       formData.append('user_image', imageFile);
 
       try {
-        const imageResponse = await fetch(
+        const imageResponse = await axios.post(
           `http://localhost:3000/mypage/${userId}/modifyImage`,
-          {
-            method: 'POST',
-            body: formData,
-          }
+          formData
         );
 
-        if (!imageResponse.ok) {
-          throw new Error('Image upload failed');
-        }
+        // if (!imageResponse.ok) {
+        //   throw new Error('Image upload failed');
+        // }
 
-        const imageData = await imageResponse.json();
-        if (imageData.access) {
+        const imageData = imageResponse.data;
+        if (imageData.access) {//이미지가 수정 되었다면 이전 이미지 삭제 API요청
           try {
             const imageDResponse = await axios.post(
               `http://localhost:3000/mypage/${userId}/deleteImage`,
@@ -162,8 +159,8 @@ const Mymodify = () => {
         return;
       }
     }
-    const finalPassword = password || userPasswordCookie;
-    const finalConfirmPassword = confirmPassword || userPasswordCookie;
+    const finalPassword = password || userPasswordCookie; //비밀번호 수정하지 않으면 이전 비밀번호 그대로 사용
+    const finalConfirmPassword = confirmPassword || userPasswordCookie; //비밀번호 확인 입력하지 않으면 이전 비밀번호 그대로 사용
     const profileData = {
       user_nickname: nickname,
       user_password: finalPassword,
@@ -179,22 +176,21 @@ const Mymodify = () => {
       return;
     } else {
       try {
-        const response = await fetch(
+        const response = await axios.put(
           `http://localhost:3000/mypage/${userId}/modify`,
+          profileData,
           {
-            method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify(profileData),
           }
         );
 
-        if (!response.ok) {
-          throw new Error('Profile update failed');
-        }
+        // if (!response.ok) {
+        //   throw new Error('Profile update failed');
+        // }
 
-        const data = await response.json();
+        const data = response.data;
         if (data.access) {
           alert(data.message);
           navigate('/my_main');
@@ -208,19 +204,16 @@ const Mymodify = () => {
     }
   };
 
-  const handleDeleteAccount = async () => {
+  const handleDeleteAccount = async () => { //회원 탈퇴 api요청
     try {
-      const response = await fetch(
-        `http://localhost:3000/mypage/${userId}/delete`,
-        {
-          method: 'DELETE',
-        }
+      const response = await axios.delete(
+        `http://localhost:3000/mypage/${userId}/delete`
       );
 
-      if (!response.ok) {
-        throw new Error('Account deletion failed');
-      }
-      cookies.remove('user_id');
+      // if (!response.ok) {
+      //   throw new Error('Account deletion failed');
+      // }
+      cookies.remove('user_id');//회원 탈퇴시 로그아웃
       cookies.remove('role');
       cookies.remove('user_password');
       setLogout();
@@ -233,10 +226,12 @@ const Mymodify = () => {
   };
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchUserData = async () => { //user 정보를 얻어오는 api 요청
       try {
-        const response = await fetch(`http://localhost:3000/mypage/${userId}`);
-        const data = await response.json();
+        const response = await axios.get(
+          `http://localhost:3000/mypage/${userId}`
+        );
+        const data = response.data;
         setpreimage(data.profile_picture);
         if (!data.profile_picture || data.profile_picture === 'null') {
           data.profile_picture = `${process.env.PUBLIC_URL}/images/original_profile.png`;
@@ -264,21 +259,20 @@ const Mymodify = () => {
     setUserPassword(e.target.value);
   };
 
-  const handlePasswordSubmit = async (e) => {
+  const handlePasswordSubmit = async (e) => { //비밀번호 확인 api요청
     e.preventDefault();
     try {
-      const response = await fetch(
+      const response = await axios.post(
         `http://localhost:3000/password/verify/${userId}`,
+        { user_password },
         {
-          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ user_password }),
         }
       );
 
-      const data = await response.json();
+      const data = response.data;
       if (data.success) {
         handleDeleteAccount();
       } else {
