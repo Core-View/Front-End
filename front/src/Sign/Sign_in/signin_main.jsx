@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Cookies } from 'react-cookie';
 import { MdOutlineMailOutline } from 'react-icons/md';
 import { MdOutlineVpnKey } from 'react-icons/md';
 import { FcGoogle } from 'react-icons/fc';
@@ -11,7 +10,6 @@ import TokenChecker from '../../Common/TokenStore';
 import './Sign_in.css';
 
 const Sign_in = () => {
-  const cookies = new Cookies();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,6 +22,7 @@ const Sign_in = () => {
   const onchangePassword = useCallback((e) => {
     setPassword(e.target.value);
   }, []);
+
   const onsubmit = (e) => {
     e.preventDefault();
     if (email.length === 0 || password.length === 0) {
@@ -36,10 +35,8 @@ const Sign_in = () => {
         user_password: password,
       })
       .then((response) => {
-        console.log(
-          '이거이거이ㅓ기어기어기어기ㅓ',
-          response.data.Authorization
-        );
+        console.log('토큰 체크 전 생로그인 ', response);
+        setToken(response.data.Authorization);
         axios
           .post(
             'http://localhost:3000/admin/check',
@@ -50,22 +47,17 @@ const Sign_in = () => {
               },
             }
           )
-          .then(
-            axios.interceptors.response.use(function (response) {
-              // 2xx 범위에 있는 상태 코드는 이 함수를 트리거 합니다.
-              // 응답 데이터가 있는 작업 수행
-              cookies.set('user_id', response.data.user_id);
-              cookies.set('role', response.data.role);
-              setLogin(response.data.user_id, response.data.role); // Zustand 스토어에 로그인 상태 설정
-              //Zustand 스토어에 토큰 상태 설정
-              setToken(response.data.Authorization);
-              checkAdmin(response.data.success);
-              alert('성공');
-              navigate('/'); // 상대 경로로 이동
-              return response;
-            })
-          );
+          .then((response) => {
+            console.log('토큰 체크 후 ', response);
+            setLogin(response.data.success);
+            checkAdmin(response.data.success);
+            console.log('사인인에서 실행행');
+            alert('성공성성');
+            console.log('사인인에서 실행행');
+            navigate('/'); // 상대 경로로 이동
+          });
       })
+
       .catch((error) => {
         alert(error.message);
       });
@@ -114,7 +106,7 @@ const Sign_in = () => {
             <div className="goNabi">
               <div>
                 <Link className="goNabiC" to="/users/find-pwd">
-                  비번 재설정{' '}
+                  비번 재설정
                 </Link>
               </div>
               <div>

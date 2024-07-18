@@ -2,40 +2,34 @@ import React from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useState } from 'react';
-import { Cookies } from 'react-cookie';
+import TokenChecker from '../Common/TokenStore';
 
 const AdminCheck = () => {
-  const cookies = new Cookies();
-  const [userId, setUserId] = useState(cookies.get('user_id'));
-  const [role, setRole] = useState(cookies.get('role'));
+  const { accessToken } = TokenChecker();
   const navigate = useNavigate();
   //관리자 페이지 접속 관련
   const clickedAdmin = () => {
-    let inputPassword = prompt('비밀번호를 입력하세요.', '');
-    if (inputPassword) {
-      axios
-        .post(`http://localhost:3000/admin/login/${userId}`, {
-          user_id: userId,
-          role: role,
-          admin_password: inputPassword,
-        })
-        .then((response) => {
-          if (response.status === 200) {
-            alert('관리자페이지 접속 성공');
-            cookies.set('adminpw', 'passed');
-            navigate('/admin');
-          }
-        })
-        .catch(() => {
-          cookies.remove('adminpw');
-          alert('(비밀번호를 확인하세요).');
-          navigate('/');
-        });
-    } else {
-      cookies.remove('adminpw');
-      navigate('/');
-    }
+    axios
+      .post(
+        `http://localhost:3000/admin/login`,
+        {},
+        {
+          headers: {
+            Authorization: accessToken,
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response);
+        if (response.status === 200) {
+          alert('관리자페이지 접속 성공');
+          navigate('/admin');
+        }
+      })
+      .catch(() => {
+        alert('접근권한 재확인 필요');
+        navigate('/');
+      });
   };
 
   useEffect(() => {

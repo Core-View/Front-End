@@ -6,7 +6,7 @@ import { Cookies } from 'react-cookie';
 import useAuthStore from '../Sign/Store';
 import TokenChecker from './TokenStore';
 function Header() {
-  const { admin, accessToken } = TokenChecker();
+  const { admin, accessToken, delToken } = TokenChecker();
   console.log('aasdfsdfa', admin);
   const cookies = new Cookies();
   const navigate = useNavigate();
@@ -15,6 +15,7 @@ function Header() {
     cookies.remove('user_id');
     cookies.remove('role');
     cookies.remove('user_password');
+    delToken(null, false);
     setLogout();
     navigate('/');
   };

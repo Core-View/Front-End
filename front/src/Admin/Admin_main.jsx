@@ -7,22 +7,30 @@ import axios from 'axios';
 import Contribution from '../Common/Contribution';
 import { Cookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
+import TokenChecker from '../Common/TokenStore';
 
 const Admin = () => {
   const cookies = new Cookies();
   const navigate = useNavigate();
   const [selectedMenu, setSelectedMenu] = useState('어떤관리');
   const [member, setMember] = useState([]);
-
   const [clicked, setClicked] = useState([false, false, false]);
+  const { accessToken } = TokenChecker();
 
   const getMember = () => {
-    if (cookies.get('adminpw') === 'passed') {
-      axios.get('http://localhost:3000/notice/viewuser').then((response) => {
-        if (response.data.success === true) {
-          setMember(response.data.user);
-        }
-      });
+    if (accessToken) {
+      axios
+        .get('http://localhost:3000/notice/viewuser', {
+          headers: {
+            Authorization: accessToken,
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.success === true) {
+            setMember(response.data.user);
+          }
+        });
     } else {
       alert('잘못된 접근!');
       cookies.remove('adminpw');

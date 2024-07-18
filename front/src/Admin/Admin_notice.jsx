@@ -3,21 +3,29 @@ import axios from 'axios';
 import './admin_notice.css';
 import { useNavigate } from 'react-router-dom';
 import { Cookies } from 'react-cookie';
+import TokenChecker from '../Common/TokenStore';
 
 const AdminNotice = () => {
   const cookies = new Cookies();
   const [noticeLists, setNoticeLists] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const { accessToken } = TokenChecker();
   const noticesPerPage = 10;
 
   //공지조회관련
   const getNotice = () => {
-    axios.get(`http://localhost:3000/notice/view`).then((response) => {
-      if (response.data.success === true) {
-        let noticeList = response.data.notice;
-        setNoticeLists(noticeList);
-      }
-    });
+    axios
+      .get(`http://localhost:3000/notice/view`, {
+        headers: {
+          Authorization: accessToken,
+        },
+      })
+      .then((response) => {
+        if (response.data.success === true) {
+          let noticeList = response.data.notice;
+          setNoticeLists(noticeList);
+        }
+      });
   };
 
   useEffect(() => {
