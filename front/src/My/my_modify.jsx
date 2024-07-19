@@ -176,7 +176,7 @@ const Mymodify = () => {
       return;
     } else {
       try {
-        const response = await axios.put(
+        const response = await axios.put(//회원 정보 수정 api요청
           `http://localhost:3000/mypage/${userId}/modify`,
           profileData,
           {
