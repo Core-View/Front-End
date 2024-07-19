@@ -52,9 +52,9 @@ const PostMainNotification = () => {
     setCurrentPage(data.selected);
   };
 
-  const handlePostClick = (notice) => {
-    navigate(`/post_view/${notice.NOTICE_ID}`);
-  };
+  // const handlePostClick = (notice) => {
+  //   navigate(`/post_view/${notice.NOTICE_ID}`);
+  // };
 
   const offset = currentPage * noticesPerPage;
   const currentPageData = notices.slice(offset, offset + noticesPerPage);
