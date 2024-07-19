@@ -21,7 +21,6 @@ const AdminCheck = () => {
           admin_password: inputPassword,
         })
         .then((response) => {
-          console.log(response);
           if (response.status === 200) {
             alert('관리자페이지 접속 성공');
             cookies.set('adminpw', 'passed');

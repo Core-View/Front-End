@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Cookies } from 'react-cookie';
@@ -34,7 +34,6 @@ const Sign_in = () => {
       })
       .then((response) => {
         if (response.status === 200) {
-          console.log(response);
           cookies.set('user_id', response.data.user_id);
           cookies.set('role', response.data.role);
           setLogin(response.data.user_id, response.data.role); // Zustand 스토어에 로그인 상태 설정

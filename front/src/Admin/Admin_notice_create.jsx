@@ -28,16 +28,10 @@ const AdminNoticeCreate = () => {
           } else if (Response.data.success === false) {
             alert('실패했습니다! 다시 시도해주세요');
           }
-          console.log(Response);
         })
         .catch((error) => {
           console.log(error);
         });
-      // 입력창에 입력한 내용을 HTML 태그 형태로 취득
-      console.log(editorInstanceRef.current.getHTML());
-      // 입력창에 입력한 내용을 MarkDown 형태로 취득
-      console.log(editorInstanceRef.current.getMarkdown());
-      console.log(typeof editorInstanceRef.current.getMarkdown());
     } else {
       alert('잘못된 접근입니다.');
       navigate('/');
@@ -70,8 +64,6 @@ const AdminNoticeCreate = () => {
                 .then((response) => {
                   if (response.data.hi === 'hello') {
                     const filename = `/images/post_notice/${blob.name}`;
-                    console.log('서버에 저장된 파일명 : ', filename);
-                    console.log(formData.get('image'));
                     // 이미지 URL을 에디터에 렌더링
                     const imageUrl = `${filename}`;
                     callback(imageUrl, 'image alt attribute');

@@ -5,6 +5,7 @@ import './Alarm.css';
 import { Cookies } from 'react-cookie';
 import axios from 'axios';
 import { BiCommentDetail } from 'react-icons/bi';
+import useAuthStore from '../Sign/Store';
 
 const Alarm = () => {
   const [isStarted, setIsStarted] = useState(false);
@@ -14,6 +15,8 @@ const Alarm = () => {
   const es = useRef(null);
   const cookies = new Cookies();
   const navigate = useNavigate();
+  const { isLoggedIn } = useAuthStore();
+
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
     if (isDropdownOpen) {
@@ -31,7 +34,6 @@ const Alarm = () => {
     }
   };
   const moving = (post) => {
-    console.log(post);
     navigate(`/post_view/${post}`);
   };
   useEffect(() => {
@@ -53,7 +55,7 @@ const Alarm = () => {
     };
 
     es.current.onmessage = (event) => {
-      if (es.current !== null || !alarm) {
+      if (es.current !== 'null' || !alarm) {
         if (event.data === 'finished') {
           es.current.close();
           return;
@@ -109,7 +111,7 @@ const Alarm = () => {
         )}
 
         <PiBellFill className="al" onClick={toggleDropdown} />
-        {isDropdownOpen ? (
+        {isDropdownOpen && isLoggedIn ? (
           <div className="dropdown">
             {alarm.map((a, index) => (
               <div

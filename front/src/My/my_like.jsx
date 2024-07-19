@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
+import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import { parseISO } from 'date-fns';
 import { ko } from 'date-fns/locale'; // 한국어 로케일 import
@@ -41,10 +42,10 @@ const Empty = () => {
     setIsLoading(false);
   }, [navigate]);
 
-  const fetchPosts = async (userId) => {
+  const fetchPosts = async (userId) => {  //user가 좋아요한 글의 모든 정보를 보여주는 api요청
     try {
-        const response = await fetch(`http://localhost:3000/mypage/${userId}/likedPosts`);
-        const postsData = await response.json();
+        const response = await axios.get(`http://localhost:3000/mypage/${userId}/likedPosts`);
+        const postsData = response.data;
         const processedData = postsData.map(like => ({
           ...like,
           profile_picture: (like.profile_picture === "null" || !like.profile_picture)

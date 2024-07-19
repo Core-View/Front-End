@@ -54,7 +54,6 @@ const Admin = () => {
       axios
         .delete(`http://localhost:3000/mypage/${userId}/delete`)
         .then((response) => {
-          console.log(response);
           if (response.status === 204) {
             getMember(); // 회원 삭제 후 목록을 새로 불러옴
           }
