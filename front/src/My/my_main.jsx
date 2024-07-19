@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Navigate, Link } from 'react-router-dom';
+import axios from 'axios';
 import './my_main.css';
 import { parseISO } from 'date-fns';
 import { ko } from 'date-fns/locale'; // 한국어 로케일 import
@@ -54,10 +55,10 @@ const Mypage = () => {
     setIsLoading(false);
   }, [navigate]);
 
-  const fetchUserData = async (userId) => {
+  const fetchUserData = async (userId) => { //user 정보 가져오는 api요청
     try {
-      const response = await fetch(`http://localhost:3000/mypage/${userId}`);
-      const data = await response.json();
+      const response = await axios.get(`http://localhost:3000/mypage/${userId}`);
+      const data = response.data;
       if (!data.profile_picture || data.profile_picture === 'null') {
         data.profile_picture = `${process.env.PUBLIC_URL}/images/original_profile.png`;
       }
@@ -67,12 +68,10 @@ const Mypage = () => {
     }
   };
 
-  const fetchPostData = async (userId) => {
+  const fetchPostData = async (userId) => { //user가 작성한 글 정보 가져오는 api요청
     try {
-      const response = await fetch(
-        `http://localhost:3000/mypage/${userId}/posts`
-      );
-      const data = await response.json();
+      const response = await axios.get(`http://localhost:3000/mypage/${userId}/posts`);
+      const data = response.data;
       const processedData = data.map((post) => ({
         ...post,
         profile_picture:
@@ -86,12 +85,10 @@ const Mypage = () => {
     }
   };
 
-  const fetchCommentData = async (userId) => {
+  const fetchCommentData = async (userId) => {  //user가 댓글 단 글의 정보를 가져오는 api요청
     try {
-      const response = await fetch(
-        `http://localhost:3000/mypage/${userId}/feedback`
-      );
-      const data = await response.json();
+      const response = await axios.get(`http://localhost:3000/mypage/${userId}/feedback`);
+      const data = response.data;
       const processedData = data.map((comment) => ({
         ...comment,
         profile_picture:
@@ -104,12 +101,10 @@ const Mypage = () => {
       console.error('Error fetching feedback data:', error);
     }
   };
-  const fetchLikeData = async (userId) => {
+  const fetchLikeData = async (userId) => { //user가 좋아요한 글의 정보를 가져오는 api요청
     try {
-      const response = await fetch(
-        `http://localhost:3000/mypage/${userId}/likedPosts`
-      );
-      const data = await response.json();
+      const response = await axios.get(`http://localhost:3000/mypage/${userId}/likedPosts`);
+      const data = response.data;
       const processedData = data.map((like) => ({
         ...like,
         profile_picture:
@@ -123,24 +118,23 @@ const Mypage = () => {
     }
   };
 
-  const handlePasswordChange = (e) => {
+  const handlePasswordChange = (e) => { //입력한 password 쿠기에 저장 위해 변수 저장
     setUserPassword(e.target.value);
   };
 
-  const handlePasswordSubmit = async (e) => {
+  const handlePasswordSubmit = async (e) => { //user가 비밀번호 확인하기 위한 api요청
     e.preventDefault();
     try {
-      const response = await fetch(
+      const response = await axios.post(
         `http://localhost:3000/password/verify/${userInfo.user_id}`,
+        { user_password },
         {
-          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ user_password }),
         }
       );
-      const data = await response.json();
+      const data = response.data;
       if (data.success) {
         cookies.set('user_password', user_password);
         navigate('/my_modify');
@@ -153,20 +147,20 @@ const Mypage = () => {
     }
   };
 
-  const formatDate = (dateString) => {
+  const formatDate = (dateString) => {  //작성한 글의 작성 날짜를 원하는 형식으로 고쳐주는 코드
     const date = parseISO(dateString);
     return format(date, 'yyyy-MM-dd', { locale: ko });
   };
 
-  if (isLoading) {
+  if (isLoading) {  //로딩
     return <div>Loading...</div>;
   }
 
-  if (!isLoggedIn) {
+  if (!isLoggedIn) {  //로그인 되지 않았으면 로그인 페이지로 이동
     return <Navigate to="/users/sign-in" replace />;
   }
 
-  const handlePostClick = (post) => {
+  const handlePostClick = (post) => { //글 클릭시 그 글의 페이지로 이동
     navigate(`/post_view/${post.post_id}`);
   };
 
