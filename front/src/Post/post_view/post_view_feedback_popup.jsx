@@ -3,7 +3,7 @@ import './post_view_feedback_popup.css';
 // import { FaRegThumbsUp, FaThumbsUp } from 'react-icons/fa';
 import Draggable from 'react-draggable';
 import axios from 'axios';
-import Contribution from '../Common/Contribution';
+import Contribution from '../../Common/Contribution';
 
 const FeedbackPopup = ({
   popup,
