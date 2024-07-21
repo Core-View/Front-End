@@ -13,8 +13,7 @@ const Sign_in = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const setToken = TokenChecker((state) => state.setToken);
-  const checkAdmin = TokenChecker((state) => state.checkAdmin);
+  const { setToken, delToken, checkAdmin, admin, accessToken } = TokenChecker();
   const onchangeEmail = useCallback((e) => {
     setEmail(e.target.value);
   }, []);
@@ -34,16 +33,23 @@ const Sign_in = () => {
         user_password: password,
       })
       .then((response) => {
+        console.log('로그인 버튼 누르고나서 post 요청 간 후의 콘솔', response);
+        setToken(response.data.Authorization);
         if (role === 1) {
           checkAdmin(true);
         } else {
           checkAdmin(false);
         }
-        setToken(response.data.Authorization);
+        console.log(
+          '토큰store에 setToken, checkAdmin 설정 후',
+          localStorage.getItem('token-store')
+        );
         alert('로그인 성공');
         return navigate('/');
       })
       .catch((error) => {
+        console.log('로그인 버튼 클릭시 나타나는 오류', error.message);
+        delToken();
         alert(error);
       });
   };

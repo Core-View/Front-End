@@ -1,12 +1,21 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
-const TokenChecker = create((set) => ({
-  accessToken: null,
-  admin: false,
-  setToken: (accessToken) => set({ accessToken }),
-  checkAdmin: (admin) => set({ admin }),
-  delToken: () => set({ accessToken: null, admin: false }),
-}));
+const TokenChecker = create(
+  persist(
+    (set) => ({
+      accessToken: null,
+      admin: false,
+      setToken: (accessToken) => set({ accessToken }),
+      checkAdmin: (admin) => set({ admin }),
+      delToken: () => set({ accessToken: null, admin: false }),
+    }),
+    {
+      name: 'token-store',
+      getStorage: () => localStorage, // storage 설정 명시
+    }
+  )
+);
 
 export default TokenChecker;
 

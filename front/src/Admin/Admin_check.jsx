@@ -23,32 +23,36 @@ const AdminCheck = () => {
         navigate('/admin');
       })
       .catch((err) => {
-        axios
-          .get('http://localhost:3000/token/refresh', {
-            headers: {
-              Authorization: accessToken,
-            },
-          })
-          .then(
-            axios.interceptors.response.use((response) => {
-              setToken(response.data.Authorization);
+        console.log(err);
+        if (err.response.status === 401) {
+          console.log('만료가 되었답니다!');
+          axios
+            .get('http://localhost:3000/token/refresh', {
+              headers: {
+                Authorization: accessToken,
+              },
             })
-          )
-          .catch((err) => {
-            if (err.response.status === 400) {
-              return navigate('/admin');
-            } else if (err.response.status === 401) {
-              alert('권한이 없습니다.');
-              delToken();
-              return navigate('/users/sign-in');
-            }
-          });
+            .then(
+              axios.interceptors.response.use((response) => {
+                console.log(response);
+                setToken(response.data.Authorization);
+                return navigate('/');
+              })
+            )
+            .catch((err) => {
+              if (err.response.status === 400) {
+                return navigate('/admin');
+              } else if (err.response.status === 401) {
+                alert('권한이 없습니다.');
+                delToken();
+                return navigate('/users/sign-in');
+              }
+            });
+        }
       });
   };
 
-  useEffect(() => {
-    clickedAdmin();
-  }, []);
+  clickedAdmin();
 };
 
 export default AdminCheck;

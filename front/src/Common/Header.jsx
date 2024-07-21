@@ -6,23 +6,18 @@ import { Cookies } from 'react-cookie';
 import TokenChecker from './TokenStore';
 function Header() {
   const { admin, accessToken, delToken } = TokenChecker();
-  console.log('aasdfsdfa', admin);
   const cookies = new Cookies();
   const navigate = useNavigate();
   const deleteCookies = () => {
     delToken(null, false);
+    console.log('로그아웃 했을때 토큰,어드민 상태', accessToken, admin);
     navigate('/users/sign-in');
   };
 
   return (
     <header className="header">
-      {console.log(accessToken)}
-      <div
-        className="header-logo-container"
-        onClick={() => {
-          cookies.remove('adminpw');
-        }}
-      >
+      {console.log('헤더에 있는 토큰과 어드민', accessToken, admin)}
+      <div className="header-logo-container">
         <Link to="/">
           <img
             src="/images/logo_CV_black.png"
@@ -38,45 +33,44 @@ function Header() {
             <li>
               {admin ? <Link to="/admin/check">관리자페이지</Link> : null}
             </li>
-            <li onClick={() => {}}>
+            <li>
               <Link to="/post_main">전체 게시글</Link>
             </li>
-            <li onClick={() => {}}>
-              {console.log(accessToken)}
+            <li>
               {!accessToken ? (
                 <Link to="/users/sign-in">글 쓰기</Link>
               ) : (
                 <Link to="/post/write">글 쓰기</Link>
               )}
             </li>
-            <li onClick={() => {}}>
+            <li>
               <Link to="/contribution_ranking">랭킹</Link>
             </li>
           </ul>
         </div>
         <div className="header-nav-right">
           <ul>
-            <li onClick={() => {}}>
-              {accessToken ? (
+            <li>
+              {!accessToken ? (
                 <Link to="/users/sign-in">내 정보</Link>
               ) : (
                 <Link to="/my_main">내 정보</Link>
               )}
             </li>
-            <li
-              onClick={() => {
-                cookies.remove('adminpw');
-              }}
-            >
+            <li>
               {!accessToken ? (
                 <Link to="/users/sign-in">로그인</Link>
               ) : (
-                <Link to="/" onClick={deleteCookies}>
+                <Link
+                  to="/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    deleteCookies();
+                  }}
+                >
                   로그아웃
                 </Link>
               )}
-
-              {console.log(accessToken)}
             </li>
             <li>
               <Alarm />

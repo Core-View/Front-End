@@ -7,13 +7,14 @@ import axios from 'axios';
 import Contribution from '../Common/Contribution';
 import { useNavigate } from 'react-router-dom';
 import TokenChecker from '../Common/TokenStore';
+import Intercepter from '../Common/Intercepter';
 
 const Admin = () => {
   const navigate = useNavigate();
   const [selectedMenu, setSelectedMenu] = useState('어떤관리');
   const [member, setMember] = useState([]);
   const [clicked, setClicked] = useState([false, false, false]);
-  const { admin, accessToken, delToken, setToken } = TokenChecker();
+  const { accessToken, delToken, setToken } = TokenChecker();
 
   const getMember = () => {
     axios
@@ -23,7 +24,6 @@ const Admin = () => {
         },
       })
       .then((response) => {
-        console.log(response.data);
         if (response.data.success === true) {
           setMember(response.data.user);
         }
@@ -75,7 +75,7 @@ const Admin = () => {
         <button
           onClick={(e) => {
             e.preventDefault();
-            setToken('');
+            setToken('dsfgkjersdfgeeeeg');
           }}
         >
           asd
