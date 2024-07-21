@@ -2,9 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import './post_write.css';
 import { Cookies } from 'react-cookie';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const PostWrite = () => {
+  const cookies = new Cookies();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [code, setCode] = useState('');
@@ -15,9 +16,23 @@ const PostWrite = () => {
   const contentRef = useRef(null);
   const codeRef = useRef(null);
 
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
   const TITLE_MAX_LENGTH = 30;
   const CONTENT_MAX_LENGTH = 3000;
   const CODE_MAX_LENGTH = 65535; // LONGTEXT
+
+  useEffect(() => {
+    const userId = cookies.get('user_id');
+    if (userId) {
+      setIsLoggedIn(true);
+    } else {
+      navigate('/users/sign-in');
+    }
+    setIsLoading(false);
+  }, [navigate]);
 
   useEffect(() => {
     const handleBeforeUnload = (event) => {
@@ -33,8 +48,6 @@ const PostWrite = () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, [title, content, code]);
-
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     const cookies = new Cookies();
@@ -54,6 +67,14 @@ const PostWrite = () => {
     if (code.length > CODE_MAX_LENGTH) {
       setCodeError(`코드는 ${CODE_MAX_LENGTH}자 이하로 작성해야 합니다.`);
       return;
+    }
+
+    if (!isLoggedIn) {
+      return <Navigate to="/users/sign-in" replace />;
+    }
+
+    if (isLoading) {
+      return <div>Loading...</div>;
     }
 
     const postData = {
