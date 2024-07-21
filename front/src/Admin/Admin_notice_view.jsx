@@ -7,10 +7,10 @@ import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { GoPencil } from 'react-icons/go';
 import { FaList } from 'react-icons/fa';
-import { Cookies } from 'react-cookie';
+import TokenChecker from '../Common/TokenStore';
 
 const AdminNoticeView = () => {
-  const cookies = new Cookies();
+  const { admin } = TokenChecker();
   const navigate = useNavigate();
   const { id } = useParams();
   const [noticeDetail, setNoticeDetail] = useState(null);
@@ -41,7 +41,7 @@ const AdminNoticeView = () => {
   }, [noticeDetail]);
 
   const handleEdit = () => {
-    if (cookies.get('adminpw') === 'passed') {
+    if (admin) {
       navigate(`/notice/modify/${id}`);
     } else {
       alert('관리자만 수정할 수 있습니다.');
@@ -49,7 +49,7 @@ const AdminNoticeView = () => {
   };
 
   const handleDelete = () => {
-    if (cookies.get('adminpw') === 'passed') {
+    if (admin) {
       axios
         .delete(`http://localhost:3000/notice/delete/${id}`)
         .then((response) => {
@@ -78,7 +78,7 @@ const AdminNoticeView = () => {
         </div>
 
         <div className="admin_notice_view_buttons">
-          {cookies.get('adminpw') && cookies.get('adminpw') === 'passed' ? (
+          {admin ? (
             <Link to="/admin" className="delete_button">
               <FaList />
             </Link>

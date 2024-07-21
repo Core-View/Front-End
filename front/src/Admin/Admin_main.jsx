@@ -5,37 +5,34 @@ import AdPost from './Admin_post';
 import AdUsers from './Admin_user';
 import axios from 'axios';
 import Contribution from '../Common/Contribution';
-import { Cookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import TokenChecker from '../Common/TokenStore';
 
 const Admin = () => {
-  const cookies = new Cookies();
   const navigate = useNavigate();
   const [selectedMenu, setSelectedMenu] = useState('어떤관리');
   const [member, setMember] = useState([]);
   const [clicked, setClicked] = useState([false, false, false]);
-  const { accessToken } = TokenChecker();
+  const { admin, accessToken, delToken, setToken } = TokenChecker();
 
   const getMember = () => {
-    if (accessToken) {
-      axios
-        .get('http://localhost:3000/notice/viewuser', {
-          headers: {
-            Authorization: accessToken,
-          },
-        })
-        .then((response) => {
-          console.log(response.data);
-          if (response.data.success === true) {
-            setMember(response.data.user);
-          }
-        });
-    } else {
-      alert('잘못된 접근!');
-      cookies.remove('adminpw');
-      navigate('/');
-    }
+    axios
+      .get('http://localhost:3000/notice/viewuser', {
+        headers: {
+          Authorization: accessToken,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        if (response.data.success === true) {
+          setMember(response.data.user);
+        }
+      })
+      .catch((err) => {
+        alert('잘못된 접근!');
+        delToken();
+        navigate('/users/sign-in');
+      });
   };
 
   const renderMenuContent = () => {
@@ -75,6 +72,14 @@ const Admin = () => {
     <div className="admin-container">
       <div className="member-section">
         <h3 className="admin_title">멤버 기여도 현황</h3>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            setToken('');
+          }}
+        >
+          asd
+        </button>
         <div className="member_detail">
           <div className="member_info">멤버</div>
           <div className="member_tier">등급</div>
@@ -116,7 +121,8 @@ const Admin = () => {
         <ul className="admin_menu_list">
           <li
             className={`menu1 menuer ${clicked[0] ? 'nowshow' : ''}`}
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               setSelectedMenu('회원관리');
               setClicked([true, false, false]);
             }}
@@ -125,7 +131,8 @@ const Admin = () => {
           </li>
           <li
             className={`menu2 menuer ${clicked[1] ? 'nowshow' : ''}`}
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               setSelectedMenu('공지사항');
               setClicked([false, true, false]);
             }}
@@ -134,7 +141,8 @@ const Admin = () => {
           </li>
           <li
             className={`menu3 menuer ${clicked[2] ? 'nowshow' : ''}`}
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               setSelectedMenu('게시판관리');
               setClicked([false, false, true]);
             }}

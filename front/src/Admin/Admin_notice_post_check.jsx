@@ -3,13 +3,13 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { Cookies } from 'react-cookie';
+import TokenChecker from '../Common/TokenStore';
 
 const AdminNoticePostCheck = () => {
-  const cookies = new Cookies();
+  const { admin } = TokenChecker();
   const navigate = useNavigate();
   const checkNoticePost = () => {
-    if (cookies.get('adminpw') === 'passed') {
+    if (admin) {
       navigate('/notice/post');
     } else {
       alert('잘못된 접근입니다.');

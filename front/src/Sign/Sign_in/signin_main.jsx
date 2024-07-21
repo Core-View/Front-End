@@ -5,15 +5,14 @@ import { MdOutlineMailOutline } from 'react-icons/md';
 import { MdOutlineVpnKey } from 'react-icons/md';
 import { FcGoogle } from 'react-icons/fc';
 import { VscGithubInverted } from 'react-icons/vsc';
-import useAuthStore from '../Store';
 import TokenChecker from '../../Common/TokenStore';
 import './Sign_in.css';
 
 const Sign_in = () => {
+  let role = 1; // 있다고 가정
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const setLogin = useAuthStore((state) => state.setLogin);
   const setToken = TokenChecker((state) => state.setToken);
   const checkAdmin = TokenChecker((state) => state.checkAdmin);
   const onchangeEmail = useCallback((e) => {
@@ -35,37 +34,24 @@ const Sign_in = () => {
         user_password: password,
       })
       .then((response) => {
-        console.log('토큰 체크 전 생로그인 ', response);
+        if (role === 1) {
+          checkAdmin(true);
+        } else {
+          checkAdmin(false);
+        }
         setToken(response.data.Authorization);
-        axios
-          .post(
-            'http://localhost:3000/admin/check',
-            {},
-            {
-              headers: {
-                Authorization: response.data.Authorization,
-              },
-            }
-          )
-          .then((response) => {
-            console.log('토큰 체크 후 ', response);
-            setLogin(response.data.success);
-            checkAdmin(response.data.success);
-            console.log('사인인에서 실행행');
-            alert('성공성성');
-            console.log('사인인에서 실행행');
-            navigate('/'); // 상대 경로로 이동
-          });
+        alert('로그인 성공');
+        return navigate('/');
       })
-
       .catch((error) => {
-        alert(error.message);
+        alert(error);
       });
   };
 
   const googleLog = () => {
     window.location.href = 'http://localhost:3000/sign/google';
   };
+
   return (
     <div className="container_si">
       <div className="loginForm_si">
@@ -133,6 +119,7 @@ const Sign_in = () => {
               src="/images/navericon.png"
               className="naverIcon"
               onClick={googleLog}
+              alt=""
             ></img>
           </div>
         </form>
@@ -140,5 +127,4 @@ const Sign_in = () => {
     </div>
   );
 };
-
 export default Sign_in;

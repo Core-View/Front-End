@@ -3,8 +3,10 @@ import axios from 'axios';
 import './post_write.css';
 import { Cookies } from 'react-cookie';
 import { Navigate, useNavigate } from 'react-router-dom';
+import TokenChecker from '../../Common/TokenStore';
 
 const PostWrite = () => {
+  const { accessToken } = TokenChecker();
   const cookies = new Cookies();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -25,7 +27,7 @@ const PostWrite = () => {
   const CODE_MAX_LENGTH = 65535; // LONGTEXT
 
   useEffect(() => {
-    const userId = cookies.get('user_id');
+    const userId = '2'; //cookies.get('user_id');
     if (userId) {
       setIsLoggedIn(true);
     } else {
@@ -51,7 +53,7 @@ const PostWrite = () => {
 
   const handleSubmit = async (e) => {
     const cookies = new Cookies();
-    const loggedInUserId = cookies.get('user_id'); // 로그인된 사용자 ID 가져오기
+    const loggedInUserId = '0'; //cookies.get('user_id'); // 로그인된 사용자 ID 가져오기
     e.preventDefault();
 
     if (title.length > TITLE_MAX_LENGTH) {
@@ -82,13 +84,18 @@ const PostWrite = () => {
       language: language,
       code: code,
       content: content,
-      user_id: loggedInUserId,
+      user_id: '2', //loggedInUserId,
     };
 
     try {
       const response = await axios.post(
         'http://localhost:3000/api/compile',
-        postData
+        postData,
+        {
+          headers: {
+            Authorization: accessToken,
+          },
+        }
       );
 
       if (response.status === 200) {
