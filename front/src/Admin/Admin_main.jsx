@@ -7,7 +7,6 @@ import axios from 'axios';
 import Contribution from '../Common/Contribution';
 import { useNavigate } from 'react-router-dom';
 import TokenChecker from '../Common/TokenStore';
-import Intercepter from '../Common/Intercepter';
 
 const Admin = () => {
   const navigate = useNavigate();

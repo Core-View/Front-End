@@ -13,7 +13,7 @@ const Sign_in = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { setToken, delToken, checkAdmin, admin, accessToken } = TokenChecker();
+  const { setToken, delToken, checkAdmin } = TokenChecker();
   const onchangeEmail = useCallback((e) => {
     setEmail(e.target.value);
   }, []);
