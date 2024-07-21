@@ -2,11 +2,10 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './admin_notice.css';
 import { useNavigate } from 'react-router-dom';
-import { Cookies } from 'react-cookie';
 import TokenChecker from '../Common/TokenStore';
 
 const AdminNotice = () => {
-  const cookies = new Cookies();
+  const { admin } = TokenChecker();
   const [noticeLists, setNoticeLists] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const { accessToken } = TokenChecker();
@@ -52,7 +51,7 @@ const AdminNotice = () => {
 
   //공지작성관련
   const createNotice = () => {
-    if (cookies.get('adminpw') === 'passed') {
+    if (admin) {
       navigate('/notice/post');
     } else {
       alert('접근권한이 없습니다.');

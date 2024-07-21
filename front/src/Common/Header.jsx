@@ -3,21 +3,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import './header.css';
 import Alarm from './Alarm';
 import { Cookies } from 'react-cookie';
-import useAuthStore from '../Sign/Store';
 import TokenChecker from './TokenStore';
 function Header() {
   const { admin, accessToken, delToken } = TokenChecker();
   console.log('aasdfsdfa', admin);
   const cookies = new Cookies();
   const navigate = useNavigate();
-  const { isLoggedIn, userId, role, setLogout } = useAuthStore();
   const deleteCookies = () => {
-    cookies.remove('user_id');
-    cookies.remove('role');
-    cookies.remove('user_password');
     delToken(null, false);
-    setLogout();
-    navigate('/');
+    navigate('/users/sign-in');
   };
 
   return (
@@ -44,41 +38,26 @@ function Header() {
             <li>
               {admin ? <Link to="/admin/check">관리자페이지</Link> : null}
             </li>
-            <li
-              onClick={() => {
-                cookies.remove('adminpw');
-              }}
-            >
+            <li onClick={() => {}}>
               <Link to="/post_main">전체 게시글</Link>
             </li>
-            <li
-              onClick={() => {
-                cookies.remove('adminpw');
-              }}
-            >
-              {userId === undefined ? (
+            <li onClick={() => {}}>
+              {console.log(accessToken)}
+              {!accessToken ? (
                 <Link to="/users/sign-in">글 쓰기</Link>
               ) : (
-                <Link to="/post_write">글 쓰기</Link>
+                <Link to="/post/write">글 쓰기</Link>
               )}
             </li>
-            <li
-              onClick={() => {
-                cookies.remove('adminpw');
-              }}
-            >
+            <li onClick={() => {}}>
               <Link to="/contribution_ranking">랭킹</Link>
             </li>
           </ul>
         </div>
         <div className="header-nav-right">
           <ul>
-            <li
-              onClick={() => {
-                cookies.remove('adminpw');
-              }}
-            >
-              {userId === undefined ? (
+            <li onClick={() => {}}>
+              {accessToken ? (
                 <Link to="/users/sign-in">내 정보</Link>
               ) : (
                 <Link to="/my_main">내 정보</Link>
@@ -89,13 +68,15 @@ function Header() {
                 cookies.remove('adminpw');
               }}
             >
-              {isLoggedIn === false ? (
+              {!accessToken ? (
                 <Link to="/users/sign-in">로그인</Link>
               ) : (
                 <Link to="/" onClick={deleteCookies}>
                   로그아웃
                 </Link>
               )}
+
+              {console.log(accessToken)}
             </li>
             <li>
               <Alarm />
