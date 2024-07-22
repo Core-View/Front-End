@@ -47,6 +47,7 @@ const PostView = () => {
   const [showMessage, setShowMessage] = useState(false);
   // const [likedFeedback, setLikedFeedback] = useState({});
 
+  // 서버에서 포스트 세부 정보와 피드백들을 가져옵니다.
   const fetchPostAndFeedback = useCallback(async () => {
     try {
       const [postResponse, feedbackResponse] = await Promise.all([
@@ -81,6 +82,7 @@ const PostView = () => {
     }
   }, [post_id, loggedInUserId]);
 
+  // 게시글 삭제 버튼 클릭 시 핸들입니다.
   const handleDeletePost = useCallback(async () => {
     if (loggedInUserId !== post.user_id) {
       setMessage('게시글을 삭제할 권한이 없습니다.');
@@ -111,9 +113,11 @@ const PostView = () => {
     }
   }, [loggedInUserId, post.user_id, post_id, navigate]);
 
+  // 작성자 프로필 사진입니다.
   const user_image =
     post.user_image || `${process.env.PUBLIC_URL}images/original_profile.png`;
 
+  // 이미 좋아요를 누른 상태인지 확인합니다.
   const isLiked = useCallback(
     (likedData) => {
       if (
@@ -129,6 +133,7 @@ const PostView = () => {
     fetchPostAndFeedback();
   }, [fetchPostAndFeedback]);
 
+  // 피드백 클릭 시 popup을 표시하는 방식을 설정합니다.
   const handleFeedbackClick = useCallback(
     (lineIndex, lineCode) => {
       setPopup({
@@ -142,6 +147,7 @@ const PostView = () => {
     [feedback]
   );
 
+  // 피드백 전송 버튼을 눌렀을 때 서버로 전송합니다.
   const handleFeedbackSubmit = useCallback(async () => {
     if (popup.text.trim() === '') return;
 
@@ -178,6 +184,7 @@ const PostView = () => {
     post_id,
   ]);
 
+  // maxLength를 초과하는 경우 ...으로 표시합니다.
   const truncateText = useCallback((text, maxLength) => {
     const newlineIndex = text.indexOf('\n');
     if (newlineIndex !== -1 && newlineIndex <= maxLength) {
@@ -189,6 +196,7 @@ const PostView = () => {
     return text.slice(0, maxLength) + '...';
   }, []);
 
+  // 좋아요를 누를 경우 if문을 거친 후, 서버에 전송합니다.
   const handleLikeClick = useCallback(async () => {
     if (!loggedInUserId) {
       setMessage('로그인이 필요합니다.');
@@ -241,6 +249,8 @@ const PostView = () => {
     return <div>{error}</div>;
   }
 
+  // 포스트 수정 버튼 클릭 시
+  // 경로 수정 필요 (아마 /update로)
   const handleUpdatePost = () => {
     navigate(`/post_update/${post_id}`);
   };
