@@ -75,15 +75,6 @@ const PostView = () => {
 
       isLiked(likedData);
       setLoading(false);
-
-      // const feedbackLikeResponse = await axios.get(
-      //   `http://localhost:3000/api/feedbacklikes/${post_id}/${loggedInUserId}`
-      // );
-      // const likedFeedbackIds = feedbackLikeResponse.data.reduce((acc, fb) => {
-      //   acc[fb.feedback_id] = fb.feedbacklike_id;
-      //   return acc;
-      // // }, {});
-      // setLikedFeedback(likedFeedbackIds);
     } catch (err) {
       setError(`데이터를 가져오는 데 실패했습니다: ${err.message}`);
       setLoading(false);
@@ -103,17 +94,11 @@ const PostView = () => {
     }
 
     try {
-      const response = await fetch(
-        `http://localhost:3000/api/delete/${post_id}`,
-        {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
+      const response = await axios.delete(
+        `http://localhost:3000/api/delete/${post_id}`
       );
 
-      if (!response.ok) {
+      if (response.status !== 200) {
         throw new Error('Network response was not ok');
       }
 
@@ -122,7 +107,7 @@ const PostView = () => {
       setTimeout(() => setShowMessage(false), 2000);
       navigate('/post_main');
     } catch (error) {
-      console.error('There was a problem with your fetch operation:', error);
+      console.error('There was a problem with your axios operation:', error);
     }
   }, [loggedInUserId, post.user_id, post_id, navigate]);
 
@@ -169,46 +154,20 @@ const PostView = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:3000/api/feedbacks', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(feedbackHandleData),
-      });
-      if (!response.ok) {
+      const response = await axios.post(
+        'http://localhost:3000/api/feedbacks',
+        feedbackHandleData
+      );
+      if (response.status !== 200) {
         throw new Error('Network response was not ok');
       }
 
-      // const newFeedback = feedback[popup.line]
-      //   ? [
-      //       ...feedback[popup.line],
-      //       {
-      //         user_id: loggedInUserId,
-      //         feedback_comment: popup.text,
-      //         user_nickname: '방금 작성한 피드백',
-      //       },
-      //     ]
-      //   : [
-      //       {
-      //         user_id: loggedInUserId,
-      //         feedback_comment: popup.text,
-      //         user_nickname: '방금 작성한 피드백',
-      //       },
-      //     ];
-
-      // setFeedback((prevFeedback) => ({
-      //   ...prevFeedback,
-      //   [popup.line]: newFeedback,
-      // }));
-
       setPopup((prevPopup) => ({
         ...prevPopup,
-        // feedback: newFeedback,
         text: '',
       }));
     } catch (error) {
-      console.error('There was a problem with your fetch operation:', error);
+      console.error('There was a problem with your axios operation:', error);
     }
   }, [
     popup.text,
@@ -255,27 +214,22 @@ const PostView = () => {
 
     const options = newLiked
       ? {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            post_id: post_id,
-            user_id: loggedInUserId,
-          }),
+          post_id: post_id,
+          user_id: loggedInUserId,
         }
-      : { method: 'DELETE' };
+      : null;
 
     try {
-      const response = await fetch(url, options);
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
+      if (newLiked) {
+        await axios.post(url, options);
+      } else {
+        await axios.delete(url);
       }
       setMessage(newLiked ? '좋아요를 눌렀습니다.' : '좋아요를 취소했습니다.');
       setShowMessage(true);
       setTimeout(() => setShowMessage(false), 2000);
     } catch (error) {
-      console.error('There was a problem with your fetch operation:', error);
+      console.error('There was a problem with your axios operation:', error);
     }
   }, [liked, likesCount, loggedInUserId, post.user_id, post_id]);
 
