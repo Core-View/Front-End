@@ -8,7 +8,7 @@ import { ko } from 'date-fns/locale';
 import './post_main_pagination.css';
 import './post_main.css';
 
-const Empty = () => {
+const Post = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -66,7 +66,7 @@ const Empty = () => {
   useEffect(() => {
     const fetchNotices = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/notice/view');
+        const response = await axios.get('http://localhost:3000/post/notice');
         setNotices(response.data.notice);
         setLoading(false);
       } catch (err) {
@@ -208,7 +208,7 @@ const Empty = () => {
           {notices.length > 0 ? (
             [...notices]
               .reverse()
-              .slice(0, 3)
+              // .slice(0, 3)
               .map((notice, index) => (
                 <li
                   key={index}
@@ -221,11 +221,11 @@ const Empty = () => {
                         alt=""
                         className="post-main-language-icon"
                       />{' '}
-                      {notice.NOTICE_TITLE}
+                      {notice.notice_title}
                     </div>
                     <div className="post-main-user-name"></div>
                     <div className="post-main-date">
-                      {formatDate(notice.NOTICE_DATE)}
+                      {formatDate(notice.noitice_date)}
                     </div>
                   </div>
                 </li>
@@ -397,4 +397,4 @@ const Empty = () => {
   );
 };
 
-export default Empty;
+export default Post;
