@@ -36,32 +36,32 @@ const Post = () => {
     python: '/images/language_icons/python_icon.png',
   };
 
-  const fetchUserInfos = async (userIds) => {
-    const userInfoPromises = userIds.map((id) =>
-      axios
-        .get(`http://localhost:3000/mypage/${id}`)
-        .then((response) => ({
-          userId: id,
-          data: response.data,
-        }))
-        .catch(() => ({
-          userId: id,
-          data: { nickname: '탈퇴한 회원' },
-        }))
-    );
+  // const fetchUserInfos = async (userIds) => {
+  //   const userInfoPromises = userIds.map((id) =>
+  //     axios
+  //       .get(`http://localhost:3000/mypage/${id}`)
+  //       .then((response) => ({
+  //         userId: id,
+  //         data: response.data,
+  //       }))
+  //       .catch(() => ({
+  //         userId: id,
+  //         data: { nickname: '탈퇴한 회원' },
+  //       }))
+  //   );
 
-    const userInfoResponses = await Promise.all(userInfoPromises);
+  //   const userInfoResponses = await Promise.all(userInfoPromises);
 
-    const newUserInfos = {};
-    userInfoResponses.forEach((response) => {
-      newUserInfos[response.userId] = response.data;
-    });
+  //   const newUserInfos = {};
+  //   userInfoResponses.forEach((response) => {
+  //     newUserInfos[response.userId] = response.data;
+  //   });
 
-    setUserInfos((prevUserInfos) => ({
-      ...prevUserInfos,
-      ...newUserInfos,
-    }));
-  };
+  //   setUserInfos((prevUserInfos) => ({
+  //     ...prevUserInfos,
+  //     ...newUserInfos,
+  //   }));
+  // };
 
   useEffect(() => {
     const fetchNotices = async () => {
@@ -86,7 +86,7 @@ const Post = () => {
         const postsData = response.data;
 
         const userIds = [...new Set(postsData.map((post) => post.user_id))];
-        await fetchUserInfos(userIds);
+        // await fetchUserInfos(userIds);
 
         setPosts(postsData);
         setFilteredPosts(postsData);
@@ -365,7 +365,8 @@ const Post = () => {
                     {post.post_title}
                   </div>
                   <div className="post-main-user-name">
-                    {userInfos[post.user_id]?.nickname || '탈퇴한 회원'}
+                    {post.user_nickname}
+                    {/* {userInfos[post.user_id]?.nickname || '탈퇴한 회원'} */}
                   </div>
                   <div className="post-main-date">
                     {formatDate(post.post_date)}
