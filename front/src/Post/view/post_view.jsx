@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Cookies } from 'react-cookie';
-import FeedbackPopup from './post_view_feedback_popup';
+import FeedbackPopup from './feedback/post_view_feedback_popup';
 import PostHeader from './post_view_header';
 import PostContent from './post_view_component';
 import PostCode from './post_view_code';

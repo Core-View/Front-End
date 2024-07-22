@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import './post_write.css';
+import '../write/post_write.css';
 import { Cookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 
