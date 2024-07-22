@@ -24,6 +24,7 @@ const PostWrite = () => {
   const CONTENT_MAX_LENGTH = 3000;
   const CODE_MAX_LENGTH = 65535; // LONGTEXT
 
+  // 로그인을 하지 않았을 경우, 로그인 페이지로 이동합니다.
   useEffect(() => {
     const userId = cookies.get('user_id');
     if (userId) {
@@ -34,6 +35,7 @@ const PostWrite = () => {
     setIsLoading(false);
   }, [navigate]);
 
+  // 내용 작성 중 뒤로가기를 눌렀을 때, 경고 메시지를 표시합니다.
   useEffect(() => {
     const handleBeforeUnload = (event) => {
       if (title || content || code) {
@@ -49,6 +51,7 @@ const PostWrite = () => {
     };
   }, [title, content, code]);
 
+  // 게시글 전송(게시) 버튼을 눌렀을 경우 핸들입니다.
   const handleSubmit = async (e) => {
     const cookies = new Cookies();
     const loggedInUserId = cookies.get('user_id'); // 로그인된 사용자 ID 가져오기
@@ -107,22 +110,26 @@ const PostWrite = () => {
     }
   };
 
+  // 작성 내용이 변경된 경우
   const handleContentChange = (e) => {
     setContent(e.target.value);
     contentRef.current.style.height = 'auto';
     contentRef.current.style.height = `${contentRef.current.scrollHeight}px`;
   };
 
+  // 작성 코드가 변경된 경우
   const handleCodeChange = (e) => {
     setCode(e.target.value);
     codeRef.current.style.height = 'auto';
     codeRef.current.style.height = `${codeRef.current.scrollHeight}px`;
   };
 
+  // 언어가 변경된 경우
   const handleLanguageChange = (lang) => {
     setLanguage(lang);
   };
 
+  // 작성 제목이 변경된 경우
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
     if (e.target.value.length <= TITLE_MAX_LENGTH) {
