@@ -67,7 +67,7 @@ function Header() {
                 cookies.remove('adminpw');
               }}
             >
-              <Link to="/post_main">전체 게시글</Link>
+              <Link to="/post/main">전체 게시글</Link>
             </li>
             <li
               onClick={() => {
@@ -77,7 +77,7 @@ function Header() {
               {userId === undefined ? (
                 <Link to="/users/sign-in">글 쓰기</Link>
               ) : (
-                <Link to="/post_write">글 쓰기</Link>
+                <Link to="/post/write">글 쓰기</Link>
               )}
             </li>
             <li
