@@ -10,7 +10,11 @@ function Header() {
   const navigate = useNavigate();
   const deleteCookies = () => {
     delToken(null, false);
-    console.log('로그아웃 했을때 토큰,어드민 상태', accessToken, admin);
+    console.log(
+      '로그아웃 했을때 토큰,어드민 상태',
+      localStorage.getItem('token-store')
+    );
+    console.log('로그아웃했으니까 다시 로그인 화면으로 갑니다');
     navigate('/users/sign-in');
   };
 

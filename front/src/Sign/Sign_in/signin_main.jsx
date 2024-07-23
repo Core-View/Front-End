@@ -24,9 +24,11 @@ const Sign_in = () => {
   const onsubmit = (e) => {
     e.preventDefault();
     if (email.length === 0 || password.length === 0) {
+      console.log('아이디 비번 틀리면 나오는 콘솔');
       alert('아이디와 비밀번호를 모두 입력 해주세요');
       return;
     }
+    console.log('로그인 요청 보내기전에 나오는 콘솔');
     axios
       .post('http://localhost:3000/login', {
         user_email: email,
@@ -35,6 +37,10 @@ const Sign_in = () => {
       .then((response) => {
         console.log('로그인 버튼 누르고나서 post 요청 간 후의 콘솔', response);
         setToken(response.data.Authorization);
+        console.log(
+          '로그인 버튼 누르고나서 post 요청 간 후의 TK store',
+          TokenChecker
+        );
         if (role === 1) {
           checkAdmin(true);
         } else {
@@ -44,12 +50,13 @@ const Sign_in = () => {
           '토큰store에 setToken, checkAdmin 설정 후',
           localStorage.getItem('token-store')
         );
-        alert('로그인 성공');
+        alert('로그인 성공, 홈으로 갑니다');
         return navigate('/');
       })
       .catch((error) => {
         console.log('로그인 버튼 클릭시 나타나는 오류', error.message);
         delToken();
+        console.log('토큰이 지워졌나요?', localStorage.getItem('token-store'));
         alert(error);
       });
   };
