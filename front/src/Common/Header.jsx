@@ -3,15 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import './header.css';
 import Alarm from './Alarm';
 import { Cookies } from 'react-cookie';
-import TokenChecker from './TokenStore';
 function Header() {
-  const { admin, accessToken, delToken } = TokenChecker();
   const cookies = new Cookies();
   const navigate = useNavigate();
   const deleteCookies = () => {
     cookies.remove('accessToken');
     cookies.remove('admin');
-    delToken(null, false);
     navigate('/users/sign-in');
   };
 
