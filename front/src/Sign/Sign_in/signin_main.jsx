@@ -7,13 +7,14 @@ import { FcGoogle } from 'react-icons/fc';
 import { VscGithubInverted } from 'react-icons/vsc';
 import TokenChecker from '../../Common/TokenStore';
 import './Sign_in.css';
+import { Cookies } from 'react-cookie';
 
 const Sign_in = () => {
-  let role = 1; // 있다고 가정
+  const cookies = new Cookies();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { setToken, delToken, checkAdmin } = TokenChecker();
+  const { setToken, delToken, checkAdmin, accessToken, admin } = TokenChecker();
   const onchangeEmail = useCallback((e) => {
     setEmail(e.target.value);
   }, []);
@@ -35,28 +36,18 @@ const Sign_in = () => {
         user_password: password,
       })
       .then((response) => {
-        console.log('로그인 버튼 누르고나서 post 요청 간 후의 콘솔', response);
-        setToken(response.data.Authorization);
-        console.log(
-          '로그인 버튼 누르고나서 post 요청 간 후의 TK store',
-          TokenChecker
-        );
-        if (role === 1) {
-          checkAdmin(true);
+        cookies.set('accessToken', response.data.Authorization);
+        if (response.data.role === 1) {
+          cookies.set('admin', true);
         } else {
-          checkAdmin(false);
+          cookies.set('admin', false);
         }
-        console.log(
-          '토큰store에 setToken, checkAdmin 설정 후',
-          localStorage.getItem('token-store')
-        );
         alert('로그인 성공, 홈으로 갑니다');
         return navigate('/');
       })
       .catch((error) => {
         console.log('로그인 버튼 클릭시 나타나는 오류', error.message);
         delToken();
-        console.log('토큰이 지워졌나요?', localStorage.getItem('token-store'));
         alert(error);
       });
   };

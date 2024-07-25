@@ -6,20 +6,20 @@ import AdUsers from './Admin_user';
 import axios from 'axios';
 import Contribution from '../Common/Contribution';
 import { useNavigate } from 'react-router-dom';
-import TokenChecker from '../Common/TokenStore';
+import { Cookies } from 'react-cookie';
 
 const Admin = () => {
+  const cookies = new Cookies();
   const navigate = useNavigate();
   const [selectedMenu, setSelectedMenu] = useState('어떤관리');
   const [member, setMember] = useState([]);
   const [clicked, setClicked] = useState([false, false, false]);
-  const { accessToken, delToken, setToken } = TokenChecker();
 
   const getMember = () => {
     axios
       .get('http://localhost:3000/notice/viewuser', {
         headers: {
-          Authorization: accessToken,
+          Authorization: cookies.get('accessToken'),
         },
       })
       .then((response) => {
@@ -29,7 +29,8 @@ const Admin = () => {
       })
       .catch((err) => {
         alert('잘못된 접근!');
-        delToken();
+        cookies.remove('accessToken');
+        cookies.remove('admin');
         navigate('/users/sign-in');
       });
   };
@@ -74,7 +75,7 @@ const Admin = () => {
         <button
           onClick={(e) => {
             e.preventDefault();
-            setToken('dsfgkjersdfgeeeeg');
+            cookies.set('accessToken', 'asdfdfwijfwdljdfwlkjdwfljifdwljiwdf');
           }}
         >
           asd
