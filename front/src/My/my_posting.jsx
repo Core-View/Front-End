@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import { parseISO } from 'date-fns';
@@ -16,13 +16,13 @@ const Empty = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  //const [loading, setLoading] = useState(true);
+  //const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [postsPerPage, setPostsPerPage] = useState(15); // 페이지당 게시글 수 기본값
   
-  const [isLoading, setIsLoading] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  //const [isLoading, setIsLoading] = useState(true);
+  //const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const languageIcons = {
     c: '/images/language_icons/c_icon.png',
@@ -34,12 +34,12 @@ const Empty = () => {
   useEffect(() => {
     const userId = cookies.get('user_id');
     if (userId) {
-      setIsLoggedIn(true);
+      //setIsLoggedIn(true);
       fetchPosts(userId);
     } else {
       navigate('/users/sign-in');
     }
-    setIsLoading(false);
+    //setIsLoading(false);
   }, [navigate]);
 
   const fetchPosts = async (userId) => {  //user가 작성한 글의 모든 정보를 보여주는 api요청
@@ -54,11 +54,11 @@ const Empty = () => {
         }));
         setPosts(processedData || []);
         setFilteredPosts(processedData || []);
-        setLoading(false);
+        //setLoading(false);
       } catch (error) {
-        setError('게시글을 가져오는 데 실패했습니다.');
+        //setError('게시글을 가져오는 데 실패했습니다.');
         console.error('Error fetching like data:', error);
-        setLoading(false);
+        //setLoading(false);
       }
   };
 
@@ -98,21 +98,21 @@ const Empty = () => {
     return format(date, 'yyyy-MM-dd', { locale: ko });
   };
 
-  if (loading) {
-    return <div>로딩 중...</div>;
-  }
+  //if (loading) {
+    //return <div>로딩 중...</div>;
+  //}
 
-  if (error) {
-    return <div>{error}</div>;
-  }
+  //if (error) {
+    //return <div>{error}</div>;
+  //}
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  //if (isLoading) {
+   //return <div>Loading...</div>;
+  //}
 
-  if (!isLoggedIn) {
-    return <Navigate to='/users/sign-in' replace />;
-  }
+  //if (!isLoggedIn) {
+    //return <Navigate to='/users/sign-in' replace />;
+  //}
 
   return (
     <div className="mylike-container">
