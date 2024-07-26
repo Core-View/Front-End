@@ -4,11 +4,13 @@ import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import { Cookies } from 'react-cookie';
 
 import './post_main_pagination.css';
 import './post_main.css';
 
 const Empty = () => {
+  const cookies = new Cookies();
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -66,7 +68,12 @@ const Empty = () => {
   useEffect(() => {
     const fetchNotices = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/notice/view');
+        const response = await axios.get('http://localhost:3000/notice/view', {
+          headers: {
+            Authorization: cookies.get('accessToken'),
+          },
+        });
+        console.log(response);
         setNotices(response.data.notice);
         setLoading(false);
       } catch (err) {
