@@ -3,10 +3,8 @@ import axios from 'axios';
 import './post_write.css';
 import { Cookies } from 'react-cookie';
 import { Navigate, useNavigate } from 'react-router-dom';
-import TokenChecker from '../../Common/TokenStore';
 
 const PostWrite = () => {
-  const { accessToken } = TokenChecker();
   const cookies = new Cookies();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -93,7 +91,7 @@ const PostWrite = () => {
         postData,
         {
           headers: {
-            Authorization: accessToken,
+            Authorization: cookies.get('Authorization'),
           },
         }
       );
