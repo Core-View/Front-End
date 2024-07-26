@@ -4,18 +4,18 @@ import Editor from '@toast-ui/editor';
 import '@toast-ui/editor/dist/toastui-editor.css'; // Editor's Style
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import TokenChecker from '../Common/TokenStore';
+import { Cookies } from 'react-cookie';
 
 const AdminNoticeCreate = () => {
+  const cookies = new Cookies();
   const editorRef = useRef(null);
   const editorInstanceRef = useRef(null);
   const [title, setTitle] = useState('');
-  const { accessToken, admin } = TokenChecker();
 
   const navigate = useNavigate();
 
   const handleRegisterButton = () => {
-    if (editorInstanceRef.current && admin) {
+    if (editorInstanceRef.current && cookies.get('admin')) {
       axios
         .post(`http://localhost:3000/notice/post`, {
           title: title,
@@ -39,7 +39,7 @@ const AdminNoticeCreate = () => {
   };
 
   useEffect(() => {
-    if (editorRef.current && admin) {
+    if (editorRef.current && cookies.get('admin')) {
       editorInstanceRef.current = new Editor({
         el: editorRef.current,
         height: '600px',
@@ -59,6 +59,7 @@ const AdminNoticeCreate = () => {
                 .post('http://localhost:3000/notice/image', formData, {
                   headers: {
                     'Content-Type': 'multipart/form-data',
+                    Authorization: cookies.get('accessToken'),
                   },
                 })
                 .then((response) => {

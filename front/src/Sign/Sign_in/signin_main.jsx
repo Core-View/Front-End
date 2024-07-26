@@ -5,7 +5,6 @@ import { MdOutlineMailOutline } from 'react-icons/md';
 import { MdOutlineVpnKey } from 'react-icons/md';
 import { FcGoogle } from 'react-icons/fc';
 import { VscGithubInverted } from 'react-icons/vsc';
-import TokenChecker from '../../Common/TokenStore';
 import './Sign_in.css';
 import { Cookies } from 'react-cookie';
 
@@ -14,7 +13,6 @@ const Sign_in = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { setToken, delToken, checkAdmin, accessToken, admin } = TokenChecker();
   const onchangeEmail = useCallback((e) => {
     setEmail(e.target.value);
   }, []);
@@ -47,7 +45,6 @@ const Sign_in = () => {
       })
       .catch((error) => {
         console.log('로그인 버튼 클릭시 나타나는 오류', error.message);
-        delToken();
         alert(error);
       });
   };

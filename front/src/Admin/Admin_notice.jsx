@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './admin_notice.css';
 import { useNavigate } from 'react-router-dom';
-import TokenChecker from '../Common/TokenStore';
+import { Cookies } from 'react-cookie';
 
 const AdminNotice = () => {
-  const { admin } = TokenChecker();
+  const cookies = new Cookies();
   const [noticeLists, setNoticeLists] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const { accessToken } = TokenChecker();
   const noticesPerPage = 10;
 
   //공지조회관련
@@ -16,7 +15,7 @@ const AdminNotice = () => {
     axios
       .get(`http://localhost:3000/notice/view`, {
         headers: {
-          Authorization: accessToken,
+          Authorization: cookies.get('accessToken'),
         },
       })
       .then((response) => {
@@ -51,7 +50,7 @@ const AdminNotice = () => {
 
   //공지작성관련
   const createNotice = () => {
-    if (admin) {
+    if (cookies.get('admin')) {
       navigate('/notice/post');
     } else {
       alert('접근권한이 없습니다.');
