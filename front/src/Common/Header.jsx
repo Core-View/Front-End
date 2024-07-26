@@ -1,52 +1,25 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './header.css';
 import Alarm from './Alarm';
 import { Cookies } from 'react-cookie';
-import axios from 'axios';
-import useAuthStore from '../Sign/Store';
 function Header() {
   const cookies = new Cookies();
   const navigate = useNavigate();
-  const { isLoggedIn, userId, role, setLogout } = useAuthStore();
   const deleteCookies = () => {
-    cookies.remove('user_id');
-    cookies.remove('role');
-    cookies.remove('user_password');
-    setLogout();
-    navigate('/');
-  };
-
-  const clickedAdmin = () => {
-    let inputPassword = prompt('비밀번호를 입력하세요.', '');
-    if (inputPassword) {
-      axios
-        .post(`http://localhost:3000/admin/login/${userId}`, {
-          user_id: userId,
-          role: role,
-          password: inputPassword,
-        })
-        .then((response) => {
-          if (response.data.success) {
-            navigate('/admin');
-          } else {
-            alert('오류발생!');
-            navigate('/');
-          }
-        });
-    } else {
-      alert('오류발생!');
-    }
+    cookies.remove('accessToken');
+    cookies.remove('admin');
+    navigate('/users/sign-in');
   };
 
   return (
     <header className="header">
-      <div
-        className="header-logo-container"
-        onClick={() => {
-          cookies.remove('adminpw');
-        }}
-      >
+      {console.log(
+        '쿠키에 있는 토큰과 어드민',
+        cookies.get('accessToken'),
+        cookies.get('admin')
+      )}
+      <div className="header-logo-container">
         <Link to="/">
           <img
             src="/images/logo_CV_black.png"
@@ -60,57 +33,45 @@ function Header() {
         <div className="header-nav-left">
           <ul>
             <li>
-              {role === 1 ? <Link to="/admin/check">관리자페이지</Link> : null}
+              {cookies.get('admin') ? (
+                <Link to="/admin/check">관리자페이지</Link>
+              ) : null}
             </li>
-            <li
-              onClick={() => {
-                cookies.remove('adminpw');
-              }}
-            >
-              <Link to="/post_main">전체 게시글</Link>
+            <li>
+              <Link to="/post/main">전체 게시글</Link>
             </li>
-            <li
-              onClick={() => {
-                cookies.remove('adminpw');
-              }}
-            >
-              {userId === undefined ? (
+            <li>
+              {!cookies.get('accessToken') ? (
                 <Link to="/users/sign-in">글 쓰기</Link>
               ) : (
-                <Link to="/post_write">글 쓰기</Link>
+                <Link to="/post/write">글 쓰기</Link>
               )}
             </li>
-            <li
-              onClick={() => {
-                cookies.remove('adminpw');
-              }}
-            >
+            <li>
               <Link to="/contribution_ranking">랭킹</Link>
             </li>
           </ul>
         </div>
         <div className="header-nav-right">
           <ul>
-            <li
-              onClick={() => {
-                cookies.remove('adminpw');
-              }}
-            >
-              {userId === undefined ? (
+            <li>
+              {!cookies.get('accessToken') ? (
                 <Link to="/users/sign-in">내 정보</Link>
               ) : (
                 <Link to="/my/main">내 정보</Link>
               )}
             </li>
-            <li
-              onClick={() => {
-                cookies.remove('adminpw');
-              }}
-            >
-              {isLoggedIn === false ? (
+            <li>
+              {!cookies.get('accessToken') ? (
                 <Link to="/users/sign-in">로그인</Link>
               ) : (
-                <Link to="/" onClick={deleteCookies}>
+                <Link
+                  to="/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    deleteCookies();
+                  }}
+                >
                   로그아웃
                 </Link>
               )}
