@@ -58,7 +58,7 @@ function Header() {
               {!cookies.get('accessToken') ? (
                 <Link to="/users/sign-in">내 정보</Link>
               ) : (
-                <Link to="/my_main">내 정보</Link>
+                <Link to="/my/main">내 정보</Link>
               )}
             </li>
             <li>
