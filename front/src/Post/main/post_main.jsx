@@ -254,11 +254,11 @@ const Post = () => {
                         alt=""
                         className="post-main-language-icon"
                       />{' '}
-                      {notice.notice_title}
+                      {notice.NOTICE_TITLE}
                     </div>
                     <div className="post-main-user-name"></div>
                     <div className="post-main-date">
-                      {formatDate(notice.noitice_date)}
+                      {formatDate(notice.NOTICE_DATE)}
                     </div>
                   </div>
                 </li>
