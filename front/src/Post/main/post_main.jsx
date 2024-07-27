@@ -194,14 +194,24 @@ const Post = () => {
   const currentPageData = filteredPosts.slice(offset, offset + postsPerPage);
 
   const formatDate = (dateString) => {
-    const date = parseISO(dateString);
-    const now = new Date();
-    const differenceInDays = (now - date) / (1000 * 60 * 60 * 24);
+    if (!dateString) {
+      console.error('Invalid dateString: ', dateString);
+      return 'Invalid date';
+    }
 
-    if (differenceInDays < 1) {
-      return formatDistanceToNow(date, { addSuffix: true, locale: ko });
-    } else {
-      return date.toLocaleDateString('ko-KR');
+    try {
+      const date = parseISO(dateString);
+      const now = new Date();
+      const differenceInDays = (now - date) / (1000 * 60 * 60 * 24);
+
+      if (differenceInDays < 1) {
+        return formatDistanceToNow(date, { addSuffix: true, locale: ko });
+      } else {
+        return date.toLocaleDateString('ko-KR');
+      }
+    } catch (error) {
+      console.error('Error parsing date: ', error);
+      return 'Invalid date';
     }
   };
 
