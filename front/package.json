@@ -10,6 +10,7 @@
     "axios": "^1.7.2",
     "bootstrap": "^5.3.3",
     "date-fns": "^3.6.0",
+    "jwt-decode": "^4.0.0",
     "prosemirror-commands": "^1.5.2",
     "prosemirror-history": "^1.4.0",
     "prosemirror-inputrules": "^1.4.0",

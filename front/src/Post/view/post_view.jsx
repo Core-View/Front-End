@@ -7,12 +7,15 @@ import PostHeader from './post_view_header';
 import PostContent from './post_view_component';
 import PostCode from './post_view_code';
 import PostResult from './post_view_result';
+// import jwt_decode from 'jwt-decode';
+
 import './post_view.css';
 import './post_view_feedback.css';
 
 const PostView = () => {
   const cookies = new Cookies();
-  const loggedInUserId = cookies.get('user_id');
+  // const loggedInUserId = cookies.get('user_id');
+  const loggedInUserId = 1;
   // const loggedInUserNickname = cookies.get('user_nickname');
   const { post_id } = useParams();
   const [loading, setLoading] = useState(true);
@@ -47,39 +50,55 @@ const PostView = () => {
   const [showMessage, setShowMessage] = useState(false);
   // const [likedFeedback, setLikedFeedback] = useState({});
 
+  const token = cookies.get('accessToken');
+  // if (token) {
+  //   const jwt = jwt_decode(token);
+  //   loggedInUserId = jwt.user_id;
+  // }
+
   // 서버에서 포스트 세부 정보와 피드백들을 가져옵니다.
-  const fetchPostAndFeedback = useCallback(async () => {
-    try {
-      const [postResponse, feedbackResponse] = await Promise.all([
-        axios.get(`http://localhost:3000/post/details/${post_id}`),
-        axios.get(`http://localhost:3000/api/feedbacks/post/${post_id}`),
-      ]);
+  const fetchPostAndFeedback = useCallback(() => {
+    axios
+      .get(`http://localhost:3000/post/details/${post_id}`, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((postResponse) => {
+        const postData = postResponse.data;
+        console.log('postData 출력', postData);
 
-      const postData = postResponse.data;
-      const feedbackData = feedbackResponse.data.reduce((acc, fb) => {
-        if (!acc[fb.feedback_codenumber]) {
-          acc[fb.feedback_codenumber] = [];
-        }
-        acc[fb.feedback_codenumber].push(fb);
-        return acc;
-      }, {});
+        axios
+          .get(`http://localhost:3000/api/feedbacks/post/${post_id}`, {
+            headers: {
+              Authorization: token,
+            },
+          })
+          .then((feedbackResponse) => {
+            const feedbackData = feedbackResponse.data.reduce((acc, fb) => {
+              if (!acc[fb.feedback_codenumber]) {
+                acc[fb.feedback_codenumber] = [];
+              }
+              console.log('feedbackData 출력', feedbackData);
 
-      setPost(postData);
-      setFeedback(feedbackData);
-      setLikesCount(postData.total_likes);
+              acc[fb.feedback_codenumber].push(fb);
+              return acc;
+            }, {});
 
-      // const likedResponse = await axios.get(
-      //   `http://localhost:3000/mypage/${loggedInUserId}/likedPosts`
-      // );
-      // const likedData = likedResponse.data;
-      // setLikedPosts(likedData);
-
-      // isLiked(likedData);
-      setLoading(false);
-    } catch (err) {
-      setError(`데이터를 가져오는데 실패했습니다: ${err.message}`);
-      setLoading(false);
-    }
+            setPost(postData);
+            setFeedback(feedbackData);
+            setLikesCount(postData.total_likes);
+            setLoading(false);
+          })
+          .catch((err) => {
+            setError(`데이터를 가져오는데 실패했습니다: ${err.message}`);
+            setLoading(false);
+          });
+      })
+      .catch((err) => {
+        setError(`데이터를 가져오는데 실패했습니다: ${err.message}`);
+        setLoading(false);
+      });
   }, [post_id, loggedInUserId]);
 
   // 게시글 삭제 버튼 클릭 시 핸들입니다.
@@ -251,9 +270,8 @@ const PostView = () => {
   }
 
   // 포스트 수정 버튼 클릭 시
-  // 경로 수정 필요 (아마 /update로)
   const handleUpdatePost = () => {
-    navigate(`/post_update/${post_id}`);
+    navigate(`/post/update/${post_id}`);
   };
 
   return (
