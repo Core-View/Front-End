@@ -12,7 +12,7 @@ const postRouter = {
     { path: 'notification', element: <PostMainNotification /> },
     { path: 'post_view/:post_id', element: <PostView /> },
     { path: 'write', element: <PostWrite /> },
-    { path: 'update', element: <PostUpdate /> },
+    { path: 'update/:post_id', element: <PostUpdate /> },
   ],
 };
 
