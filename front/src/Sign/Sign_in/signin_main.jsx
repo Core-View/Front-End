@@ -1,56 +1,58 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Cookies } from 'react-cookie';
 import { MdOutlineMailOutline } from 'react-icons/md';
 import { MdOutlineVpnKey } from 'react-icons/md';
 import { FcGoogle } from 'react-icons/fc';
 import { VscGithubInverted } from 'react-icons/vsc';
-import useAuthStore from '../Store';
 import './Sign_in.css';
+import { Cookies } from 'react-cookie';
 
 const Sign_in = () => {
   const cookies = new Cookies();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const setLogin = useAuthStore((state) => state.setLogin);
   const onchangeEmail = useCallback((e) => {
     setEmail(e.target.value);
   }, []);
   const onchangePassword = useCallback((e) => {
     setPassword(e.target.value);
   }, []);
+
   const onsubmit = (e) => {
     e.preventDefault();
     if (email.length === 0 || password.length === 0) {
+      console.log('아이디 비번 틀리면 나오는 콘솔');
       alert('아이디와 비밀번호를 모두 입력 해주세요');
       return;
     }
+    console.log('로그인 요청 보내기전에 나오는 콘솔');
     axios
       .post('http://localhost:3000/login', {
         user_email: email,
         user_password: password,
       })
       .then((response) => {
-        if (response.status === 200) {
-          cookies.set('user_id', response.data.user_id);
-          cookies.set('role', response.data.role);
-          setLogin(response.data.user_id, response.data.role); // Zustand 스토어에 로그인 상태 설정
-          alert('성공');
-          navigate('/'); // 상대 경로로 이동
+        cookies.set('accessToken', response.data.Authorization);
+        if (response.data.role === 1) {
+          cookies.set('admin', true);
         } else {
-          alert('비번틀림');
+          cookies.set('admin', false);
         }
+        alert('로그인 성공, 홈으로 갑니다');
+        return navigate('/');
       })
       .catch((error) => {
-        alert(error.message);
+        console.log('로그인 버튼 클릭시 나타나는 오류', error.message);
+        alert(error);
       });
   };
 
   const googleLog = () => {
     window.location.href = 'http://localhost:3000/sign/google';
   };
+
   return (
     <div className="container_si">
       <div className="loginForm_si">
@@ -91,7 +93,7 @@ const Sign_in = () => {
             <div className="goNabi">
               <div>
                 <Link className="goNabiC" to="/users/find-pwd">
-                  비번 재설정{' '}
+                  비번 재설정
                 </Link>
               </div>
               <div>
@@ -118,6 +120,7 @@ const Sign_in = () => {
               src="/images/navericon.png"
               className="naverIcon"
               onClick={googleLog}
+              alt=""
             ></img>
           </div>
         </form>
@@ -125,5 +128,4 @@ const Sign_in = () => {
     </div>
   );
 };
-
 export default Sign_in;

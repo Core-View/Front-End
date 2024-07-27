@@ -12,12 +12,18 @@ const AdminNotice = () => {
 
   //공지조회관련
   const getNotice = () => {
-    axios.get(`http://localhost:3000/notice/view`).then((response) => {
-      if (response.data.success === true) {
-        let noticeList = response.data.notice;
-        setNoticeLists(noticeList);
-      }
-    });
+    axios
+      .get(`http://localhost:3000/notice/view`, {
+        headers: {
+          Authorization: cookies.get('accessToken'),
+        },
+      })
+      .then((response) => {
+        if (response.data.success === true) {
+          let noticeList = response.data.notice;
+          setNoticeLists(noticeList);
+        }
+      });
   };
 
   useEffect(() => {
@@ -44,7 +50,7 @@ const AdminNotice = () => {
 
   //공지작성관련
   const createNotice = () => {
-    if (cookies.get('adminpw') === 'passed') {
+    if (cookies.get('admin')) {
       navigate('/notice/post');
     } else {
       alert('접근권한이 없습니다.');

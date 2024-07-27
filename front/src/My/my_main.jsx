@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Navigate, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import './my_main.css';
 import { parseISO } from 'date-fns';
@@ -13,8 +13,8 @@ import { IoSettings } from 'react-icons/io5';
 const Mypage = () => {
   const cookies = new Cookies();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  //const [isLoading, setIsLoading] = useState(true);
+  //const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userInfo, setUserInfo] = useState({
     user_id: '',
     nickname: '',
@@ -44,7 +44,7 @@ const Mypage = () => {
   useEffect(() => {
     const userId = cookies.get('user_id');
     if (userId) {
-      setIsLoggedIn(true);
+      //setIsLoggedIn(true);
       fetchUserData(userId);
       fetchPostData(userId);
       fetchCommentData(userId);
@@ -52,7 +52,7 @@ const Mypage = () => {
     } else {
       navigate('/users/sign-in');
     }
-    setIsLoading(false);
+    //setIsLoading(false);
   }, [navigate]);
 
   const fetchUserData = async (userId) => { //user 정보 가져오는 api요청
@@ -137,7 +137,7 @@ const Mypage = () => {
       const data = response.data;
       if (data.success) {
         cookies.set('user_password', user_password);
-        navigate('/my_modify');
+        navigate('/my/modify');
       } else {
         setErrorMessage('비밀번호가 일치하지 않습니다.');
       }
@@ -152,13 +152,13 @@ const Mypage = () => {
     return format(date, 'yyyy-MM-dd', { locale: ko });
   };
 
-  if (isLoading) {  //로딩
-    return <div>Loading...</div>;
-  }
+  //if (isLoading) {  //로딩
+  //  return <div>Loading...</div>;
+  //}
 
-  if (!isLoggedIn) {  //로그인 되지 않았으면 로그인 페이지로 이동
-    return <Navigate to="/users/sign-in" replace />;
-  }
+  //if (!isLoggedIn) {  //로그인 되지 않았으면 로그인 페이지로 이동
+  //  return <Navigate to="/users/sign-in" replace />;
+  //}
 
   const handlePostClick = (post) => { //글 클릭시 그 글의 페이지로 이동
     navigate(`/post_view/${post.post_id}`);
@@ -167,11 +167,11 @@ const Mypage = () => {
   const getMoreLink = () => {
     switch (activeTab) {
       case 'Mypost':
-        return '/my_posting';
+        return '/my/posting';
       case 'Myfeedback':
-        return '/my_comment';
+        return '/my/comment';
       case 'Mylike':
-        return '/my_like';
+        return '/my/like';
       default:
         return '/';
     }
@@ -383,7 +383,7 @@ const Mypost = ({ posts = [], handlePostClick, languageIcons, formatDate }) => {
                 <div className="post-meta">
                   <div className="post_user_div">
                     <span className="post-user">
-                      {post.user_nickname || '탈퇴한 회원'}
+                      {post.user_nickname}
                     </span>
                   </div>
                   <div className="post_date_div">
@@ -442,7 +442,7 @@ const Myfeedback = ({
                 <div className="post-meta">
                   <div className="post_user_div">
                     <span className="post-user">
-                      {comment.nickname || '탈퇴한 회원'}
+                      {comment.nickname}
                     </span>
                   </div>
                   <div className="post_date_div">
@@ -496,7 +496,7 @@ const Mylike = ({ likes = [], handlePostClick, languageIcons, formatDate }) => {
                 <div className="post-meta">
                   <div className="post_user_div">
                     <span className="post-user">
-                      {like.user_nickname || '탈퇴한 회원'}
+                      {like.user_nickname}
                     </span>
                   </div>
                   <div className="post_date_div">

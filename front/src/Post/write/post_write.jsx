@@ -26,7 +26,7 @@ const PostWrite = () => {
 
   // 로그인을 하지 않았을 경우, 로그인 페이지로 이동합니다.
   useEffect(() => {
-    const userId = cookies.get('user_id');
+    const userId = '2'; //cookies.get('user_id');
     if (userId) {
       setIsLoggedIn(true);
     } else {
@@ -54,7 +54,7 @@ const PostWrite = () => {
   // 게시글 전송(게시) 버튼을 눌렀을 경우 핸들입니다.
   const handleSubmit = async (e) => {
     const cookies = new Cookies();
-    const loggedInUserId = cookies.get('user_id'); // 로그인된 사용자 ID 가져오기
+    const loggedInUserId = '0'; //cookies.get('user_id'); // 로그인된 사용자 ID 가져오기
     e.preventDefault();
 
     if (title.length > TITLE_MAX_LENGTH) {
@@ -85,13 +85,18 @@ const PostWrite = () => {
       language: language,
       code: code,
       content: content,
-      user_id: loggedInUserId,
+      user_id: '2', //loggedInUserId,
     };
 
     try {
       const response = await axios.post(
         'http://localhost:3000/api/compile',
-        postData
+        postData,
+        {
+          headers: {
+            Authorization: cookies.get('Authorization'),
+          },
+        }
       );
 
       if (response.status === 200) {

@@ -41,7 +41,7 @@ const AdminNoticeView = () => {
   }, [noticeDetail]);
 
   const handleEdit = () => {
-    if (cookies.get('adminpw') === 'passed') {
+    if (cookies.get('admin')) {
       navigate(`/notice/modify/${id}`);
     } else {
       alert('관리자만 수정할 수 있습니다.');
@@ -49,7 +49,7 @@ const AdminNoticeView = () => {
   };
 
   const handleDelete = () => {
-    if (cookies.get('adminpw') === 'passed') {
+    if (cookies.get('admin')) {
       axios
         .delete(`http://localhost:3000/notice/delete/${id}`)
         .then((response) => {
@@ -78,7 +78,7 @@ const AdminNoticeView = () => {
         </div>
 
         <div className="admin_notice_view_buttons">
-          {cookies.get('adminpw') && cookies.get('adminpw') === 'passed' ? (
+          {cookies.get('admin') ? (
             <Link to="/admin" className="delete_button">
               <FaList />
             </Link>

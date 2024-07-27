@@ -15,7 +15,7 @@ const AdminNoticeCreate = () => {
   const navigate = useNavigate();
 
   const handleRegisterButton = () => {
-    if (editorInstanceRef.current && cookies.get('adminpw') === 'passed') {
+    if (editorInstanceRef.current && cookies.get('admin')) {
       axios
         .post(`http://localhost:3000/notice/post`, {
           title: title,
@@ -39,7 +39,7 @@ const AdminNoticeCreate = () => {
   };
 
   useEffect(() => {
-    if (editorRef.current && cookies.get('adminpw') === 'passed') {
+    if (editorRef.current && cookies.get('admin')) {
       editorInstanceRef.current = new Editor({
         el: editorRef.current,
         height: '600px',
@@ -59,6 +59,7 @@ const AdminNoticeCreate = () => {
                 .post('http://localhost:3000/notice/image', formData, {
                   headers: {
                     'Content-Type': 'multipart/form-data',
+                    Authorization: cookies.get('accessToken'),
                   },
                 })
                 .then((response) => {
