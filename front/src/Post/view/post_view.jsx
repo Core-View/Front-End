@@ -68,16 +68,16 @@ const PostView = () => {
       setFeedback(feedbackData);
       setLikesCount(postData.total_likes);
 
-      const likedResponse = await axios.get(
-        `http://localhost:3000/mypage/${loggedInUserId}/likedPosts`
-      );
-      const likedData = likedResponse.data;
-      setLikedPosts(likedData);
+      // const likedResponse = await axios.get(
+      //   `http://localhost:3000/mypage/${loggedInUserId}/likedPosts`
+      // );
+      // const likedData = likedResponse.data;
+      // setLikedPosts(likedData);
 
-      isLiked(likedData);
+      // isLiked(likedData);
       setLoading(false);
     } catch (err) {
-      setError(`likedPosts 데이터를 가져오는데 실패했습니다: ${err.message}`);
+      setError(`데이터를 가져오는데 실패했습니다: ${err.message}`);
       setLoading(false);
     }
   }, [post_id, loggedInUserId]);
@@ -118,16 +118,16 @@ const PostView = () => {
     post.user_image || `${process.env.PUBLIC_URL}images/original_profile.png`;
 
   // 이미 좋아요를 누른 상태인지 확인합니다.
-  const isLiked = useCallback(
-    (likedData) => {
-      if (
-        likedData.some((likedPost) => likedPost.post_id === parseInt(post_id))
-      ) {
-        setLiked(true);
-      }
-    },
-    [post_id]
-  );
+  // const isLiked = useCallback(
+  //   (likedData) => {
+  //     if (
+  //       likedData.some((likedPost) => likedPost.post_id === parseInt(post_id))
+  //     ) {
+  //       setLiked(true);
+  //     }
+  //   },
+  //   [post_id]
+  // );
 
   useEffect(() => {
     fetchPostAndFeedback();
