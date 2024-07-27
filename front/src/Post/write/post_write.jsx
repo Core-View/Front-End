@@ -111,6 +111,19 @@ const PostWrite = () => {
       }
     } catch (error) {
       console.error('게시글 등록 중 오류 발생:', error);
+      if (error.response) {
+        // 서버 응답 O
+        console.error('응답 데이터:', error.response.data);
+        console.error('응답 상태 코드:', error.response.status);
+        console.error('응답 헤더:', error.response.headers);
+      } else if (error.request) {
+        // 요청 전송 O
+        // 서버 응답 X
+        console.error('요청 데이터:', error.request);
+      } else {
+        // 요청 설정 중 오류 발생
+        console.error('에러 메시지:', error.message);
+      }
       alert('게시글 등록 중 오류가 발생했습니다.');
     }
   };
