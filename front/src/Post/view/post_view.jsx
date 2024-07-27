@@ -79,11 +79,12 @@ const PostView = () => {
               if (!acc[fb.feedback_codenumber]) {
                 acc[fb.feedback_codenumber] = [];
               }
-              console.log('feedbackData 출력', feedbackData);
 
               acc[fb.feedback_codenumber].push(fb);
               return acc;
             }, {});
+
+            console.log('feedbackData 출력', feedbackData);
 
             setPost(postData);
             setFeedback(feedbackData);
