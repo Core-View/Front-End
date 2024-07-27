@@ -198,6 +198,7 @@ const PostView = () => {
 
   // 좋아요를 누를 경우 if문을 거친 후, 서버에 전송합니다.
   const handleLikeClick = useCallback(async () => {
+    console.log(`loggedInUserId: ${loggedInUserId}`);
     if (!loggedInUserId) {
       setMessage('로그인이 필요합니다.');
       setShowMessage(true);
