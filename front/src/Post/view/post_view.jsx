@@ -77,7 +77,7 @@ const PostView = () => {
       isLiked(likedData);
       setLoading(false);
     } catch (err) {
-      setError(`데이터를 가져오는 데 실패했습니다: ${err.message}`);
+      setError(`likedPosts 데이터를 가져오는데 실패했습니다: ${err.message}`);
       setLoading(false);
     }
   }, [post_id, loggedInUserId]);
