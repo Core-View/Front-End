@@ -194,6 +194,7 @@ const Post = () => {
   const currentPageData = filteredPosts.slice(offset, offset + postsPerPage);
 
   const formatDate = (dateString) => {
+    // dateString 유효성 검사
     if (!dateString) {
       console.error('Invalid dateString: ', dateString);
       return 'Invalid date';
