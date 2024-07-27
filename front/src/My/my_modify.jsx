@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { resolvePath, useNavigate } from 'react-router-dom';
 import './my_modify.css';
 import { IoIosWarning } from 'react-icons/io';
 import { Cookies } from 'react-cookie';
@@ -22,7 +22,6 @@ const Mymodify = () => {
   const [introError, setIntroError] = useState('');
   const [passwordValid, setPasswordValid] = useState(false);
   const [passwordValidityMessage, setPasswordValidityMessage] = useState('');
-  //const [userId, setUserId] = useState(null);
   const myrole = cookies.get('role');
 
   const [preimage, setpreimage] = useState();
@@ -201,6 +200,7 @@ const Mymodify = () => {
         }
       )
       .then((response) => {
+        console.log("대답11",response);
         if (response.data.success === true) {
           axios
             .post(
@@ -212,14 +212,15 @@ const Mymodify = () => {
                 },
               }
             )
-            .then((response) => {
-              if (response.data.success === true) {
+            .then((responsed) => {
+              console.log("대답",responsed);
+              if (responsed.data.success === true) {
                 cookies.remove(user_password);
                 //이미지삭제 했으니 다시 홈으로 돌아가고 어쩌구 저쩌구 비번 지우고
-                alert(response.data.message);
+                alert(responsed.data.message);
                 navigate('/my/main');
               } else {
-                alert('프로필이 삭제되지 않았습니다. 관리자에게 문의 부탁드립니다.');
+                alert('aaaa프로필이 삭제되지 않았습니다. 관리자에게 문의 부탁드립니다.');
               }
             })
             .catch((error) => {
@@ -260,13 +261,14 @@ const Mymodify = () => {
           {
             headers: {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${cookies.get('accessToken')}`,
+              Authorization: cookies.get('accessToken'),
             },
           }
         )
         .then((response) => {
+          console.log("이미지 수정 대답",response);
           //const data = response.data;
-          if (response.data.access === true) {
+          if (response.data.success === true) {
             alert(response.data.message);
             navigate('/my/main');
           } else {
@@ -317,7 +319,7 @@ const Mymodify = () => {
         `http://localhost:3000/mypage/delete`,
         {
           headers: {
-            Authorization: `Bearer ${cookies.get('accessToken')}`,
+            Authorization: cookies.get('accessToken'),
           },
         }
       )
@@ -384,7 +386,6 @@ const Mymodify = () => {
         setErrorMessage('비밀번호 검증 중 오류가 발생했습니다.');
       });
   };
-  console.log("정보",preimage,imageSrc,nickname,intro);
 
   return (
     <div>
