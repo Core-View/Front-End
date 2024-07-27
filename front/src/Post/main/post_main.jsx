@@ -160,7 +160,7 @@ const Post = () => {
   // 포스트 클릭 시 이동하는 경로입니다.
   // 경로 수정 필요
   const handlePostClick = (post) => {
-    navigate(`/post_view/${post.post_id}`);
+    navigate(`/post/post_view/${post.post_id}`);
   };
 
   // 공지 클릭 시 이동하는 경로입니다.
