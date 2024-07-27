@@ -22,21 +22,96 @@ const Mymodify = () => {
   const [introError, setIntroError] = useState('');
   const [passwordValid, setPasswordValid] = useState(false);
   const [passwordValidityMessage, setPasswordValidityMessage] = useState('');
-  const [userId, setUserId] = useState(null);
+  //const [userId, setUserId] = useState(null);
+  const myrole = cookies.get('role');
+
   const [preimage, setpreimage] = useState();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [user_password, setUserPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
+
   useEffect(() => {
-    const userIdFromCookie = cookies.get('user_id');
-    if (!userIdFromCookie) {
-      navigate('/users/sign-in');
-    } else {
-      setUserId(userIdFromCookie);
-    }
-  }, [cookies, navigate]);
+    const fetchUserData = async () => { //user 정보 가져오는 api요청
+      axios
+        .get(`http://localhost:3000/mypage/`, {
+          headers: {
+            Authorization: cookies.get('accessToken'),
+          },
+        })
+        .then((response) => {
+          if (response.data.success === true) {
+            const data = response.data.userInfo;
+            if (!data.profile_picture || data.profile_picture === 'null') {
+              data.profile_picture = `${process.env.PUBLIC_URL}/images/original_profile.png`;
+            } else {
+              data.profile_picture = `${process.env.PUBLIC_URL}/${data.profile_picture}`;
+            }
+            setpreimage(data.profile_picture);
+            setImageSrc(data.profile_picture);
+            setNickname(data.nickname);
+            setIntro(data.introduction || '제 꿈은 개발자입니다.');
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching data:', error);
+          if (error.response) {
+            console.log('Response data:', error.response.data);
+            console.log('Response status:', error.response.status);
+            console.log('Response headers:', error.response.headers);
+          } else if (error.request) {
+            console.log('Request data:', error.request);
+          } else {
+            console.log('Error message:', error.message);
+          }
+          // console.log('마이 페이지 접근 요청 할때 catch된 에러', err.messsage);
+          // if (err.response.status === 401) {
+          //   console.log(
+          //     '401 에러 가 떴을때! 만료가 되었답니다! 그리고 refresh 토큰 받는 요청 get으로 보냄'
+          //   );
+          //   axios
+          //     .get('http://localhost:3000/token/refresh', {
+          //       headers: {
+          //         Authorization: cookies.get('accessToken'),
+          //       },
+          //     })
+          //     .then((response) => {
+          //       if (response.status === 200) {
+          //         console.log(
+          //           '리프래시 토큰으로 요청 보냈을때 받은 응답',
+          //           response
+          //         );
+          //         cookies.set('accessToken', response.data.Authorization);
+          //         console.log('토큰 설정해주기', cookies.get('accessToken'));
+          //         console.log('잘 됬으니까 다시 마이 페이지로 넘어가기');
+          //         return navigate('/my/modify');
+          //       } else if (response.status === 400) {
+          //         console.log('그 밖의 오류났을때, 일단 400일때 그냥 통과하기');
+          //         return navigate(-1);
+          //       }
+          //     })
+          //     .catch((err) => {
+          //       if (err.response.status === 401) {
+          //         console.log(
+          //           '리프래시에서 401이 떴을때, 권한 다 지우고 로그인 화면으로 보내기'
+          //         );
+          //         alert('권한이 없습니다.');
+          //         cookies.remove('accessToken');
+          //         cookies.remove('admin');
+          //         console.log(
+          //           '권한 다 지웠습니다',
+          //           cookies.get('accessToken'),
+          //           cookies.get('admin')
+          //         );
+          //         return navigate('/users/sign-in');
+          //       }
+          //     });
+          // }
+        });
+    };
+    fetchUserData();
+  },[]);
 
   const regex = {
     password:
@@ -115,49 +190,52 @@ const Mymodify = () => {
     if (imageFile) {  //이미지를 수정했다면 이미지 수정 api 요청
       const formData = new FormData();
       formData.append('user_image', imageFile);
-
-      try {
-        const imageResponse = await axios.post(
-          `http://localhost:3000/mypage/${userId}/modifyImage`,
-          formData
-        );
-
-        // if (!imageResponse.ok) {
-        //   throw new Error('Image upload failed');
-        // }
-
-        const imageData = imageResponse.data;
-        if (imageData.access) {//이미지가 수정 되었다면 이전 이미지 삭제 API요청
-          try {
-            const imageDResponse = await axios.post(
-              `http://localhost:3000/mypage/${userId}/deleteImage`,
+      axios
+      .post(
+        `http://localhost:3000/mypage/modifyImage`,
+        formData,
+        {
+          headers: {
+            Authorization: cookies.get('accessToken'),
+          },
+        }
+      )
+      .then((response) => {
+        if (response.data.success === true) {
+          axios
+            .post(
+              `http://localhost:3000/mypage/deleteImage`,
+              { preimage },
               {
-                preimage,
+                headers: {
+                  Authorization: cookies.get('accessToken'),
+                },
               }
-            );
-
-            const imageDataD = await imageDResponse;
-            if (imageDataD.data.access) {
-            } else {
-              alert(
-                '프로필이 삭제되지 않았습니다. 관리자에게 문의 부탁드립니다.'
-              );
-            }
-          } catch (error) {
-            console.error('Error uploading image:', error);
-            alert('이미지 삭제 중 오류가 발생했습니다. 관리자에게 문의하세요.');
-            return;
-          }
-          alert(imageData.message);
-          navigate('/my_main');
+            )
+            .then((response) => {
+              if (response.data.success === true) {
+                cookies.remove(user_password);
+                //이미지삭제 했으니 다시 홈으로 돌아가고 어쩌구 저쩌구 비번 지우고
+                alert(response.data.message);
+                navigate('/my/main');
+              } else {
+                alert('프로필이 삭제되지 않았습니다. 관리자에게 문의 부탁드립니다.');
+              }
+            })
+            .catch((error) => {
+              console.error('Error uploading image:', error);
+              alert('이미지 삭제 중 오류가 발생했습니다. 관리자에게 문의하세요.');
+              return;
+            });
         } else {
           alert('프로필이 수정되지 않았습니다. 관리자에게 문의 부탁드립니다.');
         }
-      } catch (error) {
+      })
+      .catch((error) => {
         console.error('Error uploading image:', error);
         alert('이미지 업로드 중 오류가 발생했습니다. 관리자에게 문의하세요.');
         return;
-      }
+      });
     }
     const finalPassword = password || userPasswordCookie; //비밀번호 수정하지 않으면 이전 비밀번호 그대로 사용
     const finalConfirmPassword = confirmPassword || userPasswordCookie; //비밀번호 확인 입력하지 않으면 이전 비밀번호 그대로 사용
@@ -175,82 +253,105 @@ const Mymodify = () => {
       alert('입력조건이 유효하지 않습니다. 조건을 확인해 주세요.');
       return;
     } else {
-      try {
-        const response = await axios.put(//회원 정보 수정 api요청
-          `http://localhost:3000/mypage/${userId}/modify`,
+      axios
+        .put(
+          `http://localhost:3000/mypage/modify`,
           profileData,
           {
             headers: {
               'Content-Type': 'application/json',
+              Authorization: `Bearer ${cookies.get('accessToken')}`,
             },
           }
-        );
+        )
+        .then((response) => {
+          //const data = response.data;
+          if (response.data.access === true) {
+            alert(response.data.message);
+            navigate('/my/main');
+          } else {
+            alert('프로필이 수정되지 않았습니다. 관리자에게 문의부탁드립니다.');
+          }
+        })
+        .catch((error) => {
+          console.error('Error updating profile:', error);
+          alert('프로필 업데이트 중 오류가 발생했습니다. 관리자에게 문의하세요.');
+          if (error.response) {
+            console.log('Error response data:', error.response.data);
+            console.log('Error response status:', error.response.status);
+            console.log('Error response headers:', error.response.headers);
+          } else if (error.request) {
+            console.log('Error request data:', error.request);
+          } else {
+            console.log('Error message:', error.message);
+          }
+        });
+      // try {
+      //   const response = await axios.put(//회원 정보 수정 api요청
+      //     `http://localhost:3000/mypage/${userId}/modify`,
+      //     profileData,
+      //     {
+      //       headers: {
+      //         'Content-Type': 'application/json',
+      //       },
+      //     }
+      //   );
 
-        // if (!response.ok) {
-        //   throw new Error('Profile update failed');
-        // }
-
-        const data = response.data;
-        if (data.access) {
-          alert(data.message);
-          navigate('/my_main');
-        } else {
-          alert('프로필이 수정되지 않았습니다. 관리자에게 문의부탁드립니다.');
-        }
-      } catch (error) {
-        console.error('Error updating profile:', error);
-        alert('프로필 업데이트 중 오류가 발생했습니다. 관리자에게 문의하세요.');
-      }
+      //   const data = response.data;
+      //   if (data.access) {
+      //     alert(data.message);
+      //     navigate('/my/main');
+      //   } else {
+      //     alert('프로필이 수정되지 않았습니다. 관리자에게 문의부탁드립니다.');
+      //   }
+      // } catch (error) {
+      //   console.error('Error updating profile:', error);
+      //   alert('프로필 업데이트 중 오류가 발생했습니다. 관리자에게 문의하세요.');
+      // }
     }
   };
 
   const handleDeleteAccount = async () => { //회원 탈퇴 api요청
-    try {
-      const response = await axios.delete(
-        `http://localhost:3000/mypage/${userId}/delete`
-      );
-
-      // if (!response.ok) {
-      //   throw new Error('Account deletion failed');
-      // }
-      cookies.remove('user_id');//회원 탈퇴시 로그아웃
-      cookies.remove('role');
-      cookies.remove('user_password');
-      setLogout();
-      alert('회원탈퇴가 완료되었습니다.');
-      navigate('/');
-    } catch (error) {
-      console.error('Error deleting account:', error);
-      alert('회원탈퇴 중 오류가 발생했습니다. 관리자에게 문의하세요.');
-    }
-  };
-
-  useEffect(() => {
-    const fetchUserData = async () => { //user 정보를 얻어오는 api 요청
-      try {
-        const response = await axios.get(
-          `http://localhost:3000/mypage/${userId}`
-        );
-        const data = response.data;
-        setpreimage(data.profile_picture);
-        if (!data.profile_picture || data.profile_picture === 'null') {
-          data.profile_picture = `${process.env.PUBLIC_URL}/images/original_profile.png`;
+    axios
+      .delete(
+        `http://localhost:3000/mypage/delete`,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.get('accessToken')}`,
+          },
         }
-        setImageSrc(
-          data.profile_picture ||
-            `${process.env.PUBLIC_URL}/images/original_profile.png`
-        );
-        setNickname(data.nickname);
-        setIntro(data.introduction || '제 꿈은 개발자입니다.');
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
-    if (userId) {
-      fetchUserData();
-    }
-  }, [userId]);
+      )
+      .then((response) => {
+        cookies.remove('user_id');//회원 탈퇴시 로그아웃
+        cookies.remove('role');
+        cookies.remove('user_password');
+        setLogout();
+        alert('회원탈퇴가 완료되었습니다.');
+        navigate('/');
+      })
+      .catch((error) => {
+        console.error('Error deleting account:', error);
+        alert('회원탈퇴 중 오류가 발생했습니다. 관리자에게 문의하세요.');
+      });
+    // try {
+    //   const response = await axios.delete(
+    //     `http://localhost:3000/mypage/${userId}/delete`
+    //   );
 
+    //   // if (!response.ok) {
+    //   //   throw new Error('Account deletion failed');
+    //   // }
+    //   cookies.remove('user_id');//회원 탈퇴시 로그아웃
+    //   cookies.remove('role');
+    //   cookies.remove('user_password');
+    //   setLogout();
+    //   alert('회원탈퇴가 완료되었습니다.');
+    //   navigate('/');
+    // } catch (error) {
+    //   console.error('Error deleting account:', error);
+    //   alert('회원탈퇴 중 오류가 발생했습니다. 관리자에게 문의하세요.');
+    // }
+  };
   useEffect(() => {
     setPasswordValid(isValid(regex.password, password));
   }, [password, isValid, regex]);
@@ -261,28 +362,29 @@ const Mymodify = () => {
 
   const handlePasswordSubmit = async (e) => { //비밀번호 확인 api요청
     e.preventDefault();
-    try {
-      const response = await axios.post(
-        `http://localhost:3000/password/verify/${userId}`,
+    axios
+      .post(
+        `http://localhost:3000/password/verify/`,
         { user_password },
         {
           headers: {
-            'Content-Type': 'application/json',
+            Authorization: cookies.get('accessToken'),
           },
         }
-      );
-
-      const data = response.data;
-      if (data.success) {
-        handleDeleteAccount();
-      } else {
-        setErrorMessage('비밀번호가 일치하지 않습니다.');
-      }
-    } catch (error) {
-      console.error('Error verifying password:', error);
-      setErrorMessage('비밀번호 검증 중 오류가 발생했습니다.');
-    }
+      )
+      .then((response) => {
+        if (response.data.success === true) {
+          handleDeleteAccount();
+        } else {
+          setErrorMessage('비밀번호가 일치하지 않습니다.');
+        }
+      })
+      .catch((error) => {
+        console.error('Error verifying password:', error);
+        setErrorMessage('비밀번호 검증 중 오류가 발생했습니다.');
+      });
   };
+  console.log("정보",preimage,imageSrc,nickname,intro);
 
   return (
     <div>
@@ -418,19 +520,29 @@ const Mymodify = () => {
             <h2>회원 탈퇴를 하시겠습니까?</h2>
             <h4>회원 탈퇴 시 영구히 삭제되어 복구할 수 없습니다.</h4>
             <div className="modi_last_div">
-              <input
-                type="password"
-                value={user_password}
-                onChange={handlePassword}
-                placeholder="비밀번호 입력"
-                className="mymodi_input"
-                required
-              />
-              {errorMessage && <p className="modi_error">{errorMessage}</p>}
+              {myrole === 2 ? (
+                <button type="button" onClick={handleDeleteAccount} className="my_modi_modal_btn">
+                  네
+                </button>
+              ) : (
+                <>
+                  <input
+                    type="password"
+                    value={user_password}
+                    onChange={handlePassword}
+                    placeholder="비밀번호 입력"
+                    className="mymodi_input"
+                    required
+                  />
+                  {errorMessage && <p className="modi_error">{errorMessage}</p>}
+                </>
+              )}
             </div>
-            <button type="submit" className="my_modi_modal_btn">
-              확인
-            </button>
+            {myrole !== 2 && (
+              <button type="submit" className="my_modi_modal_btn">
+                확인
+              </button>
+            )}
           </form>
         </div>
       )}
