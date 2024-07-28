@@ -9,6 +9,7 @@ function Header() {
   const deleteCookies = () => {
     cookies.remove('accessToken');
     cookies.remove('admin');
+    cookies.remove('role');
     navigate('/users/sign-in');
   };
 

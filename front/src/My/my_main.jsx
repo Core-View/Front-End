@@ -232,7 +232,6 @@ const Mypage = () => {
       )
       .then((response) => {
         if (response.data.success === true) {
-          cookies.set('user_password', user_password);
           navigate('/my/modify');
         } else {
           console.log("왜에러이지");
@@ -309,8 +308,6 @@ const Mypage = () => {
         return null;
     }
   };
-
-  console.log("사진경로",userInfo.profile_picture);
 
   return (
     <div className="allofthem">

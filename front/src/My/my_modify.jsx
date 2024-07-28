@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { resolvePath, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './my_modify.css';
 import { IoIosWarning } from 'react-icons/io';
 import { Cookies } from 'react-cookie';
@@ -8,7 +8,6 @@ import useAuthStore from '../Sign/Store'; // useAuthStore를 가져옵니다
 
 const Mymodify = () => {
   const cookies = new Cookies();
-  const userPasswordCookie = cookies.get('user_password');
   const navigate = useNavigate();
   const { setLogout } = useAuthStore(); // setLogout을 사용합니다
   const [imageSrc, setImageSrc] = useState('/images/original_profile.png');
@@ -53,60 +52,50 @@ const Mymodify = () => {
             setIntro(data.introduction || '제 꿈은 개발자입니다.');
           }
         })
-        .catch((error) => {
-          console.error('Error fetching data:', error);
-          if (error.response) {
-            console.log('Response data:', error.response.data);
-            console.log('Response status:', error.response.status);
-            console.log('Response headers:', error.response.headers);
-          } else if (error.request) {
-            console.log('Request data:', error.request);
-          } else {
-            console.log('Error message:', error.message);
+        .catch((err) => {
+          console.log('마이 페이지 접근 요청 할때 catch된 에러', err.messsage);
+          if (err.response.status === 401) {
+            console.log(
+              '401 에러 가 떴을때! 만료가 되었답니다! 그리고 refresh 토큰 받는 요청 get으로 보냄'
+            );
+            axios
+              .get('http://localhost:3000/token/refresh', {
+                headers: {
+                  Authorization: cookies.get('accessToken'),
+                },
+              })
+              .then((response) => {
+                if (response.status === 200) {
+                  console.log(
+                    '리프래시 토큰으로 요청 보냈을때 받은 응답',
+                    response
+                  );
+                  cookies.set('accessToken', response.data.Authorization);
+                  console.log('토큰 설정해주기', cookies.get('accessToken'));
+                  console.log('잘 됬으니까 다시 마이 페이지로 넘어가기');
+                  return navigate('/my/modify');
+                } else if (response.status === 400) {
+                  console.log('그 밖의 오류났을때, 일단 400일때 그냥 통과하기');
+                  return navigate(-1);
+                }
+              })
+              .catch((err) => {
+                if (err.response.status === 401) {
+                  console.log(
+                    '리프래시에서 401이 떴을때, 권한 다 지우고 로그인 화면으로 보내기'
+                  );
+                  alert('권한이 없습니다.');
+                  cookies.remove('accessToken');
+                  cookies.remove('admin');
+                  console.log(
+                    '권한 다 지웠습니다',
+                    cookies.get('accessToken'),
+                    cookies.get('admin')
+                  );
+                  return navigate('/users/sign-in');
+                }
+              });
           }
-          // console.log('마이 페이지 접근 요청 할때 catch된 에러', err.messsage);
-          // if (err.response.status === 401) {
-          //   console.log(
-          //     '401 에러 가 떴을때! 만료가 되었답니다! 그리고 refresh 토큰 받는 요청 get으로 보냄'
-          //   );
-          //   axios
-          //     .get('http://localhost:3000/token/refresh', {
-          //       headers: {
-          //         Authorization: cookies.get('accessToken'),
-          //       },
-          //     })
-          //     .then((response) => {
-          //       if (response.status === 200) {
-          //         console.log(
-          //           '리프래시 토큰으로 요청 보냈을때 받은 응답',
-          //           response
-          //         );
-          //         cookies.set('accessToken', response.data.Authorization);
-          //         console.log('토큰 설정해주기', cookies.get('accessToken'));
-          //         console.log('잘 됬으니까 다시 마이 페이지로 넘어가기');
-          //         return navigate('/my/modify');
-          //       } else if (response.status === 400) {
-          //         console.log('그 밖의 오류났을때, 일단 400일때 그냥 통과하기');
-          //         return navigate(-1);
-          //       }
-          //     })
-          //     .catch((err) => {
-          //       if (err.response.status === 401) {
-          //         console.log(
-          //           '리프래시에서 401이 떴을때, 권한 다 지우고 로그인 화면으로 보내기'
-          //         );
-          //         alert('권한이 없습니다.');
-          //         cookies.remove('accessToken');
-          //         cookies.remove('admin');
-          //         console.log(
-          //           '권한 다 지웠습니다',
-          //           cookies.get('accessToken'),
-          //           cookies.get('admin')
-          //         );
-          //         return navigate('/users/sign-in');
-          //       }
-          //     });
-          // }
         });
     };
     fetchUserData();
@@ -200,7 +189,6 @@ const Mymodify = () => {
         }
       )
       .then((response) => {
-        console.log("대답11",response);
         if (response.data.success === true) {
           axios
             .post(
@@ -213,21 +201,17 @@ const Mymodify = () => {
               }
             )
             .then((responsed) => {
-              console.log("대답",responsed);
               if (responsed.data.success === true) {
-                cookies.remove(user_password);
-                //이미지삭제 했으니 다시 홈으로 돌아가고 어쩌구 저쩌구 비번 지우고
-                alert(responsed.data.message);
-                navigate('/my/main');
               } else {
-                alert('aaaa프로필이 삭제되지 않았습니다. 관리자에게 문의 부탁드립니다.');
+                alert('프로필이 삭제되지 않았습니다. 관리자에게 문의 부탁드립니다.');
               }
             })
             .catch((error) => {
-              console.error('Error uploading image:', error);
+              console.error('Error uploading images:', error);
               alert('이미지 삭제 중 오류가 발생했습니다. 관리자에게 문의하세요.');
               return;
             });
+            navigate('/my/main');
         } else {
           alert('프로필이 수정되지 않았습니다. 관리자에게 문의 부탁드립니다.');
         }
@@ -238,8 +222,8 @@ const Mymodify = () => {
         return;
       });
     }
-    const finalPassword = password || userPasswordCookie; //비밀번호 수정하지 않으면 이전 비밀번호 그대로 사용
-    const finalConfirmPassword = confirmPassword || userPasswordCookie; //비밀번호 확인 입력하지 않으면 이전 비밀번호 그대로 사용
+    const finalPassword = password;
+    const finalConfirmPassword = confirmPassword;
     const profileData = {
       user_nickname: nickname,
       user_password: finalPassword,
@@ -266,10 +250,8 @@ const Mymodify = () => {
           }
         )
         .then((response) => {
-          console.log("이미지 수정 대답",response);
-          //const data = response.data;
           if (response.data.success === true) {
-            alert(response.data.message);
+            alert('프로필이 수정되었습니다.');
             navigate('/my/main');
           } else {
             alert('프로필이 수정되지 않았습니다. 관리자에게 문의부탁드립니다.');
@@ -288,28 +270,6 @@ const Mymodify = () => {
             console.log('Error message:', error.message);
           }
         });
-      // try {
-      //   const response = await axios.put(//회원 정보 수정 api요청
-      //     `http://localhost:3000/mypage/${userId}/modify`,
-      //     profileData,
-      //     {
-      //       headers: {
-      //         'Content-Type': 'application/json',
-      //       },
-      //     }
-      //   );
-
-      //   const data = response.data;
-      //   if (data.access) {
-      //     alert(data.message);
-      //     navigate('/my/main');
-      //   } else {
-      //     alert('프로필이 수정되지 않았습니다. 관리자에게 문의부탁드립니다.');
-      //   }
-      // } catch (error) {
-      //   console.error('Error updating profile:', error);
-      //   alert('프로필 업데이트 중 오류가 발생했습니다. 관리자에게 문의하세요.');
-      // }
     }
   };
 
@@ -324,9 +284,8 @@ const Mymodify = () => {
         }
       )
       .then((response) => {
-        cookies.remove('user_id');//회원 탈퇴시 로그아웃
-        cookies.remove('role');
-        cookies.remove('user_password');
+        cookies.remove('accessToken');
+        cookies.remove('admin');
         setLogout();
         alert('회원탈퇴가 완료되었습니다.');
         navigate('/');
@@ -335,24 +294,6 @@ const Mymodify = () => {
         console.error('Error deleting account:', error);
         alert('회원탈퇴 중 오류가 발생했습니다. 관리자에게 문의하세요.');
       });
-    // try {
-    //   const response = await axios.delete(
-    //     `http://localhost:3000/mypage/${userId}/delete`
-    //   );
-
-    //   // if (!response.ok) {
-    //   //   throw new Error('Account deletion failed');
-    //   // }
-    //   cookies.remove('user_id');//회원 탈퇴시 로그아웃
-    //   cookies.remove('role');
-    //   cookies.remove('user_password');
-    //   setLogout();
-    //   alert('회원탈퇴가 완료되었습니다.');
-    //   navigate('/');
-    // } catch (error) {
-    //   console.error('Error deleting account:', error);
-    //   alert('회원탈퇴 중 오류가 발생했습니다. 관리자에게 문의하세요.');
-    // }
   };
   useEffect(() => {
     setPasswordValid(isValid(regex.password, password));
