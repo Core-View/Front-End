@@ -15,8 +15,8 @@ const PostMainNotification = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [noticesPerPage, setNoticesPerPage] = useState(10); // 페이지당 공지사항 수
 
+  // 서버에서 공지 데이터를 가져옵니다.
   useEffect(() => {
-    // 서버에서 공지 데이터를 가져옴
     const fetchNotices = async () => {
       try {
         const response = await axios.get('http://localhost:3000/notice/view');
@@ -30,7 +30,7 @@ const PostMainNotification = () => {
     fetchNotices();
   }, []);
 
-  // 공지 클릭 핸들러
+  // 공지 클릭 시 핸들입니다.
   const handleNoticeClick = (id) => {
     console.log(id);
     navigate(`/notice/view/${id}`);

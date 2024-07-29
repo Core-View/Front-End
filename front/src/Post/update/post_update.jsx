@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import './post_write.css';
+import '../write/post_write.css';
 import { Cookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 
@@ -81,7 +81,7 @@ const PostUpdate = () => {
         setLanguage('');
         contentRef.current.style.height = 'auto';
         codeRef.current.style.height = 'auto';
-        navigate(`/post_view/${response.data.postId}`);
+        navigate(`/post/post_view/${response.data.postId}`);
       }
     } catch (error) {
       console.error('게시글 수정 중 오류 발생:', error);

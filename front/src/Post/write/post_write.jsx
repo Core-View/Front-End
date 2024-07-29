@@ -24,8 +24,11 @@ const PostWrite = () => {
   const CONTENT_MAX_LENGTH = 3000;
   const CODE_MAX_LENGTH = 65535; // LONGTEXT
 
+  // 로그인을 하지 않았을 경우, 로그인 페이지로 이동합니다.
   useEffect(() => {
-    const userId = '2'; //cookies.get('user_id');
+    // const token = cookies.get('Authorization');
+    // console.log('token:', token);
+    const userId = '10'; //cookies.get('user_id');
     if (userId) {
       setIsLoggedIn(true);
     } else {
@@ -34,6 +37,7 @@ const PostWrite = () => {
     setIsLoading(false);
   }, [navigate]);
 
+  // 내용 작성 중 뒤로가기를 눌렀을 때, 경고 메시지를 표시합니다.
   useEffect(() => {
     const handleBeforeUnload = (event) => {
       if (title || content || code) {
@@ -49,9 +53,9 @@ const PostWrite = () => {
     };
   }, [title, content, code]);
 
+  // 게시글 전송(게시) 버튼을 눌렀을 경우 핸들입니다.
   const handleSubmit = async (e) => {
     const cookies = new Cookies();
-    const loggedInUserId = '0'; //cookies.get('user_id'); // 로그인된 사용자 ID 가져오기
     e.preventDefault();
 
     if (title.length > TITLE_MAX_LENGTH) {
@@ -82,16 +86,16 @@ const PostWrite = () => {
       language: language,
       code: code,
       content: content,
-      user_id: '2', //loggedInUserId,
     };
 
     try {
+      const token = cookies.get('accessToken');
       const response = await axios.post(
         'http://localhost:3000/api/compile',
         postData,
         {
           headers: {
-            Authorization: cookies.get('Authorization'),
+            Authorization: token,
           },
         }
       );
@@ -104,30 +108,47 @@ const PostWrite = () => {
         setLanguage('');
         contentRef.current.style.height = 'auto';
         codeRef.current.style.height = 'auto';
-        navigate(`/post_view/${response.data.postId}`);
+        navigate(`/post/post_view/${response.data.postId}`);
       }
     } catch (error) {
       console.error('게시글 등록 중 오류 발생:', error);
+      if (error.response) {
+        // 서버 응답 O
+        console.error('응답 데이터:', error.response.data);
+        console.error('응답 상태 코드:', error.response.status);
+        console.error('응답 헤더:', error.response.headers);
+      } else if (error.request) {
+        // 요청 전송 O
+        // 서버 응답 X
+        console.error('요청 데이터:', error.request);
+      } else {
+        // 요청 설정 중 오류 발생
+        console.error('에러 메시지:', error.message);
+      }
       alert('게시글 등록 중 오류가 발생했습니다.');
     }
   };
 
+  // 작성 내용이 변경된 경우
   const handleContentChange = (e) => {
     setContent(e.target.value);
     contentRef.current.style.height = 'auto';
     contentRef.current.style.height = `${contentRef.current.scrollHeight}px`;
   };
 
+  // 작성 코드가 변경된 경우
   const handleCodeChange = (e) => {
     setCode(e.target.value);
     codeRef.current.style.height = 'auto';
     codeRef.current.style.height = `${codeRef.current.scrollHeight}px`;
   };
 
+  // 언어가 변경된 경우
   const handleLanguageChange = (lang) => {
     setLanguage(lang);
   };
 
+  // 작성 제목이 변경된 경우
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
     if (e.target.value.length <= TITLE_MAX_LENGTH) {

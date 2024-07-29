@@ -2,18 +2,18 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Cookies } from 'react-cookie';
-import FeedbackPopup from './post_view_feedback_popup';
+import FeedbackPopup from './feedback/post_view_feedback_popup';
 import PostHeader from './post_view_header';
 import PostContent from './post_view_component';
 import PostCode from './post_view_code';
 import PostResult from './post_view_result';
+
 import './post_view.css';
 import './post_view_feedback.css';
 
 const PostView = () => {
   const cookies = new Cookies();
-  const loggedInUserId = cookies.get('user_id');
-  // const loggedInUserNickname = cookies.get('user_nickname');
+  const [loggedInUserId, setLoggedInUserId] = useState('');
   const { post_id } = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -47,49 +47,62 @@ const PostView = () => {
   const [showMessage, setShowMessage] = useState(false);
   // const [likedFeedback, setLikedFeedback] = useState({});
 
-  const fetchPostAndFeedback = useCallback(async () => {
-    try {
-      const [postResponse, feedbackResponse] = await Promise.all([
-        axios.get(`http://localhost:3000/post/details/${post_id}`),
-        axios.get(`http://localhost:3000/api/feedbacks/post/${post_id}`),
-      ]);
+  const token = cookies.get('accessToken');
+  // if (token) {
+  //   const jwt = jwt_decode(token);
+  //   loggedInUserId = jwt.user_id;
+  // }
 
-      const postData = postResponse.data;
-      const feedbackData = feedbackResponse.data.reduce((acc, fb) => {
-        if (!acc[fb.feedback_codenumber]) {
-          acc[fb.feedback_codenumber] = [];
-        }
-        acc[fb.feedback_codenumber].push(fb);
-        return acc;
-      }, {});
+  // 서버에서 포스트 세부 정보와 피드백들을 가져옵니다.
+  const fetchPostAndFeedback = useCallback(() => {
+    axios
+      .get(`http://localhost:3000/post/details/${post_id}`, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((postResponse) => {
+        const postData = postResponse.data;
+        console.log('postData 출력', postData);
 
-      setPost(postData);
-      setFeedback(feedbackData);
-      setLikesCount(postData.total_likes);
+        axios
+          .get(`http://localhost:3000/api/feedbacks/post/${post_id}`, {
+            headers: {
+              Authorization: token,
+            },
+          })
+          .then((feedbackResponse) => {
+            const feedbackData = feedbackResponse.data.reduce((acc, fb) => {
+              if (!acc[fb.feedback_codenumber]) {
+                acc[fb.feedback_codenumber] = [];
+              }
 
-      const likedResponse = await axios.get(
-        `http://localhost:3000/mypage/${loggedInUserId}/likedPosts`
-      );
-      const likedData = likedResponse.data;
-      setLikedPosts(likedData);
+              acc[fb.feedback_codenumber].push(fb);
+              return acc;
+            }, {});
 
-      isLiked(likedData);
-      setLoading(false);
+            console.log('feedbackData 출력', feedbackData);
 
-      // const feedbackLikeResponse = await axios.get(
-      //   `http://localhost:3000/api/feedbacklikes/${post_id}/${loggedInUserId}`
-      // );
-      // const likedFeedbackIds = feedbackLikeResponse.data.reduce((acc, fb) => {
-      //   acc[fb.feedback_id] = fb.feedbacklike_id;
-      //   return acc;
-      // // }, {});
-      // setLikedFeedback(likedFeedbackIds);
-    } catch (err) {
-      setError(`데이터를 가져오는 데 실패했습니다: ${err.message}`);
-      setLoading(false);
-    }
+            setPost(postData);
+            // console.log('postData: ', postData);
+            setLoggedInUserId(postData.loggedInUserId);
+            console.log('loggedInUserId: ', loggedInUserId);
+            setFeedback(feedbackData);
+            setLikesCount(postData.total_likes);
+            setLoading(false);
+          })
+          .catch((err) => {
+            setError(`데이터를 가져오는데 실패했습니다: ${err.message}`);
+            setLoading(false);
+          });
+      })
+      .catch((err) => {
+        setError(`데이터를 가져오는데 실패했습니다: ${err.message}`);
+        setLoading(false);
+      });
   }, [post_id, loggedInUserId]);
 
+  // 게시글 삭제 버튼 클릭 시 핸들입니다.
   const handleDeletePost = useCallback(async () => {
     if (loggedInUserId !== post.user_id) {
       setMessage('게시글을 삭제할 권한이 없습니다.');
@@ -103,17 +116,11 @@ const PostView = () => {
     }
 
     try {
-      const response = await fetch(
-        `http://localhost:3000/api/delete/${post_id}`,
-        {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
+      const response = await axios.delete(
+        `http://localhost:3000/api/delete/${post_id}`
       );
 
-      if (!response.ok) {
+      if (response.status !== 200) {
         throw new Error('Network response was not ok');
       }
 
@@ -122,28 +129,31 @@ const PostView = () => {
       setTimeout(() => setShowMessage(false), 2000);
       navigate('/post_main');
     } catch (error) {
-      console.error('There was a problem with your fetch operation:', error);
+      console.error('There was a problem with your axios operation:', error);
     }
   }, [loggedInUserId, post.user_id, post_id, navigate]);
 
+  // 작성자 프로필 사진입니다.
   const user_image =
     post.user_image || `${process.env.PUBLIC_URL}images/original_profile.png`;
 
-  const isLiked = useCallback(
-    (likedData) => {
-      if (
-        likedData.some((likedPost) => likedPost.post_id === parseInt(post_id))
-      ) {
-        setLiked(true);
-      }
-    },
-    [post_id]
-  );
+  // 이미 좋아요를 누른 상태인지 확인합니다.
+  // const isLiked = useCallback(
+  //   (likedData) => {
+  //     if (
+  //       likedData.some((likedPost) => likedPost.post_id === parseInt(post_id))
+  //     ) {
+  //       setLiked(true);
+  //     }
+  //   },
+  //   [post_id]
+  // );
 
   useEffect(() => {
     fetchPostAndFeedback();
   }, [fetchPostAndFeedback]);
 
+  // 피드백 클릭 시 popup을 표시하는 방식을 설정합니다.
   const handleFeedbackClick = useCallback(
     (lineIndex, lineCode) => {
       setPopup({
@@ -157,6 +167,7 @@ const PostView = () => {
     [feedback]
   );
 
+  // 피드백 전송 버튼을 눌렀을 때 서버로 전송합니다.
   const handleFeedbackSubmit = useCallback(async () => {
     if (popup.text.trim() === '') return;
 
@@ -169,46 +180,20 @@ const PostView = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:3000/api/feedbacks', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(feedbackHandleData),
-      });
-      if (!response.ok) {
+      const response = await axios.post(
+        'http://localhost:3000/api/feedbacks',
+        feedbackHandleData
+      );
+      if (response.status !== 200) {
         throw new Error('Network response was not ok');
       }
 
-      // const newFeedback = feedback[popup.line]
-      //   ? [
-      //       ...feedback[popup.line],
-      //       {
-      //         user_id: loggedInUserId,
-      //         feedback_comment: popup.text,
-      //         user_nickname: '방금 작성한 피드백',
-      //       },
-      //     ]
-      //   : [
-      //       {
-      //         user_id: loggedInUserId,
-      //         feedback_comment: popup.text,
-      //         user_nickname: '방금 작성한 피드백',
-      //       },
-      //     ];
-
-      // setFeedback((prevFeedback) => ({
-      //   ...prevFeedback,
-      //   [popup.line]: newFeedback,
-      // }));
-
       setPopup((prevPopup) => ({
         ...prevPopup,
-        // feedback: newFeedback,
         text: '',
       }));
     } catch (error) {
-      console.error('There was a problem with your fetch operation:', error);
+      console.error('There was a problem with your axios operation:', error);
     }
   }, [
     popup.text,
@@ -219,6 +204,7 @@ const PostView = () => {
     post_id,
   ]);
 
+  // maxLength를 초과하는 경우 ...으로 표시합니다.
   const truncateText = useCallback((text, maxLength) => {
     const newlineIndex = text.indexOf('\n');
     if (newlineIndex !== -1 && newlineIndex <= maxLength) {
@@ -230,7 +216,9 @@ const PostView = () => {
     return text.slice(0, maxLength) + '...';
   }, []);
 
+  // 좋아요를 누를 경우 if문을 거친 후, 서버에 전송합니다.
   const handleLikeClick = useCallback(async () => {
+    console.log(`loggedInUserId: ${loggedInUserId}`);
     if (!loggedInUserId) {
       setMessage('로그인이 필요합니다.');
       setShowMessage(true);
@@ -255,27 +243,22 @@ const PostView = () => {
 
     const options = newLiked
       ? {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            post_id: post_id,
-            user_id: loggedInUserId,
-          }),
+          post_id: post_id,
+          user_id: loggedInUserId,
         }
-      : { method: 'DELETE' };
+      : null;
 
     try {
-      const response = await fetch(url, options);
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
+      if (newLiked) {
+        await axios.post(url, options);
+      } else {
+        await axios.delete(url);
       }
       setMessage(newLiked ? '좋아요를 눌렀습니다.' : '좋아요를 취소했습니다.');
       setShowMessage(true);
       setTimeout(() => setShowMessage(false), 2000);
     } catch (error) {
-      console.error('There was a problem with your fetch operation:', error);
+      console.error('There was a problem with your axios operation:', error);
     }
   }, [liked, likesCount, loggedInUserId, post.user_id, post_id]);
 
@@ -287,8 +270,9 @@ const PostView = () => {
     return <div>{error}</div>;
   }
 
+  // 포스트 수정 버튼 클릭 시
   const handleUpdatePost = () => {
-    navigate(`/post_update/${post_id}`);
+    navigate(`/post/update/${post_id}`);
   };
 
   return (

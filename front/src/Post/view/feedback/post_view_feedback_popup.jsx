@@ -3,7 +3,7 @@ import './post_view_feedback_popup.css';
 // import { FaRegThumbsUp, FaThumbsUp } from 'react-icons/fa';
 import Draggable from 'react-draggable';
 import axios from 'axios';
-import Contribution from '../../Common/Contribution';
+import Contribution from '../../../Common/Contribution';
 
 const FeedbackPopup = ({
   popup,
@@ -25,12 +25,14 @@ const FeedbackPopup = ({
   });
   const [contributions, setContributions] = useState({});
 
+  // 피드백 리스트가 업데이트될 때마다 스크롤을 맨 아래로 이동합니다.
   useEffect(() => {
     if (feedbackListRef.current) {
       feedbackListRef.current.scrollTop = feedbackListRef.current.scrollHeight;
     }
   }, [popup.feedback]);
 
+  // Escape 키를 눌렀을 때, 팝업을 닫게 합니다.
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
@@ -43,15 +45,19 @@ const FeedbackPopup = ({
       }
     };
 
+    // 팝업이 열려 있을 때만
     if (popup.show) {
       window.addEventListener('keydown', handleKeyDown);
     }
 
+    // cleanup 함수 (이벤트 리스너 제거)
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [popup.show, setPopup]);
 
+  // 스크롤 위치를 추적하는 핸들입니다.
+  // 스크롤을 움직일 때, 팝업이 스크롤을 따라 움직입니다.
   useEffect(() => {
     const handleScroll = () => {
       setScrollPosition({
@@ -60,8 +66,10 @@ const FeedbackPopup = ({
       });
     };
 
+    // 스크롤 이벤트 리스너 추가
     window.addEventListener('scroll', handleScroll);
 
+    // cleanup 함수 (이벤트 리스너 제거)
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };

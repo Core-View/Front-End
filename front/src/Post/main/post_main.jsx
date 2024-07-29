@@ -9,7 +9,7 @@ import { Cookies } from 'react-cookie';
 import './post_main_pagination.css';
 import './post_main.css';
 
-const Empty = () => {
+const Post = () => {
   const cookies = new Cookies();
   const navigate = useNavigate();
   const location = useLocation();
@@ -28,8 +28,7 @@ const Empty = () => {
   const [selectedLanguages, setSelectedLanguages] = useState([]);
   const [sortOrder, setSortOrder] = useState(initialSortOrder);
 
-  const [userInfos, setUserInfos] = useState({});
-
+  // 게시글에서 사용한 언어의 아이콘 경로
   const languageIcons = {
     other: '/images/language_icons/other_icon.png',
     c: '/images/language_icons/c_icon.png',
@@ -38,37 +37,11 @@ const Empty = () => {
     python: '/images/language_icons/python_icon.png',
   };
 
-  const fetchUserInfos = async (userIds) => {
-    const userInfoPromises = userIds.map((id) =>
-      axios
-        .get(`http://localhost:3000/mypage/${id}`)
-        .then((response) => ({
-          userId: id,
-          data: response.data,
-        }))
-        .catch(() => ({
-          userId: id,
-          data: { nickname: '탈퇴한 회원' },
-        }))
-    );
-
-    const userInfoResponses = await Promise.all(userInfoPromises);
-
-    const newUserInfos = {};
-    userInfoResponses.forEach((response) => {
-      newUserInfos[response.userId] = response.data;
-    });
-
-    setUserInfos((prevUserInfos) => ({
-      ...prevUserInfos,
-      ...newUserInfos,
-    }));
-  };
-
+  // 서버에서 공지 데이터를 받아옵니다.
   useEffect(() => {
     const fetchNotices = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/notice/view', {
+        const response = await axios.get('http://localhost:3000/post/notice', {
           headers: {
             Authorization: cookies.get('accessToken'),
           },
@@ -84,6 +57,8 @@ const Empty = () => {
     fetchNotices();
   }, []);
 
+  // 서버에서 post 데이터를 받아옵니다.
+  // sortOrder값 : latest or mostlike
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -91,9 +66,6 @@ const Empty = () => {
           `http://localhost:3000/post/${sortOrder}`
         );
         const postsData = response.data;
-
-        const userIds = [...new Set(postsData.map((post) => post.user_id))];
-        await fetchUserInfos(userIds);
 
         setPosts(postsData);
         setFilteredPosts(postsData);
@@ -107,6 +79,7 @@ const Empty = () => {
     fetchPosts();
   }, [sortOrder]);
 
+  // 게시글에 진입 후 뒤로가기를 하였을 때, page 번호와 sort 방식을 유지합니다.
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const page = parseInt(queryParams.get('page') || '0', 10);
@@ -120,6 +93,7 @@ const Empty = () => {
     }
   }, [location.search]);
 
+  // 검색 기능입니다.
   const handleSearch = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
@@ -127,6 +101,7 @@ const Empty = () => {
     setCurrentPage(0);
   };
 
+  // 게시글의 언어 필터링을 위해 토글을 사용합니다.
   const handleLanguageToggle = (language) => {
     const newSelectedLanguages = selectedLanguages.includes(language)
       ? selectedLanguages.filter((lang) => lang !== language)
@@ -136,6 +111,7 @@ const Empty = () => {
     setCurrentPage(0);
   };
 
+  // 게시글의 언어를 필터링합니다.
   const filterPosts = (query, languages) => {
     let filtered = posts;
     if (query) {
@@ -149,25 +125,32 @@ const Empty = () => {
     setFilteredPosts(filtered);
   };
 
+  // 포스트 클릭 시 이동하는 경로입니다.
+  // 경로 수정 필요
   const handlePostClick = (post) => {
-    navigate(`/post_view/${post.post_id}`);
+    navigate(`/post/post_view/${post.post_id}`);
   };
 
+  // 공지 클릭 시 이동하는 경로입니다.
+  // 경로 수정 필요
   const handleNoticeClick = (id) => {
     navigate(`/notice/view/${id}`);
   };
 
+  // 페이지를 변경합니다.
   const handlePageClick = (data) => {
     const selectedPage = data.selected;
     setCurrentPage(selectedPage);
     navigate(`${location.pathname}?page=${selectedPage}&sort=${sortOrder}`);
   };
 
+  // 한 페이지에 볼 수 있는 포스트의 개수를 조정합니다.
   const handlePostsPerPageChange = (e) => {
     setPostsPerPage(Number(e.target.value));
     setCurrentPage(0);
   };
 
+  // 게시글 정렬 방식을 조정합니다.
   const handleSortOrderChange = (order) => {
     setSortOrder(order);
     setLoading(true);
@@ -179,14 +162,25 @@ const Empty = () => {
   const currentPageData = filteredPosts.slice(offset, offset + postsPerPage);
 
   const formatDate = (dateString) => {
-    const date = parseISO(dateString);
-    const now = new Date();
-    const differenceInDays = (now - date) / (1000 * 60 * 60 * 24);
+    // dateString 유효성 검사
+    if (!dateString) {
+      console.error('Invalid dateString: ', dateString);
+      return 'Invalid date';
+    }
 
-    if (differenceInDays < 1) {
-      return formatDistanceToNow(date, { addSuffix: true, locale: ko });
-    } else {
-      return date.toLocaleDateString('ko-KR');
+    try {
+      const date = parseISO(dateString);
+      const now = new Date();
+      const differenceInDays = (now - date) / (1000 * 60 * 60 * 24);
+
+      if (differenceInDays < 1) {
+        return formatDistanceToNow(date, { addSuffix: true, locale: ko });
+      } else {
+        return date.toLocaleDateString('ko-KR');
+      }
+    } catch (error) {
+      console.error('Error parsing date: ', error);
+      return 'Invalid date';
     }
   };
 
@@ -215,7 +209,7 @@ const Empty = () => {
           {notices.length > 0 ? (
             [...notices]
               .reverse()
-              .slice(0, 3)
+              // .slice(0, 3)
               .map((notice, index) => (
                 <li
                   key={index}
@@ -372,7 +366,7 @@ const Empty = () => {
                     {post.post_title}
                   </div>
                   <div className="post-main-user-name">
-                    {userInfos[post.user_id]?.nickname || '탈퇴한 회원'}
+                    {post.user_nickname}
                   </div>
                   <div className="post-main-date">
                     {formatDate(post.post_date)}
@@ -404,4 +398,4 @@ const Empty = () => {
   );
 };
 
-export default Empty;
+export default Post;

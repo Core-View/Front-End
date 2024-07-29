@@ -239,15 +239,16 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.post-language-buttons button.active {
+.post-language-buttons button.active,
+.post-language-buttons button.active:hover {
   background-color: #303030;
   color: white;
   border: 1px solid #303030;
 }
 
 .post-language-buttons button:hover {
-  background-color: #303030;
-  color: white;
+  background-color: white;
+  color: #333;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -350,15 +351,16 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.sort-buttons button.active {
+.sort-buttons button.active,
+.sort-buttons button.active:hover {
   background-color: #303030;
   color: white;
   border: 1px solid #303030;
 }
 
 .sort-buttons button:hover {
-  background-color: #303030;
-  color: white;
+  background-color: white;
+  color: #333;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
