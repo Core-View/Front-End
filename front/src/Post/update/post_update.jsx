@@ -81,7 +81,7 @@ const PostUpdate = () => {
         setLanguage('');
         contentRef.current.style.height = 'auto';
         codeRef.current.style.height = 'auto';
-        navigate(`/post_view/${response.data.postId}`);
+        navigate(`/post/post_view/${response.data.postId}`);
       }
     } catch (error) {
       console.error('게시글 수정 중 오류 발생:', error);
