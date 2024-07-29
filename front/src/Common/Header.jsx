@@ -9,6 +9,7 @@ function Header() {
   const deleteCookies = () => {
     cookies.remove('accessToken');
     cookies.remove('admin');
+    cookies.remove('role');
     navigate('/users/sign-in');
   };
 
@@ -53,7 +54,7 @@ function Header() {
               {!cookies.get('accessToken') ? (
                 <Link to="/users/sign-in">내 정보</Link>
               ) : (
-                <Link to="/my_main">내 정보</Link>
+                <Link to="/my/main">내 정보</Link>
               )}
             </li>
             <li>
