@@ -7,17 +7,13 @@ import PostHeader from './post_view_header';
 import PostContent from './post_view_component';
 import PostCode from './post_view_code';
 import PostResult from './post_view_result';
-// import jwt_decode from 'jwt-decode';
 
 import './post_view.css';
 import './post_view_feedback.css';
 
 const PostView = () => {
   const cookies = new Cookies();
-  // const loggedInUserId = cookies.get('user_id');
-  // const loggedInUserId = 1;
   const [loggedInUserId, setLoggedInUserId] = useState('');
-  // const loggedInUserNickname = cookies.get('user_nickname');
   const { post_id } = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

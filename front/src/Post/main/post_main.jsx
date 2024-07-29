@@ -28,8 +28,6 @@ const Post = () => {
   const [selectedLanguages, setSelectedLanguages] = useState([]);
   const [sortOrder, setSortOrder] = useState(initialSortOrder);
 
-  // const [userInfos, setUserInfos] = useState({});
-
   // 게시글에서 사용한 언어의 아이콘 경로
   const languageIcons = {
     other: '/images/language_icons/other_icon.png',
@@ -68,9 +66,6 @@ const Post = () => {
           `http://localhost:3000/post/${sortOrder}`
         );
         const postsData = response.data;
-
-        // const userIds = [...new Set(postsData.map((post) => post.user_id))];
-        // await fetchUserInfos(userIds);
 
         setPosts(postsData);
         setFilteredPosts(postsData);

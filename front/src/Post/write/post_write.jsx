@@ -56,7 +56,6 @@ const PostWrite = () => {
   // 게시글 전송(게시) 버튼을 눌렀을 경우 핸들입니다.
   const handleSubmit = async (e) => {
     const cookies = new Cookies();
-    // const loggedInUserId = '10'; //cookies.get('user_id'); // 로그인된 사용자 ID 가져오기
     e.preventDefault();
 
     if (title.length > TITLE_MAX_LENGTH) {
@@ -87,7 +86,6 @@ const PostWrite = () => {
       language: language,
       code: code,
       content: content,
-      // user_id: '10', //loggedInUserId,
     };
 
     try {
@@ -97,7 +95,6 @@ const PostWrite = () => {
         postData,
         {
           headers: {
-            // Authorization: `Bearer ${token}`,
             Authorization: token,
           },
         }
