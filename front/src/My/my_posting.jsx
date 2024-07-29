@@ -16,13 +16,8 @@ const Empty = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
-  //const [loading, setLoading] = useState(true);
-  //const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [postsPerPage, setPostsPerPage] = useState(15); // 페이지당 게시글 수 기본값
-  
-  //const [isLoading, setIsLoading] = useState(true);
-  //const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const languageIcons = {
     c: '/images/language_icons/c_icon.png',
@@ -31,37 +26,78 @@ const Empty = () => {
     python: '/images/language_icons/python_icon.png',
     other: '/images/language_icons/other_icon.png',
   };
+
   useEffect(() => {
-    const userId = cookies.get('user_id');
-    if (userId) {
-      //setIsLoggedIn(true);
-      fetchPosts(userId);
-    } else {
-      navigate('/users/sign-in');
-    }
-    //setIsLoading(false);
-  }, [navigate]);
+    fetchPosts();
+  },[]);
 
-  const fetchPosts = async (userId) => {  //user가 작성한 글의 모든 정보를 보여주는 api요청
-    try {
-        const response = await axios.get(`http://localhost:3000/mypage/${userId}/posts`);
-        const postsData = response.data;
-        const processedData = postsData.map(post => ({
-          ...post,
-          profile_picture: (post.profile_picture === "null" || !post.profile_picture)
-            ? `${process.env.PUBLIC_URL}/images/original_profile.png`
-            : post.profile_picture,
-        }));
-        setPosts(processedData || []);
-        setFilteredPosts(processedData || []);
-        //setLoading(false);
-      } catch (error) {
-        //setError('게시글을 가져오는 데 실패했습니다.');
-        console.error('Error fetching like data:', error);
-        //setLoading(false);
-      }
+  const fetchPosts = async () => { //user가 작성한 글 정보 가져오는 api요청
+    axios
+      .get(`http://localhost:3000/mypage/posts`, {
+        headers: {
+          Authorization: cookies.get('accessToken'),
+        },
+      })
+      .then((response) => {
+        if (response.data.success === true) {
+          const postsData = response.data.posts;
+          const processedData = postsData.map((post) => ({
+            ...post,
+            profile_picture:
+              post.profile_picture === 'null' || !post.profile_picture
+                ? `${process.env.PUBLIC_URL}/images/original_profile.png`
+                : `${process.env.PUBLIC_URL}/${post.profile_picture}`,
+          }));
+          setPosts(processedData || []);
+          setFilteredPosts(processedData || []);
+        }
+      })
+      .catch((err) => {
+        console.log('나의 게시글 페이지 접근 요청 할때 catch된 에러', err.messsage);
+        if (err.response.status === 401) {
+          console.log(
+            '401 에러 가 떴을때! 만료가 되었답니다! 그리고 refresh 토큰 받는 요청 get으로 보냄'
+          );
+          axios
+            .get('http://localhost:3000/token/refresh', {
+              headers: {
+                Authorization: cookies.get('accessToken'),
+              },
+            })
+            .then((response) => {
+              if (response.status === 200) {
+                console.log(
+                  '리프래시 토큰으로 요청 보냈을때 받은 응답',
+                  response
+                );
+                cookies.set('accessToken', response.data.Authorization);
+                console.log('토큰 설정해주기', cookies.get('accessToken'));
+                console.log('잘 됬으니까 다시 전체 게시글로 넘어가기');
+                return navigate('/my/posting');
+              } else if (response.status === 400) {
+                console.log('그 밖의 오류났을때, 일단 400일때 그냥 통과하기');
+                return navigate(-1);
+              }
+            })
+            .catch((err) => {
+              if (err.response.status === 401) {
+                console.log(
+                  '리프래시에서 401이 떴을때, 권한 다 지우고 로그인 화면으로 보내기'
+                );
+                alert('권한이 없습니다.');
+                cookies.remove('accessToken');
+                cookies.remove('admin');
+                console.log(
+                  '권한 다 지웠습니다',
+                  cookies.get('accessToken'),
+                  cookies.get('admin')
+                );
+                return navigate('/users/sign-in');
+              }
+            });
+        }
+      });
   };
-
   // 검색 핸들러
   const handleSearch = (e) => {
     const query = e.target.value;

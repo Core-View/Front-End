@@ -13,8 +13,6 @@ import { IoSettings } from 'react-icons/io5';
 const Mypage = () => {
   const cookies = new Cookies();
   const navigate = useNavigate();
-  //const [isLoading, setIsLoading] = useState(true);
-  //const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userInfo, setUserInfo] = useState({
     user_id: '',
     nickname: '',
@@ -32,6 +30,7 @@ const Mypage = () => {
   const [user_password, setUserPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [activeTab, setActiveTab] = useState('Mypost');
+  const myrole = cookies.get('role');
 
   const languageIcons = {
     c: '/images/language_icons/c_icon.png',
@@ -42,80 +41,177 @@ const Mypage = () => {
   };
 
   useEffect(() => {
-    const userId = cookies.get('user_id');
-    if (userId) {
-      //setIsLoggedIn(true);
-      fetchUserData(userId);
-      fetchPostData(userId);
-      fetchCommentData(userId);
-      fetchLikeData(userId);
-    } else {
-      navigate('/users/sign-in');
-    }
-    //setIsLoading(false);
-  }, [navigate]);
-
-  const fetchUserData = async (userId) => { //user 정보 가져오는 api요청
-    try {
-      const response = await axios.get(`http://localhost:3000/mypage/${userId}`);
-      const data = response.data;
-      if (!data.profile_picture || data.profile_picture === 'null') {
-        data.profile_picture = `${process.env.PUBLIC_URL}/images/original_profile.png`;
-      }
-      setUserInfo(data);
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-    }
+    fetchUserData();
+    fetchPostData();
+    fetchCommentData();
+    fetchLikeData();
+  },[]);
+  
+  const fetchUserData = async () => { //user 정보 가져오는 api요청
+    axios
+      .get(`http://localhost:3000/mypage/`, {
+        headers: {
+          Authorization: cookies.get('accessToken'),
+        },
+      })
+      .then((response) => {
+        if (response.data.success === true) {
+          const data = response.data.userInfo;
+            if (!data.profile_picture || data.profile_picture === 'null') {
+              data.profile_picture = `${process.env.PUBLIC_URL}/images/original_profile.png`;
+            } else {
+              data.profile_picture = `${process.env.PUBLIC_URL}/${data.profile_picture}`;
+            }
+          setUserInfo(data);
+        }
+      })
+      .catch((err) => {
+        console.log('마이 페이지 접근 요청 할때 catch된 에러', err.messsage);
+        if (err.response.status === 401) {
+          console.log(
+            '401 에러 가 떴을때! 만료가 되었답니다! 그리고 refresh 토큰 받는 요청 get으로 보냄'
+          );
+          axios
+            .get('http://localhost:3000/token/refresh', { //토큰 refresh
+              headers: {
+                Authorization: cookies.get('accessToken'),
+              },
+            })
+            .then((response) => {
+              if (response.status === 200) {
+                console.log(
+                  '리프래시 토큰으로 요청 보냈을때 받은 응답',
+                  response
+                );
+                cookies.set('accessToken', response.data.Authorization);
+                console.log('토큰 설정해주기', cookies.get('accessToken'));
+                console.log('잘 됬으니까 다시 마이 페이지로 넘어가기');
+                return navigate('/my/main');
+              } else if (response.status === 400) {
+                console.log('그 밖의 오류났을때, 일단 400일때 그냥 통과하기');
+                return navigate(-1);
+              }
+            })
+            .catch((err) => {
+              if (err.response.status === 401) {
+                console.log(
+                  '리프래시에서 401이 떴을때, 권한 다 지우고 로그인 화면으로 보내기'
+                );
+                alert('권한이 없습니다.');
+                cookies.remove('accessToken');
+                cookies.remove('admin');
+                console.log(
+                  '권한 다 지웠습니다',
+                  cookies.get('accessToken'),
+                  cookies.get('admin')
+                );
+                return navigate('/users/sign-in');
+              }
+            });
+        }
+      });
   };
 
-  const fetchPostData = async (userId) => { //user가 작성한 글 정보 가져오는 api요청
-    try {
-      const response = await axios.get(`http://localhost:3000/mypage/${userId}/posts`);
-      const data = response.data;
-      const processedData = data.map((post) => ({
-        ...post,
-        profile_picture:
-          post.profile_picture === 'null' || !post.profile_picture
-            ? `${process.env.PUBLIC_URL}/images/original_profile.png`
-            : post.profile_picture,
-      }));
-      setPosts(processedData || []);
-    } catch (error) {
-      console.error('Error fetching post data:', error);
-    }
+  const fetchPostData = async () => { //user가 작성한 글 정보 가져오는 api요청
+    axios
+      .get(`http://localhost:3000/mypage/posts`, {
+        headers: {
+          Authorization: cookies.get('accessToken'),
+        },
+      })
+      .then((response) => {
+        if (response.data.success === true) {
+          const data = response.data.posts;
+          const processedData = data.map((post) => ({
+            ...post,
+            profile_picture:
+              post.profile_picture === 'null' || !post.profile_picture
+                ? `${process.env.PUBLIC_URL}/images/original_profile.png`
+                : `${process.env.PUBLIC_URL}/${post.profile_picture}`,
+          }));
+          setPosts(processedData || []);
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching post data:', error);
+        if (error.response) {
+          console.log('Response data:', error.response.data);
+          console.log('Response status:', error.response.status);
+          console.log('Response headers:', error.response.headers);
+        } else if (error.request) {
+          console.log('Request data:', error.request);
+        } else {
+          console.log('Error message:', error.message);
+        }
+      });
   };
 
-  const fetchCommentData = async (userId) => {  //user가 댓글 단 글의 정보를 가져오는 api요청
-    try {
-      const response = await axios.get(`http://localhost:3000/mypage/${userId}/feedback`);
-      const data = response.data;
-      const processedData = data.map((comment) => ({
-        ...comment,
-        profile_picture:
-          comment.profile_picture === 'null' || !comment.profile_picture
-            ? `${process.env.PUBLIC_URL}/images/original_profile.png`
-            : comment.profile_picture,
-      }));
-      setComments(processedData || []);
-    } catch (error) {
-      console.error('Error fetching feedback data:', error);
-    }
+  const fetchCommentData = async () => {  //user가 댓글 단 글의 정보를 가져오는 api요청
+    axios
+      .get(`http://localhost:3000/mypage/feedback`, {
+        headers: {
+          Authorization: cookies.get('accessToken'),
+        },
+      })
+      .then((response) => {
+        if (response.data.success === true) {
+          const data = response.data.feedbacks;
+          const processedData = data.map((comment) => ({
+            ...comment,
+            profile_picture:
+              comment.profile_picture === 'null' || !comment.profile_picture
+                ? `${process.env.PUBLIC_URL}/images/original_profile.png`
+                : `${process.env.PUBLIC_URL}/${comment.profile_picture}`,
+          }));
+          setComments(processedData || []);
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching comment data:', error);
+        if (error.response) {
+          console.log('Response data:', error.response.data);
+          console.log('Response status:', error.response.status);
+          console.log('Response headers:', error.response.headers);
+        } else if (error.request) {
+          console.log('Request data:', error.request);
+        } else {
+          console.log('Error message:', error.message);
+        }
+      });
   };
-  const fetchLikeData = async (userId) => { //user가 좋아요한 글의 정보를 가져오는 api요청
-    try {
-      const response = await axios.get(`http://localhost:3000/mypage/${userId}/likedPosts`);
-      const data = response.data;
-      const processedData = data.map((like) => ({
-        ...like,
-        profile_picture:
-          like.profile_picture === 'null' || !like.profile_picture
-            ? `${process.env.PUBLIC_URL}/images/original_profile.png`
-            : like.profile_picture,
-      }));
-      setLikes(processedData || []);
-    } catch (error) {
-      console.error('Error fetching like data:', error);
-    }
+
+  const fetchLikeData = async () => { //user가 좋아요한 글의 정보를 가져오는 api요청
+    axios
+      .get(`http://localhost:3000/mypage/likedPosts`, {
+        headers: {
+          Authorization: cookies.get('accessToken'),
+        },
+      })
+      .then((response) => {
+        if (response.data.success === true) {
+          const data = response.data.likedPosts;
+          const processedData = data.map((like) => ({
+            ...like,
+            profile_picture:
+              like.profile_picture === 'null' || !like.profile_picture
+                ? `${process.env.PUBLIC_URL}/images/original_profile.png`
+                : `${process.env.PUBLIC_URL}/${like.profile_picture}`,
+          }));
+          setLikes(processedData || []);
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching like data:', error);
+        if (error.response) {
+          console.log('Response data:', error.response.data);
+          console.log('Response status:', error.response.status);
+          console.log('Response headers:', error.response.headers);
+        } else if (error.request) {
+          console.log('Request data:', error.request);
+        } else {
+          console.log('Error message:', error.message);
+        }
+      });
   };
 
   const handlePasswordChange = (e) => { //입력한 password 쿠기에 저장 위해 변수 저장
@@ -124,41 +220,43 @@ const Mypage = () => {
 
   const handlePasswordSubmit = async (e) => { //user가 비밀번호 확인하기 위한 api요청
     e.preventDefault();
-    try {
-      const response = await axios.post(
-        `http://localhost:3000/password/verify/${userInfo.user_id}`,
+    axios
+      .post(
+        `http://localhost:3000/password/verify/`,
         { user_password },
         {
           headers: {
-            'Content-Type': 'application/json',
+            Authorization: cookies.get('accessToken'),
           },
         }
-      );
-      const data = response.data;
-      if (data.success) {
-        cookies.set('user_password', user_password);
-        navigate('/my/modify');
-      } else {
-        setErrorMessage('비밀번호가 일치하지 않습니다.');
-      }
-    } catch (error) {
-      console.error('Error verifying password:', error);
-      setErrorMessage('비밀번호 검증 중 오류가 발생했습니다.');
-    }
+      )
+      .then((response) => {
+        if (response.data.success === true) {
+          navigate('/my/modify');
+        } else {
+          console.log("왜에러이지");
+          setErrorMessage('비밀번호가 일치하지 않습니다.');
+        }
+      })
+      .catch((error) => {
+        console.log("Password verification error:", error);
+        setErrorMessage('비밀번호 검증 중 오류가 발생했습니다.');
+        if (error.response) {
+          console.log('Error response data:', error.response.data);
+          console.log('Error response status:', error.response.status);
+          console.log('Error response headers:', error.response.headers);
+        } else if (error.request) {
+          console.log('Error request data:', error.request);
+        } else {
+          console.log('Error message:', error.message);
+        }
+      });
   };
 
   const formatDate = (dateString) => {  //작성한 글의 작성 날짜를 원하는 형식으로 고쳐주는 코드
     const date = parseISO(dateString);
     return format(date, 'yyyy-MM-dd', { locale: ko });
   };
-
-  //if (isLoading) {  //로딩
-  //  return <div>Loading...</div>;
-  //}
-
-  //if (!isLoggedIn) {  //로그인 되지 않았으면 로그인 페이지로 이동
-  //  return <Navigate to="/users/sign-in" replace />;
-  //}
 
   const handlePostClick = (post) => { //글 클릭시 그 글의 페이지로 이동
     navigate(`/post_view/${post.post_id}`);
@@ -230,9 +328,13 @@ const Mypage = () => {
               <div className="my_modify">
                 <button
                   onClick={() => {
-                    setIsModalOpen(true);
-                    setUserPassword('');
-                    setErrorMessage('');
+                    if(myrole === 2){
+                      navigate('/my/modify');
+                    }else{
+                      setIsModalOpen(true);
+                      setUserPassword('');
+                      setErrorMessage('');
+                    }
                   }}
                   className="modi_link"
                 >
