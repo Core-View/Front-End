@@ -91,7 +91,7 @@ const PostWrite = () => {
     };
 
     try {
-      const token = cookies.get('Authorization');
+      const token = cookies.get('accessToken');
       const response = await axios.post(
         'http://localhost:3000/api/compile',
         postData,
