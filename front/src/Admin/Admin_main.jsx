@@ -28,10 +28,32 @@ const Admin = () => {
         }
       })
       .catch((err) => {
-        alert('잘못된 접근!');
-        cookies.remove('accessToken');
-        cookies.remove('admin');
-        navigate('/users/sign-in');
+        if (err.response.status === 401) {
+          axios
+            .get('http://localhost:3000/token/refresh', {
+              headers: {
+                Authorization: cookies.get('accessToken'),
+              },
+            })
+            .then((response) => {
+              if (response.status === 200) {
+                cookies.set('accessToken', response.data.Authorization);
+
+                return navigate('/admin');
+              } else if (response.status === 400) {
+                return navigate(-1);
+              }
+            })
+            .catch((err) => {
+              if (err.response.status === 401) {
+                alert('권한이 없습니다.');
+                cookies.remove('accessToken');
+                cookies.remove('admin');
+
+                return navigate('/users/sign-in');
+              }
+            });
+        }
       });
   };
 
@@ -57,10 +79,40 @@ const Admin = () => {
   const handleDelete = (userId) => {
     if (window.confirm('삭제하시겠습니까?')) {
       axios
-        .delete(`http://localhost:3000/mypage/${userId}/delete`)
+        .delete(`http://localhost:3000/mypage/${userId}/delete`, {
+          headers: { Authorization: cookies.get('accessToken') },
+        })
         .then((response) => {
           if (response.status === 204) {
             getMember(); // 회원 삭제 후 목록을 새로 불러옴
+          }
+        })
+        .catch((err) => {
+          if (err.response.status === 401) {
+            axios
+              .get('http://localhost:3000/token/refresh', {
+                headers: {
+                  Authorization: cookies.get('accessToken'),
+                },
+              })
+              .then((response) => {
+                if (response.status === 200) {
+                  cookies.set('accessToken', response.data.Authorization);
+
+                  return navigate('/admin');
+                } else if (response.status === 400) {
+                  return navigate(-1);
+                }
+              })
+              .catch((err) => {
+                if (err.response.status === 401) {
+                  alert('권한이 없습니다.');
+                  cookies.remove('accessToken');
+                  cookies.remove('admin');
+
+                  return navigate('/users/sign-in');
+                }
+              });
           }
         });
     } else {

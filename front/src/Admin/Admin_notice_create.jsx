@@ -1,26 +1,34 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Cookies } from 'react-cookie';
 import './admin_notice_create.css';
 import Editor from '@toast-ui/editor';
 import '@toast-ui/editor/dist/toastui-editor.css'; // Editor's Style
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import TokenChecker from '../Common/TokenStore';
 
 const AdminNoticeCreate = () => {
+  const cookies = new Cookies();
   const editorRef = useRef(null);
   const editorInstanceRef = useRef(null);
   const [title, setTitle] = useState('');
-  const { accessToken, admin } = TokenChecker();
 
   const navigate = useNavigate();
 
   const handleRegisterButton = () => {
-    if (editorInstanceRef.current && admin) {
+    if (editorInstanceRef.current && cookies.get('admin') === 'true') {
       axios
-        .post(`http://localhost:3000/notice/post`, {
-          title: title,
-          content: `${editorInstanceRef.current.getMarkdown()}`,
-        })
+        .post(
+          `http://localhost:3000/notice/post`,
+          {
+            title: title,
+            content: `${editorInstanceRef.current.getMarkdown()}`,
+          },
+          {
+            headers: {
+              Authorization: cookies.get('accessToken'),
+            },
+          }
+        )
         .then((Response) => {
           if (Response.data.success === true) {
             alert('등록성공!!');
@@ -29,8 +37,33 @@ const AdminNoticeCreate = () => {
             alert('실패했습니다! 다시 시도해주세요');
           }
         })
-        .catch((error) => {
-          console.log(error);
+        .catch((err) => {
+          if (err.response.status === 401) {
+            axios
+              .get('http://localhost:3000/token/refresh', {
+                headers: {
+                  Authorization: cookies.get('accessToken'),
+                },
+              })
+              .then((response) => {
+                if (response.status === 200) {
+                  cookies.set('accessToken', response.data.Authorization);
+
+                  return navigate('/admin');
+                } else if (response.status === 400) {
+                  return navigate(-1);
+                }
+              })
+              .catch((err) => {
+                if (err.response.status === 401) {
+                  alert('권한이 없습니다.');
+                  cookies.remove('accessToken');
+                  cookies.remove('admin');
+
+                  return navigate('/users/sign-in');
+                }
+              });
+          }
         });
     } else {
       alert('잘못된 접근입니다.');
@@ -39,7 +72,7 @@ const AdminNoticeCreate = () => {
   };
 
   useEffect(() => {
-    if (editorRef.current && admin) {
+    if (editorRef.current && cookies.get('admin') === 'true') {
       editorInstanceRef.current = new Editor({
         el: editorRef.current,
         height: '600px',
@@ -59,6 +92,7 @@ const AdminNoticeCreate = () => {
                 .post('http://localhost:3000/notice/image', formData, {
                   headers: {
                     'Content-Type': 'multipart/form-data',
+                    Authorization: cookies.get('accessToken'),
                   },
                 })
                 .then((response) => {

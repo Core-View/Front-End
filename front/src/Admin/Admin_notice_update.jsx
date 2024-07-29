@@ -18,14 +18,12 @@ const AdminNoticeUpdate = () => {
   const getOriginData = () => {
     // 게시글 정보 가져오기
     axios
-      .get(`http://localhost:3000/notice/view/${id}`)
+      .get(`http://localhost:3000/notice/view`)
       .then((response) => {
         setTitle(response.data.notice[0].NOTICE_TITLE);
         setContent(response.data.notice[0].NOTICE_CONTENT);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   };
 
   useEffect(() => {
@@ -91,9 +89,7 @@ const AdminNoticeUpdate = () => {
             alert('수정 실패! 다시 시도해주세요');
           }
         })
-        .catch((error) => {
-          console.log(error);
-        });
+        .catch((error) => {});
     }
   };
 

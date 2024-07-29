@@ -5,7 +5,6 @@ import { MdOutlineMailOutline } from 'react-icons/md';
 import { MdOutlineVpnKey } from 'react-icons/md';
 import { FcGoogle } from 'react-icons/fc';
 import { VscGithubInverted } from 'react-icons/vsc';
-import TokenChecker from '../../Common/TokenStore';
 import './Sign_in.css';
 import { Cookies } from 'react-cookie';
 
@@ -14,7 +13,6 @@ const Sign_in = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { setToken, delToken, checkAdmin, accessToken, admin } = TokenChecker();
   const onchangeEmail = useCallback((e) => {
     setEmail(e.target.value);
   }, []);
@@ -25,11 +23,9 @@ const Sign_in = () => {
   const onsubmit = (e) => {
     e.preventDefault();
     if (email.length === 0 || password.length === 0) {
-      console.log('아이디 비번 틀리면 나오는 콘솔');
       alert('아이디와 비밀번호를 모두 입력 해주세요');
       return;
     }
-    console.log('로그인 요청 보내기전에 나오는 콘솔');
     axios
       .post('http://localhost:3000/login', {
         user_email: email,
@@ -46,8 +42,8 @@ const Sign_in = () => {
         return navigate('/');
       })
       .catch((error) => {
-        console.log('로그인 버튼 클릭시 나타나는 오류', error.message);
-        delToken();
+        cookies.remove('accessToken');
+        cookies.remove('admin');
         alert(error);
       });
   };

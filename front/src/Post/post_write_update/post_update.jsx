@@ -25,7 +25,6 @@ const PostUpdate = () => {
     axios
       .get(`http://localhost:3000/post/details/${post_id}`)
       .then((response) => {
-        console.log(response);
         setTitle(response.data.post_title);
         setContent(response.data.post_content);
         setCode(response.data.post_code);

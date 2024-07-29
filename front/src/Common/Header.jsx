@@ -14,11 +14,6 @@ function Header() {
 
   return (
     <header className="header">
-      {console.log(
-        '쿠키에 있는 토큰과 어드민',
-        cookies.get('accessToken'),
-        cookies.get('admin')
-      )}
       <div className="header-logo-container">
         <Link to="/">
           <img
@@ -33,7 +28,7 @@ function Header() {
         <div className="header-nav-left">
           <ul>
             <li>
-              {cookies.get('admin') ? (
+              {cookies.get('admin') === true ? (
                 <Link to="/admin/check">관리자페이지</Link>
               ) : null}
             </li>

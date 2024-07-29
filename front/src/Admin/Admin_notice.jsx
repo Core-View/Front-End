@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './admin_notice.css';
+import { Cookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
-import TokenChecker from '../Common/TokenStore';
 
 const AdminNotice = () => {
-  const { admin } = TokenChecker();
+  const cookies = new Cookies();
   const [noticeLists, setNoticeLists] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const { accessToken } = TokenChecker();
   const noticesPerPage = 10;
 
   //공지조회관련
@@ -16,13 +15,41 @@ const AdminNotice = () => {
     axios
       .get(`http://localhost:3000/notice/view`, {
         headers: {
-          Authorization: accessToken,
+          Authorization: cookies.get('accessToken'),
         },
       })
       .then((response) => {
         if (response.data.success === true) {
           let noticeList = response.data.notice;
           setNoticeLists(noticeList);
+        }
+      })
+      .catch((err) => {
+        if (err.response.status === 401) {
+          axios
+            .get('http://localhost:3000/token/refresh', {
+              headers: {
+                Authorization: cookies.get('accessToken'),
+              },
+            })
+            .then((response) => {
+              if (response.status === 200) {
+                cookies.set('accessToken', response.data.Authorization);
+
+                return navigate('/admin');
+              } else if (response.status === 400) {
+                return navigate(-1);
+              }
+            })
+            .catch((err) => {
+              if (err.response.status === 401) {
+                alert('권한이 없습니다.');
+                cookies.remove('accessToken');
+                cookies.remove('admin');
+
+                return navigate('/users/sign-in');
+              }
+            });
         }
       });
   };
@@ -51,7 +78,7 @@ const AdminNotice = () => {
 
   //공지작성관련
   const createNotice = () => {
-    if (admin) {
+    if (cookies.get('admin') === true) {
       navigate('/notice/post');
     } else {
       alert('접근권한이 없습니다.');
