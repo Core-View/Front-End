@@ -15,7 +15,8 @@ import './post_view_feedback.css';
 const PostView = () => {
   const cookies = new Cookies();
   // const loggedInUserId = cookies.get('user_id');
-  const loggedInUserId = 1;
+  // const loggedInUserId = 1;
+  const [loggedInUserId, setLoggedInUserId] = useState('');
   // const loggedInUserNickname = cookies.get('user_nickname');
   const { post_id } = useParams();
   const [loading, setLoading] = useState(true);
@@ -87,6 +88,9 @@ const PostView = () => {
             console.log('feedbackData 출력', feedbackData);
 
             setPost(postData);
+            // console.log('postData: ', postData);
+            setLoggedInUserId(postData.loggedInUserId);
+            console.log('loggedInUserId: ', loggedInUserId);
             setFeedback(feedbackData);
             setLikesCount(postData.total_likes);
             setLoading(false);
