@@ -32,7 +32,6 @@ const PostMainNotification = () => {
 
   // 공지 클릭 시 핸들입니다.
   const handleNoticeClick = (id) => {
-    console.log(id);
     navigate(`/notice/view/${id}`);
   };
 

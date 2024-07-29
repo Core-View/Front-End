@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './admin_notice_view.css';
 import Viewer from '@toast-ui/editor/dist/toastui-editor-viewer';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
@@ -12,12 +12,15 @@ import { Cookies } from 'react-cookie';
 const AdminNoticeView = () => {
   const cookies = new Cookies();
   const navigate = useNavigate();
-  const { id } = useParams();
   const [noticeDetail, setNoticeDetail] = useState(null);
 
   const getNoticeDetail = () => {
     axios
-      .get(`http://localhost:3000/notice/view/${id}`)
+      .get(`http://localhost:3000/notice/view`, {
+        headers: {
+          Authorization: cookies.get('accessToken'),
+        },
+      })
       .then((response) => {
         setNoticeDetail(response.data.notice);
       })
@@ -41,23 +44,21 @@ const AdminNoticeView = () => {
   }, [noticeDetail]);
 
   const handleEdit = () => {
-    if (cookies.get('admin')) {
-      navigate(`/notice/modify/${id}`);
+    if (cookies.get('admin') === true) {
+      navigate(`/notice/modify`);
     } else {
       alert('관리자만 수정할 수 있습니다.');
     }
   };
 
   const handleDelete = () => {
-    if (cookies.get('admin')) {
-      axios
-        .delete(`http://localhost:3000/notice/delete/${id}`)
-        .then((response) => {
-          if (response.data.success === true) {
-            alert('삭제 성공!');
-            navigate('/admin');
-          }
-        });
+    if (cookies.get('admin') === true) {
+      axios.delete(`http://localhost:3000/notice/delete`).then((response) => {
+        if (response.data.success === true) {
+          alert('삭제 성공!');
+          navigate('/admin');
+        }
+      });
     } else {
       alert('관리자만 지울수 있습니다.');
     }
@@ -78,7 +79,7 @@ const AdminNoticeView = () => {
         </div>
 
         <div className="admin_notice_view_buttons">
-          {cookies.get('admin') ? (
+          {cookies.get('admin') === true ? (
             <Link to="/admin" className="delete_button">
               <FaList />
             </Link>

@@ -95,7 +95,11 @@ const PostWrite = () => {
         postData,
         {
           headers: {
+<<<<<<< HEAD:front/src/Post/post_write_update/post_write.jsx
+            Authorization: cookies.get('accessToken'),
+=======
             Authorization: token,
+>>>>>>> 54f1797e0a12f8dafc574a35c71e3f49cfaea659:front/src/Post/write/post_write.jsx
           },
         }
       );

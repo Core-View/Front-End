@@ -46,7 +46,6 @@ const Post = () => {
             Authorization: cookies.get('accessToken'),
           },
         });
-        console.log(response);
         setNotices(response.data.notice);
         setLoading(false);
       } catch (err) {
