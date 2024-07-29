@@ -39,33 +39,6 @@ const Post = () => {
     python: '/images/language_icons/python_icon.png',
   };
 
-  // const fetchUserInfos = async (userIds) => {
-  //   const userInfoPromises = userIds.map((id) =>
-  //     axios
-  //       .get(`http://localhost:3000/mypage/${id}`)
-  //       .then((response) => ({
-  //         userId: id,
-  //         data: response.data,
-  //       }))
-  //       .catch(() => ({
-  //         userId: id,
-  //         data: { nickname: '탈퇴한 회원' },
-  //       }))
-  //   );
-
-  //   const userInfoResponses = await Promise.all(userInfoPromises);
-
-  //   const newUserInfos = {};
-  //   userInfoResponses.forEach((response) => {
-  //     newUserInfos[response.userId] = response.data;
-  //   });
-
-  //   setUserInfos((prevUserInfos) => ({
-  //     ...prevUserInfos,
-  //     ...newUserInfos,
-  //   }));
-  // };
-
   // 서버에서 공지 데이터를 받아옵니다.
   useEffect(() => {
     const fetchNotices = async () => {
