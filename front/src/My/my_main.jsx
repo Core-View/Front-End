@@ -46,7 +46,7 @@ const Mypage = () => {
     fetchCommentData();
     fetchLikeData();
   },[]);
-
+  
   const fetchUserData = async () => { //user 정보 가져오는 api요청
     axios
       .get(`http://localhost:3000/mypage/`, {
@@ -72,7 +72,7 @@ const Mypage = () => {
             '401 에러 가 떴을때! 만료가 되었답니다! 그리고 refresh 토큰 받는 요청 get으로 보냄'
           );
           axios
-            .get('http://localhost:3000/token/refresh', {
+            .get('http://localhost:3000/token/refresh', { //토큰 refresh
               headers: {
                 Authorization: cookies.get('accessToken'),
               },
