@@ -367,7 +367,6 @@ const Post = () => {
                   </div>
                   <div className="post-main-user-name">
                     {post.user_nickname}
-                    {/* {userInfos[post.user_id]?.nickname || '탈퇴한 회원'} */}
                   </div>
                   <div className="post-main-date">
                     {formatDate(post.post_date)}
